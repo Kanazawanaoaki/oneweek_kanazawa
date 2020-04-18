@@ -1,0 +1,153 @@
+## 最初のセットアップ
+```lisp
+(load "package://pr2eus/pr2.l")   
+(setq *pr2* (pr2))
+(load"models/room73b2-scene.l")
+(setq *room73b2* (room73b2))     
+(objects (list *pr2* *room73b2*))  
+```
+
+##  73b2の場所を全部表示
+```lisp
+(send *room73b2* :spots)
+```
+/eng2/7f/room73B2-front-of-kitchenboard :   
+/eng2/7f/room73B2-sink-front : シンクの前  
+/eng2/7f/room73B2-beside-chair ：　椅子の横  
+/eng2/7f/room73B2-far-chair-back :   
+/eng2/7f/room73B2-tmp-chair-back ：  
+/eng2/7f/room73B2-chair-back :
+/eng2/7f/room73B2-table-front :  
+/eng2/7f/room73B2-table-back  
+/eng2/7f/room73B2-table-side :  
+/eng2/7f/room73B2-front-kitchen-table :  
+/eng2/7f/room73B2-front-of-tv :  
+door-spot :  
+coe-spot :  
+broom-spot :  
+table-spot :  
+cook-spot :  コンロの前  
+fridge-front-spot :  
+init-spot :  最初の場所
+
+## 物全部表示
+```lisp
+(send-all (send *room73b2* :objects) :name)
+```
+"room73b2-73b2-ground"  
+"room73b2-locker2"  
+"room73b2-locker1"  
+"room73b2-door-left"  
+"room73b2-door-right"  
+"room73b2-foldable-desk"  
+"room73b2-gifuplastic-900-cart"  
+"room73b2-kirin-steppy-black-ladder"  
+"room73b2-broom"  
+"room73b2-bamboo-broom"  
+"room73b2-azuma-broom"  
+"room73b2-azuma-short-broom"  
+"room73b2-coe-800-shelf"  
+"room73b2-coe-450-shelf"  
+"room73b2-uchida-shelf-1100"  
+"room73b2-uchida-shelf-1300"  
+"room73b2-uchida-shelf-1300"  
+"room73b2-uchida-shelf-1300"  
+"room73b2-uchida-shelf-1300"  
+"room73b2-uchida-shelf-1300"  
+"room73b2-uchida-shelf-1300"  
+"room73b2-bariera-1200-right"  
+"room73b2-bariera-1200-middle3-0"  
+"room73b2-bariera-1200-middle3-1"  
+"room73b2-bariera-1200-middle2"  
+"room73b2-bariera-1200-middle-0"  
+"room73b2-bariera-1200-middle-1"  
+"room73b2-bariera-1200-middle-2"  
+"room73b2-bariera-1200-corner"  
+
+- 飲み物  
+"room73b2-wanda"  
+"room73b2-iemon"  
+"room73b2-georgia-emerald-mountain"  
+
+- 食器系  
+"room73b2-sushi-cup"  
+"room73b2-mug-cup"  
+"room73b2-tray"  
+"room73b2-kettle"  
+"room73b2-knife"  
+"room73b2-sponge"  
+"room73b2-cup"  
+"room73b2-dish"  
+"room73b2-kitchen-shelf"  
+"room73b2-kitchen"  
+
+- 関係有り？  
+"room73b2-bottle"  
+"room73b2-sushi-cup2"  
+"room73b2-trashbox0"  
+
+
+"room73b2-hitachi-fiesta-refrigerator"  
+"room73b2-chair1"  
+"room73b2-chair0"  
+"room73b2-empty-box"  
+
+
+"room73b2-karimoku-table"  
+"room73b2-hrp2-parts-drawer"  
+"room73b2-plus-590-locker"  
+"room73b2-sharp-52-aquostv"  
+"room73b2-askul-1200x700-desk-0"  
+"room73b2-askul-1200x700-desk-1"  
+"room73b2-askul-1200x700-desk-2"  
+"room73b2-askul-1200x700-desk-3"  
+"room73b2-askul-1200x700-desk-4"  
+"room73b2-askul-1200x700-desk-5"  
+"room73b2-askul-1200x700-desk-6"  
+"room73b2-uchida-shelf-1100"  
+"room73b2-askul-1000x700-desk"  
+"room73b2-uchida-shelf-1300"  
+"room73b2-askul-1200x700-desk-7"  
+
+"room73b2-cupboard-right"  
+"room73b2-cupboard-left"  
+
+"room73b2-toshiba-clacio-refrigerator"  
+"room73b2-bariera-1400-middle"  
+"room73b2-bariera-900-middle-0"  
+"room73b2-bariera-900-middle-1"  
+"room73b2-bariera-900-left"  
+"room73b2-askul-1400-desk"  
+"room73b2-desk-0"  
+"room73b2-desk-1"  
+"room73b2-desk-2"  
+"room73b2-unknown-1200-desk-0"  
+"room73b2-unknown-1200-desk-1"  
+"room73b2-unknown-1200-desk-2"  
+"room73b2-unknown-1200-desk-3"  
+"room73b2-unknown-1200-desk-4"  
+"room73b2-external-wall-4"  
+"room73b2-external-wall-3"  
+"room73b2-external-wall-2"  
+"room73b2-external-wall-1"  
+"room73b2-external-wall-0"  
+"room73b2-panelwall-0"  
+
+"/eng2/7f/room73B2-front-of-kitchenboard"  
+"/eng2/7f/room73B2-sink-front"  
+"/eng2/7f/room73B2-beside-chair"  
+"/eng2/7f/room73B2-far-chair-back"  
+"/eng2/7f/room73B2-tmp-chair-back"  
+"/eng2/7f/room73B2-chair-back"  
+"/eng2/7f/room73B2-table-front"  
+"/eng2/7f/room73B2-table-back"  
+"/eng2/7f/room73B2-table-side"  
+"/eng2/7f/room73B2-front-kitchen-table"  
+"/eng2/7f/room73B2-front-of-tv"  
+"door-spot"  
+"coe-spot"  
+"broom-spot"  
+"table-spot"  
+"cook-spot"  
+"fridge-front-spot"  
+"init-spot"
