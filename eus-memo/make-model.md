@@ -55,4 +55,11 @@ Convert4. コマンドが2つ書かれていますが、fixed model versionの�
 
 以上の手順で、my_model.lが生成される  
 最後に、Visualize3. の手順に従ってIRTViewerで表示すれば、正しくモデルの変換が行われたか確認できる。  
-READMEでは(objects (list (my_model)))となっているが、(objects (list (my_model_name)))だと上手く行く。  
+READMEでは(objects (list (my_model)))となっているが、(objects (list (my_model_name)))だと上手く行く。
+
+### STLファイルの生成
+https://free3d.com/ja/ や https://www.cgtrader.com/ などの3Dモデルを扱っているサイトから3Dモデルをダウンロードしてくる。  
+
+[FUSION 360](https://www.autodesk.co.jp/products/fusion-360/overview)などのCADソフトを利用して3DモデルをSTL形式として保存する。
+
+しかし、スケールの問題、縮尺を変えたことによる座標原点ズレの問題が発生してしまった。
