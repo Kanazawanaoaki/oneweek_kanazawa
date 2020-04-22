@@ -13,9 +13,6 @@ jsk_recognitionには
 ## 色認識からbounding box
 ゼミで扱った。色認識からbounding boxを出すlaunchファイル。
 https://github.com/jsk-ros-pkg/jsk_demos/blob/master/jsk_2019_10_semi/launch/hsi_color_filter.launch
-```
-roslaunch jsk_2019_10_semi hsi_color_filter.launch
-```
 
 [HSIColorFilter](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/hsi_color_filter.html)を使って指定した範囲のHSI値のpoint cloudのみを抽出する。  
 
@@ -30,4 +27,17 @@ HSIフィルタを通した点群について、[EuclideanClustering](https://js
 その結果に対して、[ClusterPointIndicesDecomposer](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/cluster_point_indices_decomposer.html)をすることでbounding boxを出している。  
 クラスタリングした結果を用いて、それぞれのクラスターのpoint cloudとか重心位置とかを出すようになっている。  
 
-## 画像からのパターンマッチング
+## 画像からのテンプレートマッチング
+ゼミで扱った。入力画像とテンプレート画像のSIFT特徴量を照合してテンプレート画像と一致する部分の位置姿勢を取得出来る。  
+https://github.com/jsk-ros-pkg/jsk_demos/blob/master/jsk_2019_10_semi/launch/point_pose_extractor_socks.launch  
+
+[PointPoseExtractor](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_perception/nodes/point_pose_extractor.html)を使っている。  
+
+## PointCloudのマッチング
+[ICPRegistration](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/icp_registration.html)を使ってReferenece PointCloudと入力のPointCloudをICP (Iterative Closest Point)で位置姿勢を整合させる。  
+
+まず[PointCloudToPCD](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros_utils/nodes/pointcloud_to_pcd.html)をつかって点群のトピックをpcdファイルに保存した。  
+そのpcdファイルにたいして、[CloudCompare](http://www.danielgm.net/cc/)という点群処理ソフトでやかんの部分だけを切り出して保存した。
+保存したpcdファイルから[PointcloudDatabaseServer](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/pointcloud_database_server.html?highlight=PointcloudDatabaseServer)を使ってPointCloudのトピックをpublishするようにした。  
+
+そのPointCloudのトピックをReferenceとして、現在の点群入力にたいしてICPを行った。  
