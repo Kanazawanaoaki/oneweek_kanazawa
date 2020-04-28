@@ -59,7 +59,7 @@
      ;; definition of :attention
      (setq attention0 (make-cascoords :pos #f(0 -50 110) :name "attention0"))
      (send link1 :assoc attention0)
-     (setq attention1 (make-cascoords :pos #f(0 0 110) :rpy #f(-1.57 0 0) :name "attention1"))
+     (setq attention1 (make-cascoords :pos #f(0 0 130) :rpy #f(-1.57 0 0) :name "attention1"))
      (send link1 :assoc attention1)
     
      ;; init-ending 
