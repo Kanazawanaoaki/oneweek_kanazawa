@@ -57,9 +57,14 @@ Convert4. コマンドが2つ書かれていますが、fixed model versionの�
 最後に、Visualize3. の手順に従ってIRTViewerで表示すれば、正しくモデルの変換が行われたか確認できる。  
 READMEでは(objects (list (my_model)))となっているが、(objects (list (my_model_name)))だと上手く行く。
 
-### STLファイルの生成
+### STLファイルの用意
 https://free3d.com/ja/ や https://www.cgtrader.com/ などの3Dモデルを扱っているサイトから3Dモデルをダウンロードしてくる。  
 
 [FUSION 360](https://www.autodesk.co.jp/products/fusion-360/overview)などのCADソフトを利用して3DモデルをSTL形式として保存する。
 
 しかし、スケールの問題、縮尺を変えたことによる座標原点ズレの問題が発生してしまった。
+
+### 点群からSTLファイルの生成
+ロボットに道具を持たせて、ロボットが道具を見回して道具のモデルを作れると良い。  
+点群を合成して360°の合成点群を作り、その点群からモデルを作る。  
+[こんな感じ](https://github.com/Kanazawanaoaki/jsk_demos/tree/kanazawa-ow/jsk_2020_04_chahakobi#%E7%82%B9%E7%BE%A4%E3%81%8B%E3%82%89%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B)
