@@ -38,6 +38,9 @@ https://github.com/jsk-ros-pkg/jsk_demos/blob/master/jsk_2019_10_semi/launch/poi
 
 まず[PointCloudToPCD](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros_utils/nodes/pointcloud_to_pcd.html)をつかって点群のトピックをpcdファイルに保存した。  
 そのpcdファイルにたいして、[CloudCompare](http://www.danielgm.net/cc/)という点群処理ソフトでやかんの部分だけを切り出して保存した。
-保存したpcdファイルから[PointcloudDatabaseServer](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/pointcloud_database_server.html?highlight=PointcloudDatabaseServer)を使ってPointCloudのトピックをpublishするようにした。  
+保存したpcdファイルから
+
 
 そのPointCloudのトピックをReferenceとして、現在の点群入力にたいしてICPを行った。  
+
+ICPはlocalな手法。
