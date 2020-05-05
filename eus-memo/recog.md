@@ -37,10 +37,36 @@ https://github.com/jsk-ros-pkg/jsk_demos/blob/master/jsk_2019_10_semi/launch/poi
 [ICPRegistration](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/icp_registration.html)を使ってReferenece PointCloudと入力のPointCloudをICP (Iterative Closest Point)で位置姿勢を整合させる。  
 
 まず[PointCloudToPCD](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros_utils/nodes/pointcloud_to_pcd.html)をつかって点群のトピックをpcdファイルに保存した。  
-そのpcdファイルにたいして、[CloudCompare](http://www.danielgm.net/cc/)という点群処理ソフトでやかんの部分だけを切り出して保存した。
-保存したpcdファイルから
+そのpcdファイルにたいして、[CloudCompare](http://www.danielgm.net/cc/)という点群処理ソフトでやかんの部分だけを切り出して保存した。  
+もしくは、保存するときに[AttentionClipper](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/attention_clipper.html)と[ExtractIndices](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/extract_indices.html)を使って点群を切り出したものを使うなどする。  
+保存したpcdファイルからpcd_to_pointcloudでPointCloudを出力する。  
+そのPointCloudをReferenceとして使用してICPを行う。
 
+しかし、ICPはlocalな手法で初期姿勢が大きくことなると利用出来ない。  
 
-そのPointCloudのトピックをReferenceとして、現在の点群入力にたいしてICPを行った。  
+## 机の上のものを認識する
+机の上に乗っている物体を認識して掴むデモの認識部分を勉強する。  
 
-ICPはlocalな手法。
+最終的に呼ばれている認識部分のlaunchはこれ(https://github.com/jsk-ros-pkg/jsk_recognition/blob/master/jsk_pcl_ros/sample/tabletop_object_detector.launch )  
+
+### jsk_pcl/OrganizedMultiPlaneSegmentation
+https://jsk-recognition.readthedocs.io/en/latest/jsk_pcl_ros/nodes/organized_multi_plane_segmentation.html  
+organizedな点群からconnected component analysis に基づいたpcl::OrganizedMultiPlaneSegmentationを使った平面検出を行い、複数の平面のセグメンテーションを行う。
+
+### jsk_pcl_utils/PolygonMagnifier
+https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros_utils/nodes/polygon_magnifier.html  
+特定の範囲のポリゴンを拡大するらしい。なぜ使っているのかよくわからない。  
+
+### jsk_pcl/MultiPlaneExtraction
+https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/multi_plane_extraction.html  
+平面からの高さが指定した範囲内にある点群を抽出する。  
+
+### jsk_pcl/EuclideanClustering
+https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/euclidean_clustering.html  
+ユークリッド距離に基づいてクラスタリングを行い、セグメンテーションを行う。
+
+### jsk_pcl/ClusterPointIndicesDecomposer
+https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/cluster_point_indices_decomposer.html  
+クラスタリングされた結果を、配列にしてpubする。  
+クラスターの中心をtfとして出して、バウンディングボックスも出す。  
+バウンディングボックスの方向は最も近い平面に揃えられる。
