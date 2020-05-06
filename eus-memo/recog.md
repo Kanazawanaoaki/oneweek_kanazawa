@@ -70,3 +70,8 @@ https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/n
 クラスタリングされた結果を、配列にしてpubする。  
 クラスターの中心をtfとして出して、バウンディングボックスも出す。  
 バウンディングボックスの方向は最も近い平面に揃えられる。
+
+## PointCloudをトラッキングする
+机の上に乗っている物体を認識して掴むデモのトラッキング部分を理解する。  
+
+最終的に呼ばれている認識部分のlaunchはこれ(https://github.com/jsk-ros-pkg/jsk_recognition/blob/master/jsk_pcl_ros/sample/tabletop_object_detector.launch )  
