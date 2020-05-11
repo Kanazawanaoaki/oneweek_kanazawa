@@ -10,6 +10,12 @@
 (send *kitchen* :locate #f(800 -200 0))
 (send *kitchen* :rotate (deg2rad 180) :z :world)
 
+;; set 
+(load "models/room73b2-toshiba-clacio-refrigerator-object.l")
+(setq *frige* (room73b2-toshiba-clacio-refrigerator))
+(send *frige* :locate #f(-325 -1675 0))
+(send *frige* :rotate (deg2rad 90) :z :world)
+
 ;; set knife
 (load "models/knife-object.l")
 (setq *knife* (knife))
@@ -33,7 +39,7 @@
 
 
 
-(setq *env-list* (list *kitchen* *knife* *cutting-board* *pot*))
+(setq *env-list* (list *kitchen* *knife* *cutting-board* *pot* *frige*))
 
 (objects (append *env-list* (list *robot*))) 
 
