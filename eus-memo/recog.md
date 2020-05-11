@@ -44,6 +44,15 @@ https://github.com/jsk-ros-pkg/jsk_demos/blob/master/jsk_2019_10_semi/launch/poi
 
 しかし、ICPはlocalな手法で初期姿勢が大きくことなると利用出来ない。  
 
+## ロボットが掴んでいる物の点群を獲得する
+ロボットが掴んでいる物体の点群を獲得する。これを使って物体のeusモデルを作成する。
+
+### ロボットリンクの除去
+[robot_self_filter](http://wiki.ros.org/robot_self_filter)や[robot_self_filter_color](http://wiki.ros.org/robot_self_filter_color)を使うことでロボットリンクを除去した点群を獲得することが出来る。
+
+### グリッパ近くを切り出す
+[AttentionClipper](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/attention_clipper.html)と[ExtractIndices](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/extract_indices.html)を使って点群を切り出したものを使うなどする。グリッパ座標相対で範囲を指定することで、グリッパ周りの点群を取り出すことが出来る。  
+
 ## 机の上のものを認識する
 机の上に乗っている物体を認識して掴むデモの認識部分を勉強する。  
 
