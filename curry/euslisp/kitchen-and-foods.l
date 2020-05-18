@@ -21,6 +21,10 @@
 (setq *knife* (knife))
 (send *knife* :locate #f(550.0 -200.0 850.0))
 
+;; set peeler
+(load "model/peeler.l")
+(setq *peeler* (peeler))
+(send *peeler* :locate #f(550.0 -250.0 850.0))
 
 ;; set まな板
 (load "model/cutting-board.l")
@@ -32,14 +36,29 @@
 (setq *pot* (cooking-pot))
 (send *pot* :locate #f(680 500 830))
 
-;; ;; set tray
-;; (load "models/tray-object.l")
-;; (setq *tray* (tray))
-;; (send *tray* :locate #f(800 0 1000))
+;; set onion
+(load "model/onion.l")
+(setq *onion* (onion))
+(send *onion* :locate #f(850 200 845))
+
+;; set tomato
+(load "model/tomato.l")
+(setq *tomato* (tomato))
+(send *tomato* :locate #f(850 100 845))
+
+;; set carrot
+(load "model/carrot.l")
+(setq *carrot* (carrot))
+(send *carrot* :locate #f(850 0 845))
+
+;; set potato
+(load "model/potato.l")
+(setq *potato* (potato))
+(send *potato* :locate #f(850 -100 845))
 
 
 
-(setq *env-list* (list *kitchen* *knife* *cutting-board* *pot* *frige*))
+(setq *env-list* (list *kitchen* *knife* *peeler* *cutting-board* *pot* *frige* *onion* *tomato* *carrot* *potato*))
 
 (objects (append *env-list* (list *robot*))) 
 
