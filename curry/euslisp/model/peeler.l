@@ -1,6 +1,7 @@
 (defclass peeler-object
   :super cascaded-link
-  :slots (
+  :slots (handle0
+	  attention0
          ))
 
 (defmethod peeler-object
@@ -11,23 +12,19 @@
 
      ;; definition of link
      (setq b1 (make-cube 100 12 12))
-     ;; (setq b1 (make-cube 12 100 12))
 
      (setq b2 (make-cylinder 30 5))
      (setq b3 (make-cylinder 25 5))
      (setq b2 (body- b2 b3))
      (setq b4 (make-cube 100 100 20))
-     ;; (send b4 :locate #f(0 51 0))
      (send b4 :locate #f(51 0 0))
      (setq b2 (body- b2 b4))
 
-     ;; (setq b5 (make-cube 50 5 2))
      (setq b5 (make-cube 5 50 2))
      (send b5 :locate #f(0 0 2))
      (send b5 :set-color :white)
 
      (send b2 :assoc b5)
-     ;; (send b2 :locate #f(0 80 0))
      (send b2 :locate #f(80 0 0))
 
      (send b1 :assoc b2)
@@ -45,6 +42,12 @@
      ;; definition of joint
 
      ;; definition of :handle
+     (setq handle0 (make-cascoords :pos #f(0 0 0) :name "handle0"))
+     (send link1 :assoc handle0)
+
+     ;; definition of :attention
+     (setq attention0 (make-cascoords :pos #f(80 0 0) :name "attention0"))
+     (send link1 :assoc attention0)
 
      ;; init-ending 
      (setq links (list link1))
@@ -53,7 +56,10 @@
      (send-all links :worldcoords)
 
      self))
-
+  (:handle (&rest args) (forward-message-to-all (list  handle0) args))
+  (:handle-handle0 (&rest args) (forward-message-to handle0 args))
+  (:attention (&rest args) (forward-message-to-all (list  attention0) args))
+  (:attention-attention0 (&rest args) (forward-message-to attention0 args))
   )
 
 (defun peeler (&rest args) (instance* peeler-object :init args))
