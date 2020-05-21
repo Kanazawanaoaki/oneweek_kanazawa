@@ -134,8 +134,10 @@
 
   (send *robot* :larm :inverse-kinematics *arrow* :debug-view t)
   (send (send *robot* :larm :end-coords) :dissoc *potato*)
+  (unix:usleep 100000)
 
   (send *robot* :reset-manip-pose)
+  (unix:usleep 100000)
   )
 
 
@@ -147,6 +149,7 @@
   
   (send *robot* :larm :inverse-kinematics *arrow* :debug-view t)
   (send (send *robot* :larm :end-coords) :assoc *potato*)
+  (unix:usleep 100000)
   )
 
 
@@ -160,6 +163,8 @@
   
   (send p4 :set-color :moccasin)
   (send *viewer* :draw-objects)
+
+  (unix:usleep 100000)  
 
   (format t ";; please run (put-potato-1)~%")
   )
@@ -183,6 +188,8 @@
   (send p3 :set-color :moccasin)
   (send *viewer* :draw-objects)
 
+  (unix:usleep 100000)
+
   (format t ";; please run (put-potato-2)~%")
   )
 
@@ -203,6 +210,8 @@
   (send p1 :set-color :moccasin)
   (send *viewer* :draw-objects)
 
+  (unix:usleep 100000)
+  
   (format t ";; please run (put-potato-3)~%")
   )
 
@@ -225,6 +234,7 @@
   )
 
 (set-peel-1)
+(format t ";; you can also run (now-devel) or (exec-all)~%"))
 
 (defun now-devel ()
   (peel-move-1)
@@ -233,3 +243,15 @@
   (peel-move-2)
   )
 
+(defun exec-all ()
+  (peel-move-1)
+  (put-potato-1)
+  (pick-potato-2)
+  (peel-move-2)
+  (put-potato-2)
+  (pick-potato-3)
+  (peel-move-3)
+  (put-potato-3)
+  (pick-potato-4)
+  (peel-move-4)
+  )
