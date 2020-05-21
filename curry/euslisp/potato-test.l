@@ -191,7 +191,6 @@
 	:debug-view t)
 
   (format t ";; please run (peel-move-1)~%"))  
-  )
 
 
 (defun peel-move-1 ()
