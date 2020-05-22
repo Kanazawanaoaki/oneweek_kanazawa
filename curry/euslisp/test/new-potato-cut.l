@@ -14,10 +14,10 @@
 (send b2 :translate #f(1 0 0))
 
 (setq b5 (make-cube 500 500 500))
-(send b5 :translate #f(0 -240 0))
+(send b5 :translate #f(0 0 -240))
 
 (setq b6 (make-cube 500 500 500))
-(send b6 :translate #f(0 -260 0))
+(send b6 :translate #f(0 0 -260))
 
 (setq t1 (body- b2 b3))
 (setq t2 (body- b2 b4))
@@ -39,8 +39,104 @@
 (send p5 :set-color :moccasin)
 (send p6 :set-color :moccasin)
 
+(setq *potato* (make-cascoords))
+(send *potato* :assoc p1)
+(send *potato* :assoc p2)
+(send *potato* :assoc p3)
+(send *potato* :assoc p4)
+(send *potato* :assoc p5)
+(send *potato* :assoc p6)
 
-(objects (list p1 p2 p3 p4 p5 p6))
+(setq *cut-point-1* (make-cascoords))
+(send *cut-point-1* :rotate (deg2rad 90) :z)
+(send *potato* :assoc *cut-point-1*)
+
+(setq *cut-point-2* (make-cascoords :pos #f(0 0 -10)))
+(send *cut-point-2* :rotate (deg2rad 90) :y)
+(send *cut-point-2* :rotate (deg2rad 90) :z)
+(send p2 :assoc *cut-point-2*)
+
+(setq *cut-point-3* (make-cascoords :pos #f(0 0 10)))
+(send *cut-point-3* :rotate (deg2rad 90) :y)
+(send *cut-point-3* :rotate (deg2rad 90) :z)
+(send p1 :assoc *cut-point-3*)
+
+(setq *cut-point-4* (make-cascoords :pos #f(0 0 -10)))
+(send *cut-point-4* :rotate (deg2rad -90) :z)
+(send *cut-point-4* :rotate (deg2rad 90) :x)
+(send p5 :assoc *cut-point-4*)
+
+(setq *cut-point-5* (make-cascoords :pos #f(0 0 10)))
+(send *cut-point-5* :rotate (deg2rad -90) :z)
+(send *cut-point-5* :rotate (deg2rad 90) :x)
+(send p4 :assoc *cut-point-5*)
+
+
+(load "models/arrow-object.l")
+(setq *arrow* (arrow))
+(send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+
+(objects (list p1 p2 p3 p4 p5 p6 *arrow*))
+
+(defun cut1 ()
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  
+  (send *potato* :dissoc p1)
+  (send *potato* :dissoc p2)
+  (send *potato* :dissoc p3)
+
+  (setq *potato2* (make-cascoords))
+  (send *potato2* :newcoords (send *potato* :copy-worldcoords))
+
+  (send *potato2* :assoc p1)
+  (send *potato2* :assoc p2)
+  (send *potato2* :assoc p3)
+
+  (send *potato2* :translate #f(30 0 0) :world)
+  (send *viewer* :draw-objects)
+  )
+
+(defun cut2 ()
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+
+  (send *potato2* :dissoc p3)
+
+  (send p3 :translate #f(0 0 -20))
+  (send *viewer* :draw-objects)
+  )
+
+(defun cut3 ()
+  (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+
+  (send *potato2* :dissoc p2)
+
+  (send p2 :translate #f(0 0 -10))
+  (send *viewer* :draw-objects)
+  )
+
+(defun cut4 ()
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+
+  (send *potato* :dissoc p6)
+
+  (send p6 :translate #f(0 0 -20))
+  (send *viewer* :draw-objects)
+  )
+
+(defun cut5 ()
+  (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+
+  (send *potato* :dissoc p5)
+
+  (send p5 :translate #f(0 0 -10))
+  (send *viewer* :draw-objects)
+  )
+
+
 
 
 (defun pqp-test (&optional (close? t)
