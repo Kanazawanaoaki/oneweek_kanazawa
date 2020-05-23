@@ -45,13 +45,26 @@ https://github.com/jsk-ros-pkg/jsk_demos/blob/master/jsk_2019_10_semi/launch/poi
 しかし、ICPはlocalな手法で初期姿勢が大きくことなると利用出来ない。  
 
 ## ロボットが掴んでいる物の点群を獲得する
-ロボットが掴んでいる物体の点群を獲得する。これを使って物体のeusモデルを作成する。
+ロボットが掴んでいる物体の点群を獲得する。これを使って物体のeusモデルを作成したい。
 
 ### ロボットリンクの除去
 [robot_self_filter](http://wiki.ros.org/robot_self_filter)や[robot_self_filter_color](http://wiki.ros.org/robot_self_filter_color)を使うことでロボットリンクを除去した点群を獲得することが出来る。
 
 ### グリッパ近くを切り出す
 [AttentionClipper](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/attention_clipper.html)と[ExtractIndices](https://jsk-docs.readthedocs.io/projects/jsk_recognition/en/latest/jsk_pcl_ros/nodes/extract_indices.html)を使って点群を切り出したものを使うなどする。グリッパ座標相対で範囲を指定することで、グリッパ周りの点群を取り出すことが出来る。  
+
+### グリッパ相対に点群を保存する
+Anneさんが使ってらしゃったpythonのスクリプトを自分用に少し変えた[もの](https://github.com/Kanazawanaoaki/jsk_demos/blob/kanazawa-ow/jsk_2020_04_chahakobi/scripts/merge_pointcloud_from_tf.py)を使っている。  
+中身は全てを理解しているわけではないが、PointCloudのROSトピックとTFを取得して点群部分をnumpyを使ってグリッパ相対に変換をしている。リアルタイム性が必要無い場合はこのようにnumpyで書くこともできるし、Open3Dのtransformも使えるかも。
+
+### 点群をマージする
+同じく、Anneさんが使ってらしゃったpythonのスクリプトを自分用に少し変えた[もの](https://github.com/Kanazawanaoaki/jsk_demos/blob/kanazawa-ow/jsk_2020_04_chahakobi/scripts/merge_pointcloud_from_tf.py)を使っている。  
+おそらくだが、
+```
+self.points = self.points + points_transformed
+```
+でただ足し算をしているだけだと思われる。
+マージの例としては、例えばOpen3Dでダウンサンプリングして結合する[サンプル](http://www.open3d.org/docs/release/tutorial/Advanced/multiway_registration.html#Make-a-combined-point-cloud)などがある。
 
 ## 机の上のものを認識する
 机の上に乗っている物体を認識して掴むデモの認識部分を勉強する。  
