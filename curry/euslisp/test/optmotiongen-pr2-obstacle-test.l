@@ -10,10 +10,10 @@
 (setq *robot* (instance pr2-robot :init))
 (setq *arrow* (instance arrow-object :init))
 (send *arrow* :newcoords
-      (make-coords :pos (float-vector  550 0 500) :rpy (list (deg2rad 60) 0 0)))
+      (make-coords :pos (float-vector  550 50 600) :rpy (list (deg2rad 60) 0 0)))
 (setq *obstacle* (make-cube 250 250 250))
 (send *obstacle* :newcoords
-      (make-coords :pos (float-vector 500 -200 600)))
+      (make-coords :pos (float-vector 500 -200 700)))
 (send *obstacle* :set-color (float-vector 1 0 0) 0.5)
 (objects (list *robot* *arrow* *obstacle*))
 
@@ -29,7 +29,7 @@
 	:rotation-axis nil
 	:debug-view t
 	)
-
+  (warn "please run (normal-ik) or (obstacle-ik)~%")
   )
 (defun obstacle-ik ()
   (send *robot* :reset-pose)
@@ -41,6 +41,7 @@
 	:translation-axis t
 	:rotation-axis nil
 	:debug-view t
-	:obstacles (list *obstacle*)
+	:collision-avoidance-link-pair (mapcar #'(lambda (l) (list l *obstacle*)) (send *robot* :links))
 	)
+  (warn "please run (normal-ik) or (obstacle-ik)~%")
   )
