@@ -41,7 +41,7 @@
 	:translation-axis t
 	:rotation-axis nil
 	:debug-view t
-	:collision-avoidance-link-pair (mapcar #'(lambda (l) (list l *obstacle*)) (send *robot* :links))
+	:collision-avoidance-link-pair (mapcar #'(lambda (l) (list l *obstacle*)) (append (send *robot* :link-list (send *robot* :rarm :end-coords :parent)) (list (send *robot* :r_forearm_link_lk) (send *robot* :r_upper_arm_link_lk) (send *robot* :r_gripper_palm_link_lk) (send *robot* :r_gripper_r_finger_link_lk) (send *robot* :r_gripper_l_finger_link_lk) (send *robot* :r_gripper_r_finger_tip_link_lk) (send *robot* :r_gripper_l_finger_tip_link_lk))))
 	)
   (warn "please run (normal-ik) or (obstacle-ik)~%")
   )
