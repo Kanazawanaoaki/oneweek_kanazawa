@@ -24,6 +24,10 @@
      (setq b3 (make-sphere 30))
      (send b3 :locate #f(100 0 0))
 
+     (setq b4 (make-cube 100 100 100))
+     (send b4 :translate #f(49 0 0))
+     (setq b3 (body- b3 b4))
+
      (send b2 :set-color :orangered)
      (send b3 :set-color :orangered)
 
