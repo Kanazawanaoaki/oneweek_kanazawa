@@ -10,14 +10,16 @@
      (send-super* :init :name name args)
 
      ;; definition of link
-     (setq b1 (make-cylinder 30 2))
-     (send b1 :translate #f(100 0 0))
-     (send b1 :rotate (deg2rad -90) :y)
+     ;; (setq b1 (make-cylinder 30 2))
+     ;; (send b1 :translate #f(100 0 0))
+     ;; (send b1 :rotate (deg2rad -90) :y)
 
-     (send b1 :worldcoords)
+     ;; (send b1 :worldcoords)
+
+     (setq v-list (list #f(100.0 -15.0 25.9808) #f(100.0 -25.9808 15.0) #f(100.0 -30.0 -4.085621e-14) #f(100.0 -25.9808 -15.0) #f(100.0 -15.0 -25.9808) #f(100.0 2.842171e-14 -30.0) #f(100.0 15.0 -25.9808) #f(100.0 25.9808 -15.0) #f(100.0 30.0 1.598721e-14) #f(100.0 25.9808 15.0) #f(100.0 15.0 25.9808) #f(100.0 0.0 30.0)))
      
-     (setq v-list (list (car (send b1 :vertices))))
-     (dolist (x (cdr (send b1 :vertices))) (if (> (elt x 0) 99) (setq v-list (append v-list (list x)))))
+     ;; (setq v-list (list (car (send b1 :vertices))))
+     ;; (dolist (x (cdr (send b1 :vertices))) (if (> (elt x 0) 99) (setq v-list (append v-list (list x)))))
 
      (setq b2 (make-cone #f(-100 0 0) v-list))
      
