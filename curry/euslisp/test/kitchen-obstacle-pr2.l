@@ -44,9 +44,10 @@
       (send *arrow* :copy-worldcoords)
       :link-list (send *robot* :link-list (send (send *robot* :larm :end-coords) :parent))
       :move-target (send *robot* :larm :end-coords)
-      :translation-axis :y
+      :translation-axis t
       :rotation-axis nil
       :debug-view t
-      ;; :root-virtual-mode :planar
-      :collision-avoidance-link-pair (mapcar #'(lambda (l) (list l *kitchen*)) (append (send *robot* :link-list (send *robot* :larm :end-coords :parent)) (list (send *robot* :l_forearm_link_lk) (send *robot* :l_upper_arm_link_lk) (send *robot* :l_gripper_palm_link_lk) (send *robot* :l_gripper_r_finger_link_lk) (send *robot* :l_gripper_l_finger_link_lk) (send *robot* :l_gripper_r_finger_tip_link_lk)(send *robot* :base_link_lk))))
+      :root-virtual-mode :planar
+      ;; :collision-avoidance-link-pair (mapcar #'(lambda (l) (list l *kitchen*)) (append (send *robot* :link-list (send *robot* :larm :end-coords :parent)) (list (send *robot* :l_forearm_link_lk) (send *robot* :l_upper_arm_link_lk) (send *robot* :l_gripper_palm_link_lk) (send *robot* :l_gripper_r_finger_link_lk) (send *robot* :l_gripper_l_finger_link_lk) (send *robot* :l_gripper_r_finger_tip_link_lk)(send *robot* :base_link_lk))))
+      :collision-avoidance-link-pair (mapcar #'(lambda (l) (list l *kitchen*)) (append (send *robot* :link-list (send *robot* :larm :end-coords :parent)) (list (send *robot* :l_forearm_link_lk) (send *robot* :l_upper_arm_link_lk) (send *robot* :l_gripper_palm_link_lk) (send *robot* :l_gripper_r_finger_link_lk) (send *robot* :l_gripper_l_finger_link_lk) (send *robot* :l_gripper_r_finger_tip_link_lk))))
       )
