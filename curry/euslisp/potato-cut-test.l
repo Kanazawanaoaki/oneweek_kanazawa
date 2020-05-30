@@ -80,12 +80,12 @@
   )
 
 ;; set knife
-(load "../model/my-knife.l")
+(load "model/my-knife.l")
 (setq *knife* (knife))
 (send *knife* :locate #f(500 -400 830))
 
 ;; set まな板
-(load "../model/cutting-board.l")
+(load "model/cutting-board.l")
 (setq *cutting-board* (cutting-board))
 (send *cutting-board* :locate #f(620 -160 825))
 

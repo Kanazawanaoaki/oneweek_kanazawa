@@ -53,12 +53,12 @@
   )
 
 ;; set peeler
-(load "../model/peeler.l")
+(load "model/peeler.l")
 (setq *peeler* (peeler))
 (send *peeler* :locate #f(450 -250 830))
 
 ;; set まな板
-(load "../model/cutting-board.l")
+(load "model/cutting-board.l")
 (setq *cutting-board* (cutting-board))
 (send *cutting-board* :locate #f(550 0 825))
 
@@ -114,7 +114,7 @@
 	:rotation-axis t
 	:debug-view t)
 
-  (unix:sleep 1)
+  (unix:usleep 100000)
 
   (send *arrow* :translate #f(-100 0 0))
   
