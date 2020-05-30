@@ -122,14 +122,133 @@
 (setq *cut-point-3* (make-cascoords :pos #f(0 0 -25)))
 (send *cut-point-3* :rotate (deg2rad -90) :x)
 (send *cut-point-3* :rotate (deg2rad 180) :z :world)
+(send *cut-point-3* :rotate (deg2rad 180) :z)
 
 (setq *cut-point-4* (make-cascoords :pos #f(0 0 25)))
 (send *cut-point-4* :rotate (deg2rad -90) :x)
 (setq *cut-point-5* (make-cascoords :pos #f(0 0 -25)))
 (send *cut-point-5* :rotate (deg2rad -90) :x)
+(send *cut-point-5* :rotate (deg2rad 180) :z)
+
+(send p3-1 :assoc *cut-point-1*)
+(send p2-1 :assoc *cut-point-2*)
+(send p4-1 :assoc *cut-point-3*)
+(send p1-1 :assoc *cut-point-4*)
+(send p3-1 :assoc *cut-point-5*)
 
 (load "models/arrow-object.l")
 (setq *arrow* (arrow))
 (send *arrow* :move-to *cut-point-1* :world)
 
 (objects (list p1-1 p1-2 p1-3 p1-4 p2-1 p2-2 p2-3 p2-4 p3-1 p3-2 p4-1 p4-2 p5-1 p5-2 p6-1 p6-2 *arrow*))
+
+
+;; test codes
+(send p4-1 :assoc p2-1)
+(send p4-1 :assoc p6-1)
+(send p3-1 :assoc p1-1)
+(send p3-1 :assoc p5-1)
+(send p3-1 :assoc p4-1)
+
+(warn "please run (c1-1) or (exec-all)~%")
+
+(defun c1-1 ()
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c1-2)~%")
+  )
+
+(defun c1-2 ()
+  (send p3-1 :dissoc p4-1)
+  (send p4-1 :translate #f(0 -30 0))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c2-1)~%")
+  )
+
+(defun c2-1 ()
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c2-2)~%")
+  )
+
+
+(defun c2-2 ()
+  (send p4-1 :dissoc p2-1)
+  (send p2-1 :translate #f(0 0 20))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c3-1)~%")
+  )
+  
+(defun c3-1 ()
+  (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c3-2)~%")
+  )
+
+
+(defun c3-2 ()
+  (send p4-1 :dissoc p6-1)
+  (send p6-1 :translate #f(0 0 -20))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c4-1)~%")
+  )
+
+(defun c4-1 ()
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c4-2)~%")
+  )
+
+
+(defun c4-2 ()
+  (send p3-1 :dissoc p1-1)
+  (send p1-1 :translate #f(0 0 20))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c5-1)~%")
+  )
+
+(defun c5-1 ()
+  (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (c5-2)~%")
+  )
+
+
+(defun c5-2 ()
+  (send p3-1 :dissoc p5-1)
+  (send p5-1 :translate #f(0 0 -20))
+
+  (send *viewer* :draw-objects)
+  )
+
+(defun exec-all ()
+  (c1-1)
+  (unix:usleep 1000000)
+  (c1-2)
+  (unix:usleep 1000000)
+  (c2-1)
+  (unix:usleep 1000000)
+  (c2-2)
+  (unix:usleep 1000000)
+  (c3-1)
+  (unix:usleep 1000000)
+  (c3-2)
+  (unix:usleep 1000000)
+  (c4-1)
+  (unix:usleep 1000000)
+  (c4-2)
+  (unix:usleep 1000000)
+  (c5-1)
+  (unix:usleep 1000000)
+  (c5-2)
+  (unix:usleep 1000000)
+  )
