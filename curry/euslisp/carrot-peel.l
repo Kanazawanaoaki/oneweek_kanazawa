@@ -123,6 +123,70 @@
 	:debug-view t)
   )
 
+(defun peel-move ()
+  (send *arrow* :newcoords (send (send *robot* :larm :end-coords) :copy-worldcoords))
+  (send *arrow* :rotate (deg2rad 180) :z)
+  (send *arrow* :rotate (deg2rad -90) :y)
+  (send *arrow* :rotate (deg2rad 180) :x)
+  
+  (send *arrow* :translate #f(50 0 -20))  ;; ここを認識から大きさに合わせてとかやるのが良い。
+
+  (send *robot* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *peeler* :attention))
+	:rotation-axis t
+	:debug-view t)
+
+  (unix:usleep 100000)
+
+  (send *arrow* :translate #f(-100 0 0))
+  
+  (send *robot* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *peeler* :attention))
+	:rotation-axis t
+	:debug-view t)
+  )
+
+(defun put-carrot ()
+  (send *arrow* :newcoords (make-coords :pos #f(500 -150 850)))
+  (send *arrow* :rotate (deg2rad 90) :y)
+  (send *arrow* :rotate (deg2rad -45) :x :world)
+  (send *arrow* :rotate (deg2rad -90) :z :world)  
+
+  (send *robot* :larm :inverse-kinematics *arrow* :debug-view t)
+  (send (send *robot* :larm :end-coords) :dissoc p2)
+  (unix:usleep 100000)
+
+  (send *robot* :reset-manip-pose)
+  (unix:usleep 100000)
+  )
+
+
+(defun pick-up-carrot ()
+  (send *arrow* :newcoords (make-coords :pos #f(500 -150 850)))
+  (send *arrow* :rotate (deg2rad 90) :y)
+  (send *arrow* :rotate (deg2rad 45) :x :world)
+  (send *arrow* :rotate (deg2rad -90) :z :world)
+  
+  (send *robot* :larm :inverse-kinematics *arrow* :debug-view t)
+  (send (send *robot* :larm :end-coords) :assoc p2)
+  (unix:usleep 100000)
+  )
+
+(defun set-peel ()
+  (send *arrow* :newcoords (send *robot* :copy-worldcoords))
+  (send *arrow* :translate #f(550 150 1050))
+  (send *arrow* :rotate (deg2rad -120) :z)
+  (send *arrow* :rotate (deg2rad -40) :y)
+  
+  (send *robot* :larm :inverse-kinematics
+  	*arrow*
+  	:rotation-axis t
+  	:debug-view t)
+  )
+
+
 (defun set-move-1 ()
   (send *robot* :larm :inverse-kinematics
 	*arrow*
@@ -179,19 +243,29 @@
   (send *viewer* :draw-objects)
   (unix:usleep 100000)
 
-  (format t ";; please run (end-move)~%")
+  (format t ";; please run (set-move-3)~%")
   )
 
-(defun end-move ()
+(defun set-move-3 ()
   (send *arrow* :newcoords (make-coords :pos #f(520 -300 1030)))
   (send *robot* :rarm :inverse-kinematics *arrow* :rotation-axis nil :debug-view t)
   (unix:usleep 100000)
+
+  (send *arrow* :newcoords (make-coords :pos  #f(500 -400 830)))
+  (send *robot* :rarm :inverse-kinematics
+	*arrow*
+	:move-target *knife*
+	:rotation-axis t
+	:debug-view t)
+  (unix:usleep 100000)
+  
+  (send *robot* :rarm :end-coords :dissoc *knife*)
 
   (send *robot* :larm :end-coords :dissoc *carrot*)
   (send *robot* :larm :end-coords :assoc p3)
 
   (send *arrow* :newcoords (send p3 :copy-worldcoords))
-  (send *arrow* :translate #f(0 20 0) :world)
+  (send *arrow* :translate #f(0 80 0) :world)
 
   (send *robot* :larm :inverse-kinematics
 	*arrow*
@@ -199,8 +273,104 @@
 	:rotation-axis t
 	:debug-view t)
   (unix:usleep 100000)
+
+
+  (send *robot* :larm :end-coords :dissoc p3)
+
+  (send *arrow* :newcoords (send p2 :copy-worldcoords))
+  (send *arrow* :translate #f(60 0 0))
+  (send *arrow* :rotate (deg2rad 90) :y)
+  (send *robot* :larm :inverse-kinematics
+	*arrow*
+	:rotation-axis t
+	:debug-view t)
+  (unix:usleep 100000)
+
+  (send *robot* :larm :end-coords :assoc p2)
+
+  (set-peel)
+  (unix:usleep 100000)
+
+  ;; grasp peeler
+  (send *robot* :rarm :inverse-kinematics
+	(car (send *peeler* :handle))
+	:rotation-axis t
+	:debug-view t)
+  (send (send *robot* :rarm :end-coords) :assoc *peeler*)
+
+  (format t ";; please run (peel-carrot-1)~%")
   )
 
+(defun peel-carrot-1 ()
+  (peel-move)
+  
+  (unix:usleep 100000)
+
+  (format t ";; please run (put-carrot-1)~%")
+  )
+
+(defun put-carrot-1 ()
+  (put-carrot)
+
+  (format t ";; please run (pick-carrot-2)~%")
+  )
+
+(defun pick-carrot-2 ()
+  (pick-up-carrot)
+  (set-peel)
+
+  (format t ";; please run (peel-carrot-2)~%")
+  )
+
+(defun peel-carrot-2 ()
+  (peel-move)
+  
+  (unix:usleep 100000)
+
+  (format t ";; please run (put-carrot-2)~%")
+  )
+
+(defun put-carrot-2 ()
+  (put-carrot)
+
+  (format t ";; please run (pick-carrot-3)~%")
+  )
+
+(defun pick-carrot-3 ()
+  (pick-up-carrot)
+  (set-peel)
+
+  (format t ";; please run (peel-carrot-3)~%")
+  )
+
+(defun peel-carrot-3 ()
+  (peel-move)
+  
+  (unix:usleep 100000)
+
+  (format t ";; please run (put-carrot-3)~%")
+  )
+
+(defun put-carrot-3 ()
+  (put-carrot)
+
+  (format t ";; please run (pick-carrot-4)~%")
+  )
+
+(defun pick-carrot-4 ()
+  (pick-up-carrot)
+  (set-peel)
+
+  (format t ";; please run (peel-carrot-4)~%")
+  )
+
+(defun peel-carrot-4 ()
+  (peel-move)
+  
+  (unix:usleep 100000)
+
+  ;; (format t ";; please run (put-carrot-4)~%")
+  )
 
 
 (format t ";; please run (set-move-1)~%")
@@ -211,6 +381,7 @@
   (cut-carrot-1)
   (set-move-2)
   (cut-carrot-2)
+  (set-move-3)
   )
 
 (defun exec-all ()
@@ -218,5 +389,15 @@
   (cut-carrot-1)
   (set-move-2)
   (cut-carrot-2)
-  (end-move)
+  (set-move-3)
+  (peel-carrot-1)
+  (put-carrot-1)
+  (pick-carrot-2)
+  (peel-carrot-2)
+  (put-carrot-2)
+  (pick-carrot-3)
+  (peel-carrot-3)
+  (put-carrot-3)
+  (pick-carrot-4)
+  (peel-carrot-4)
   )
