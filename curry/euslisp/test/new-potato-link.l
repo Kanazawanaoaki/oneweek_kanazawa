@@ -6,6 +6,17 @@
   (setq v-list (list (x-mul (car (send b1 :vertices)) 1.5)))
   (dolist (x (cdr (send b1 :vertices))) (setq v-list (append v-list (list (x-mul x 1.5)))))
   (setq b2 (convex-hull-3d v-list))
+
+  (send b2 :set-color :saddlebrown)
+
+  (setq *potato* (instance bodyset-link :init (make-cascoords) :bodies (list b2) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+  )
+
+(defun make-potato-peel-link ()
+  (setq b1 (make-sphere 30))
+  (setq v-list (list (x-mul (car (send b1 :vertices)) 1.5)))
+  (dolist (x (cdr (send b1 :vertices))) (setq v-list (append v-list (list (x-mul x 1.5)))))
+  (setq b2 (convex-hull-3d v-list))
      
   (setq b3 (make-cube 500 500 500))
   (send b3 :translate #f(0 -250 0))
@@ -41,7 +52,7 @@
   (send p1 :assoc p3)
   (send p1 :assoc p4)
 
-  (setq *potato* (instance bodyset-link :init (make-cascoords) :bodies (list p1 p2 p3 p4) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+  (setq *potato-p* (instance bodyset-link :init (make-cascoords) :bodies (list p1 p2 p3 p4) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
   )
 
 
@@ -84,13 +95,6 @@
   (send p5 :set-color :moccasin)
   (send p6 :set-color :moccasin)
 
-  ;; (setq *potato* (make-cascoords))
-  ;; (send *potato* :assoc p1)
-  ;; (send *potato* :assoc p2)
-  ;; (send *potato* :assoc p3)
-  ;; (send *potato* :assoc p4)
-  ;; (send *potato* :assoc p5)
-  ;; (send *potato* :assoc p6)
   (send p4 :assoc p1)
   (send p4 :assoc p2)
   (send p4 :assoc p3)
@@ -99,7 +103,6 @@
 
   (setq *cut-point-1* (make-cascoords :pos #f(0 0 -20)))
   (send *cut-point-1* :rotate (deg2rad 90) :z)
-  ;; (send *potato* :assoc *cut-point-1*)
   (send p1 :assoc *cut-point-1*)
 
   (setq *cut-point-2* (make-cascoords :pos #f(0 0 -10)))
@@ -126,8 +129,9 @@
   )
 
 
-
 (make-potato-link)
+
+(send *potato* :translate #f(0 0 50))
 
 ;; set arrow
 (load "models/arrow-object.l")
@@ -135,13 +139,16 @@
 
 (objects (list *potato*))
 
-(send *potato* :rotate (deg2rad 45) :x)
-
+(send *viewer* :draw-objects)
 
 (format t ";; please run (p1-1)~%")
 
-
 (defun p1-1 ()
+  (make-potato-peel-link)
+  (send *potato-p* :newcoords (send *potato* :copy-worldcoords))
+  (send *potato-p* :rotate (deg2rad 45) :x)
+  (objects (list *potato-p*))
+  
   (send p1 :set-color :moccasin)
 
   (send *viewer* :draw-objects)
@@ -149,7 +156,7 @@
   )
 
 (defun p1-2 ()
-  (send *potato* :rotate (deg2rad -90) :x)
+  (send *potato-p* :rotate (deg2rad -90) :x)
 
   (send *viewer* :draw-objects)
   (format t ";; please run (p2-1)~%")
@@ -163,7 +170,7 @@
   )
 
 (defun p2-2 ()
-  (send *potato* :rotate (deg2rad -90) :x)
+  (send *potato-p* :rotate (deg2rad -90) :x)
 
   (send *viewer* :draw-objects)
   (format t ";; please run (p3-1)~%")
@@ -177,7 +184,7 @@
   )
 
 (defun p3-2 ()
-  (send *potato* :rotate (deg2rad -90) :x)
+  (send *potato-p* :rotate (deg2rad -90) :x)
 
   (send *viewer* :draw-objects)
   (format t ";; please run (p4-1)~%")
@@ -192,7 +199,7 @@
 
 (defun c1-1 ()
   (make-potato-cut-link)
-  (send *potato-c* :newcoords (make-coords :pos (send *potato* :worldpos)))
+  (send *potato-c* :newcoords (make-coords :pos (send *potato-p* :worldpos)))
   
   ;; (send *potato-c* :newcoords (send *potato* :copy-worldcoords))
   ;; (send *potato-c* :rotate (deg2rad -45) :x)
