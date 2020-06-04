@@ -10,25 +10,6 @@
   (setq b2 (convex-hull-3d v-list))
   )
 
-(defun box-approximation (body)
-  (setq first-point (car (send body :vertices)))
-  (setq x-max (elt first-point 0))
-  (setq x-min (elt first-point 0))
-  (setq y-max (elt first-point 1))
-  (setq y-min (elt first-point 1))
-  (setq z-max (elt first-point 2))
-  (setq z-min (elt first-point 2))
-  (dolist (x (cdr (send body :vertices)))
-    (if (> (elt x 0) x-max) (setq x-max (elt x 0)))
-    (if (> (elt x 1) y-max) (setq y-max (elt x 1)))
-    (if (> (elt x 2) z-max) (setq z-max (elt x 2)))
-    (if (< (elt x 0) x-min) (setq x-min (elt x 0)))
-    (if (< (elt x 1) y-min) (setq y-min (elt x 1)))
-    (if (< (elt x 2) z-min) (setq z-min (elt x 2))))
-  (list x-max x-min y-max y-min z-max z-min)
-  )
-  
-
 (defclass potato
   :super bodyset-link
   :slots (width
@@ -44,7 +25,7 @@
      (setq length l)
      (setq height h)
      (setq b (make-ellipsoid w l h))
-     (send b :set-color :gray90)
+     (send b :set-color :saddlebrown)
      (send-super* :init (make-cascoords) :bodies (list b) args)))
   (:print-info
    ()
@@ -57,117 +38,405 @@
      (send b :set-color :saddlebrown)
      (push b r)
      (setq geo::bodies r)))
+  (:peel
+   ()
+   (let (b1 b2 b3 b4 r)
+     (setq b1 (make-ellipsoid width length height))
+     (setq b2 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b2 :locate (float-vector 0 (* (/ -2 3.0) length) 0))
+   
+     (setq b3 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b3 :locate (float-vector 0 (* (/ 2 3.0) length) 0))
+   
+     (setq b4 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b4 :locate (float-vector 0 0 (+ (* -1 height) 1)))
+   
+     (setq p2 (body- b1 b2))
+     (setq b1 (body- b1 p2))
+     (setq p4 (body- b1 b3))
+     (setq b1 (body- b1 p4))
+     (setq p1 (body- b1 b4))
+     (setq p3 (body- b1 p1))
+   
+     (send p1 :assoc p2)
+     (send p1 :assoc p3)
+     (send p1 :assoc p4)
+
+     (send p1 :set-color :saddlebrown)
+     (send p2 :set-color :saddlebrown)
+     (send p3 :set-color :saddlebrown)
+     (send p4 :set-color :saddlebrown)
+     (send p1 :newcoords (send self :copy-worldcoords))
+     (send self :assoc p1)
+     
+     (push p1 r)
+     (push p2 r)
+     (push p3 r)
+     (push p4 r)
+     (setq geo::bodies r))
+     )
   (:cut
    ()
-   (let (r m c p)
-     ;; for all bodies
-     (dolist (abody geo::bodies)
-       ;; (setq m (cdar (send abody :csg))) ;; get w/d/h
-       (setq b-list (box-approximation abody))
-       (print (list (- (elt b-list 0) (elt b-list 1)) (- (elt b-list 2) (elt b-list 3)) (-  (elt b-list 4) (elt b-list 5))))
-       (setq m (float-vector (- (elt b-list 0) (elt b-list 1)) (- (elt b-list 2) (elt b-list 3)) (- (elt b-list 4) (elt b-list 5))))
-       (setq c (send abody :get :face-color))
-       (setq p (send abody :pos))
-       ;; generate half size cube
-       (setq b1 (make-cube (+ (/ (elt m 0) 2) 2) (+ (elt m 1) 2) (+ (elt m 2) 2)))
-       (setq b2 (make-cube (+ (/ (elt m 0) 2) 2) (+ (elt m 1) 2) (+ (elt m 2) 2)))
-       ;; move generated bodies
-       (send b1 :locate (v+ p (float-vector (/ (elt m 0) -2) 0 0)))
-       (send b2 :locate (v+ p (float-vector (/ (elt m 0) 2) 0 0)))
-       (send b1 :set-color c)
-       (send b2 :set-color c)
-       
-       (send abody :locate (float-vector (/ (elt m 0) -4) 0 0))
-       (setq b1 (body- abody b1))
-       (send abody :locate (float-vector (/ (elt m 0) 2) 0 0))
-       (setq b2 (body- abody b2))
-       (send b1 :locate (float-vector (/ (elt m 0) 4) 0 0))
-       (send b2 :locate (float-vector (/ (elt m 0) -4) 0 0))
-       
-       (send self :assoc b1)
-       (send self :assoc b2)
-       (print (v+ p (float-vector (/ (elt m 0) 4) 0 0)))
-       ;; use original color
-       (send b1 :set-color c)
-       (send b2 :set-color c)
-       ;; push generated bodies to r
-       (push b1 r)
-       (push b2 r)
-       )
-       ;; replace geo::bodies with new bodies
-     (setq geo::bodies r)))
+   (let (b1 b2 b3 b4 b5 b6 r)
+     (setq b1 (make-ellipsoid width length height))
+     (setq b2 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b2 :locate (float-vector (+ (* -1 width) 1) 0 0))
+
+     (setq b3 (body- b1 b2))
+     (setq b4 (body- b1 b3))
+
+     (setq b5 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b5 :locate (float-vector 0 0 (/ (* -5 height) 6)))
+     (setq b6 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b6 :locate (float-vector 0 0 (/ (* -7 height) 6)))
+     
+     (setq p1 (body- b3 b5))
+     (setq p4 (body- b4 b5))
+     (setq b3 (body- b3 p1))
+     (setq b4 (body- b4 p4))
+
+     (setq p2 (body- b3 b6))
+     (setq p5 (body- b4 b6))
+     (setq p3 (body- b3 p2))
+     (setq p6 (body- b4 p5))
+
+     (send p1 :set-color :moccasin)
+     (send p2 :set-color :moccasin)
+     (send p3 :set-color :moccasin)
+     (send p4 :set-color :moccasin)
+     (send p5 :set-color :moccasin)
+     (send p6 :set-color :moccasin)
+
+     (send p4 :assoc p1)
+     (send p4 :assoc p2)
+     (send p4 :assoc p3)
+     (send p4 :assoc p5)
+     (send p4 :assoc p6)
+     
+     (setq *cut-point-1* (make-cascoords :pos (float-vector 0 0 (/ height -2))))
+     (send *cut-point-1* :rotate (deg2rad 90) :z)
+     (send p1 :assoc *cut-point-1*)
+
+     (setq *cut-point-2* (make-cascoords :pos (float-vector 0 0 (/ height -6))))
+     (send *cut-point-2* :rotate (deg2rad 90) :y)
+     (send *cut-point-2* :rotate (deg2rad 90) :z)
+     (send p2 :assoc *cut-point-2*)
+     
+     (setq *cut-point-3* (make-cascoords :pos (float-vector 0 0 (/ height 6))))
+     (send *cut-point-3* :rotate (deg2rad 90) :y)
+     (send *cut-point-3* :rotate (deg2rad 90) :z)
+     (send p1 :assoc *cut-point-3*)
+
+     (setq *cut-point-4* (make-cascoords :pos (float-vector 0 0 (/ height -6))))
+     (send *cut-point-4* :rotate (deg2rad -90) :z)
+     (send *cut-point-4* :rotate (deg2rad 90) :x)
+     (send p5 :assoc *cut-point-4*)
+
+     (setq *cut-point-5* (make-cascoords :pos (float-vector 0 0 (/ height 6))))
+     (send *cut-point-5* :rotate (deg2rad -90) :z)
+     (send *cut-point-5* :rotate (deg2rad 90) :x)
+     (send p4 :assoc *cut-point-5*)
+
+     (send p4 :newcoords (send self :copy-worldcoords))
+     (send self :assoc p4)
+     
+     (push p1 r)
+     (push p2 r)
+     (push p3 r)
+     (push p4 r)
+     (push p5 r)
+     (push p6 r)
+     (setq geo::bodies r))
+   )
   )
 
-(setq *potato* (instance potato :init :w 90 :l 60 :h 30))
+
+(setq *potato* (instance potato :init :w 90 :l 70 :h 60))
+(send *potato* :translate #f(0 0 50))
+
+;; set arrow
+(load "models/arrow-object.l")
+(setq *arrow* (arrow))
+
 (objects (list *potato*))
 
+(send *viewer* :draw-objects)
 
-(unix:sleep 1)
+(format t ";; please run (p1-1)~%")
 
-;; (send *potato* :translate #f(0 0 50))
-;; (send *potato* :rotate (deg2rad 90) :z)
-;; (send *viewer* :draw-objects)
+(defun p1-1 ()
+  (send *potato* :peel)
+  (objects (list *potato*))
+  
+  (send p1 :set-color :moccasin)
 
-(send *potato* :change-color)
-;; (send *viewer* :draw-objects)
-(objects (list *potato*))
-(unix:sleep 1)
+  (send *viewer* :draw-objects)
+  (format t ";; please run (p1-2)~%")
+  )
 
-(send *potato* :cut)
-;; (send *viewer* :draw-objects)
-(objects (list *potato*))
-(unix:sleep 1)
+(defun p1-2 ()
+  (send *potato* :rotate (deg2rad 90) :x)
 
-(send *potato* :cut)
-;; (send *viewer* :draw-objects)
-(objects (list *potato*))
-(unix:sleep 1)
+  (send *viewer* :draw-objects)
+  (format t ";; please run (p2-1)~%")
+  )
+  
+(defun p2-1 ()
+  (send p2 :set-color :moccasin)
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (p2-2)~%")
+  )
+
+(defun p2-2 ()
+  (send *potato* :rotate (deg2rad 90) :x)
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (p3-1)~%")
+  )
+
+(defun p3-1 ()
+  (send p3 :set-color :moccasin)
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (p3-2)~%")
+  )
+
+(defun p3-2 ()
+  (send *potato* :rotate (deg2rad 90) :x)
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (p4-1)~%")
+  )
+
+(defun p4-1 ()
+  (send p4 :set-color :moccasin)
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c4-2)~%")
+  )
+
+(defun p4-2 ()
+  (send *potato* :rotate (deg2rad 90) :x)
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c1-1)~%")
+  )
+
+(defun c1-1 ()
+  (send *potato* :cut)
+
+  (objects (list *potato* *arrow*))
+
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  
+  (format t ";; please run (c1-2)~%")
+  )
+
+(defun c1-2 ()
+  (send p4 :dissoc p1)
+  (send p4 :dissoc p2)
+  (send p4 :dissoc p3)
+
+  (send p1 :assoc p2)
+  (send p1 :assoc p3)
+
+  (setq *potato2* (make-cascoords))
+  (send *potato2* :newcoords (send *potato* :copy-worldcoords))
+
+  (send *potato2* :assoc p1)
+  (send *potato2* :translate #f(30 0 0) :world)
+  (send *viewer* :draw-objects)
+  (unix:usleep 100000)
+
+  (format t ";; please run (c2-1)~%")  
+  )
+
+(defun c2-1 ()
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c2-2)~%")
+  )
+  
+(defun c2-2 ()
+  (send p1 :dissoc p3)
+  (send p3 :translate #f(0 0 -20))
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c3-1)~%")
+  )
+
+(defun c3-1 ()
+  (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c3-2)~%")
+  )
+  
+(defun c3-2 ()
+  (send p1 :dissoc p2)
+  (send p2 :translate #f(0 0 -10))
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c4-1)~%")
+  )
+
+(defun c4-1 ()
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c4-2)~%")
+  )
+  
+(defun c4-2 ()
+  (send p4 :dissoc p6)
+  (send p6 :translate #f(0 0 -20))
+  (send *viewer* :draw-objects)
+
+  (format t ";; please run (c5-1)~%")
+  )
+
+(defun c5-1 ()
+  (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
+
+  (send *viewer* :draw-objects)
+  (format t ";; please run (c5-2)~%")
+  )
+
+(defun c5-2 ()
+  (send p4 :dissoc p5)
+  (send p5 :translate #f(0 0 -10))
+  (send *viewer* :draw-objects)
+  )  
+  
+
+(format t ";; please run (p1-1)~%")
+(format t ";; you can also run (now-devel) or (exec-all)~%"))
 
 
-;; ;; this requries https://github.com/euslisp/jskeus/pull/560
-;; ;; (load "/home/k-okada/catkin_ws/ws_euslisp/src/jskeus/irteus/irtviewer.l")
-;; (load "../../tmpfiles/irtviewer.l")
+(defun now-devel ()
+  (p1-1)
+  (unix:usleep 1000000)
+  (p1-2)
+  (unix:usleep 1000000)
+  (p2-1)
+  (unix:usleep 1000000)
+  (p2-2)
+  (unix:usleep 1000000)
+  (p3-1)
+  (unix:usleep 1000000)
+  (p3-2)
+  (unix:usleep 1000000)
+  (p4-1)
+  (unix:usleep 1000000)
+  (p4-2)
+  )
 
-;; (with-save-animgif
-;;  "potato.gif" 
+(defun exec-all ()
+  (p1-1)
+  (unix:usleep 1000000)
+  (p1-2)
+  (unix:usleep 1000000)
+  (p2-1)
+  (unix:usleep 1000000)
+  (p2-2)
+  (unix:usleep 1000000)
+  (p3-1)
+  (unix:usleep 1000000)
+  (p3-2)
+  (unix:usleep 1000000)
+  (p4-1)
+  (unix:usleep 1000000)
+  (p4-2)
+  (unix:usleep 1000000)
+  (c1-1)
+  (unix:usleep 1000000)
+  (c1-2)
+  (unix:usleep 1000000)
+  (c2-1)
+  (unix:usleep 1000000)
+  (c2-2)
+  (unix:usleep 1000000)
+  (c3-1)
+  (unix:usleep 1000000)
+  (c3-2)
+  (unix:usleep 1000000)
+  (c4-1)
+  (unix:usleep 1000000)
+  (c4-2)
+  (unix:usleep 1000000)
+  (c5-1)
+  (unix:usleep 1000000)
+  (c5-2)
+  )
 
-;;  (setq *potato* (instance potato :init :w 90 :l 60 :h 30))
-;;  (objects (list *potato*))
+;; this requries https://github.com/euslisp/jskeus/pull/560
+;; (load "/home/k-okada/catkin_ws/ws_euslisp/src/jskeus/irteus/irtviewer.l")
+(load "../../tmpfiles/irtviewer.l")
 
-;;  (dotimes (i 10)
-;;    (x::window-main-one)
-;;    (send *irtviewer* :draw-objects)
-;;    (unix:usleep 100000))
+(with-save-animgif
+ "potato-class.gif"
 
-;;  ;; (send *potato* :translate #f(0 0 50))
-;;  ;; (send *potato* :rotate (deg2rad 90) :z)
-;;  ;; (send *viewer* :draw-objects)
+ (p1-1)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
+ (p1-2)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
+ (p2-1)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
+ (p2-2)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
+ (p3-1)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
+ (p3-2)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
+ (p4-1)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
+ (p4-2)
+ (dotimes (i 10)
+   (x::window-main-one)
+   (send *irtviewer* :draw-objects)
+   (unix:usleep 100000))
 
-;;  (send *potato* :change-color)
-;;  ;; (send *viewer* :draw-objects)
-;;  (objects (list *potato*))
-
-;;  (dotimes (i 10)
-;;    (x::window-main-one)
-;;    (send *irtviewer* :draw-objects)
-;;    (unix:usleep 100000))
-
-;;  (send *potato* :cut)
-;;  ;; (send *viewer* :draw-objects)
-;;  (objects (list *potato*))
-
-;;  (dotimes (i 10)
-;;    (x::window-main-one)
-;;    (send *irtviewer* :draw-objects)
-;;    (unix:usleep 100000))
-
-;;  (send *potato* :cut)
-;;  ;; (send *viewer* :draw-objects)
-;;  (objects (list *potato*))
-
-;;  (dotimes (i 10)
-;;    (x::window-main-one)
-;;    (send *irtviewer* :draw-objects)
-;;    (unix:usleep 100000))
-
-;;  )
+ ;; (c1-1)
+ ;; (unix:usleep 1000000)
+ ;; (c1-2)
+ ;; (unix:usleep 1000000)
+ ;; (c2-1)
+ ;; (unix:usleep 1000000)
+ ;; (c2-2)
+ ;; (unix:usleep 1000000)
+ ;; (c3-1)
+ ;; (unix:usleep 1000000)
+ ;; (c3-2)
+ ;; (unix:usleep 1000000)
+ ;; (c4-1)
+ ;; (unix:usleep 1000000)
+ ;; (c4-2)
+ ;; (unix:usleep 1000000)
+ ;; (c5-1)
+ ;; (unix:usleep 1000000)
+ ;; (c5-2)
+ )
