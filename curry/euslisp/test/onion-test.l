@@ -49,7 +49,7 @@
   (:print-info
    ()
    (format t "width ~A, length ~A, height ~A~%" width length height))
-  (:cut
+  (:peel
    ()
    (let (b1 b2 b3 b4 b5 b6 b7 r)
      (setq b1 (make-ellipsoid width length height))
@@ -186,117 +186,138 @@
 (setq *onion* (instance onion :init :w 90 :l 90 :h 70))
 (send *onion* :translate #f(0 0 50))
 
-(send *onion* :cut)
+(send *onion* :peel)
 
 ;; set arrow
 (load "models/arrow-object.l")
 (setq *arrow* (arrow))
 
-(objects (list *onion*))
+(objects (list *onion* *arrow*))
 
 (send *viewer* :draw-objects)
 
 
 
-(warn "please run (c1-1) or (exec-all)~%")
+(warn "please run (p1-1) or (exec-all)~%")
 
-(defun c1-1 ()
+(defun p1-1 ()
   (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c1-2)~%")
+  (warn "please run (p1-2)~%")
   )
 
-(defun c1-2 ()
+(defun p1-2 ()
   (send p3-1 :dissoc p4-1)
   (send p4-1 :translate #f(0 -30 0))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c2-1)~%")
+  (warn "please run (p2-1)~%")
   )
 
-(defun c2-1 ()
+(defun p2-1 ()
   (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c2-2)~%")
+  (warn "please run (p2-2)~%")
   )
 
 
-(defun c2-2 ()
+(defun p2-2 ()
   (send p4-1 :dissoc p2-1)
   (send p2-1 :translate #f(0 0 20))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c3-1)~%")
+  (warn "please run (p3-1)~%")
   )
   
-(defun c3-1 ()
+(defun p3-1 ()
   (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c3-2)~%")
+  (warn "please run (p3-2)~%")
   )
 
 
-(defun c3-2 ()
+(defun p3-2 ()
   (send p4-1 :dissoc p6-1)
   (send p6-1 :translate #f(0 0 -20))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c4-1)~%")
+  (warn "please run (p4-1)~%")
   )
 
-(defun c4-1 ()
+(defun p4-1 ()
   (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c4-2)~%")
+  (warn "please run (p4-2)~%")
   )
 
 
-(defun c4-2 ()
+(defun p4-2 ()
   (send p3-1 :dissoc p1-1)
   (send p1-1 :translate #f(0 0 20))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c5-1)~%")
+  (warn "please run (p5-1)~%")
   )
 
-(defun c5-1 ()
+(defun p5-1 ()
   (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
 
   (send *viewer* :draw-objects)
-  (warn "please run (c5-2)~%")
+  (warn "please run (p5-2)~%")
   )
 
 
-(defun c5-2 ()
+(defun p5-2 ()
   (send p3-1 :dissoc p5-1)
   (send p5-1 :translate #f(0 0 -20))
 
   (send *viewer* :draw-objects)
+  (warn "please run (p6-1)~%")
   )
 
+(defun p6-1 ()
+  (send p4-1 :dissoc p4-2)
+  (send p4-2 :translate #f(0 -50 0))
+
+  (send *viewer* :draw-objects)
+  (warn "please run (p6-2)~%")
+  )
+
+
+(defun p6-2 ()
+  (send p3-1 :dissoc p3-2)
+  (send p3-2 :translate #f(0 50 0))
+
+  (send *viewer* :draw-objects)
+  )
+
+
 (defun exec-all ()
-  (c1-1)
+  (p1-1)
   (unix:usleep 1000000)
-  (c1-2)
+  (p1-2)
   (unix:usleep 1000000)
-  (c2-1)
+  (p2-1)
   (unix:usleep 1000000)
-  (c2-2)
+  (p2-2)
   (unix:usleep 1000000)
-  (c3-1)
+  (p3-1)
   (unix:usleep 1000000)
-  (c3-2)
+  (p3-2)
   (unix:usleep 1000000)
-  (c4-1)
+  (p4-1)
   (unix:usleep 1000000)
-  (c4-2)
+  (p4-2)
   (unix:usleep 1000000)
-  (c5-1)
+  (p5-1)
   (unix:usleep 1000000)
-  (c5-2)
+  (p5-2)
   (unix:usleep 1000000)
+  (p6-1)
+  (unix:usleep 1000000)
+  (p6-2)
   )
