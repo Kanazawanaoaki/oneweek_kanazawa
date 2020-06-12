@@ -10,16 +10,16 @@
   (setq b2 (convex-hull-3d v-list))
   )
 
-(defclass potato
+(defclass potato-object
   :super bodyset-link
   :slots (width
 	  length
 	  height
 	  ))
 
-(defmethod potato
+(defmethod potato-object
   (:init
-   (&rest args &key (w 90) (l 60) (h 60))
+   (&rest args &key (w 90) (l 60) (h 60) &allow-other-keys)
    (let (b)
      (setq width w)
      (setq length l)
@@ -150,8 +150,9 @@
    )
   )
 
+(defun potato (&rest args) (instance* potato-object :init args))
 
-;; (setq *potato* (instance potato :init :w 90 :l 70 :h 60))
+;; (setq *potato* (potato :w 90 :l 70 :h 60))
 ;; (send *potato* :translate #f(0 0 50))
 
 ;; ;; set arrow

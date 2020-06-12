@@ -11,16 +11,16 @@
     (setq b2 (convex-hull-3d v-list)))
     )
 
-(defclass onion
+(defclass onion-object
   :super bodyset-link
   :slots (width
 	  length
 	  height
 	  ))
 
-(defmethod onion
+(defmethod onion-object
   (:init
-   (&rest args &key (w 90) (l 90) (h 60))
+   (&rest args &key (w 90) (l 90) (h 60) &allow-other-keys)
    (let (b1 b2)
      (setq width w)
      (setq length l)
@@ -286,8 +286,9 @@
    )
   )
 
+(defun onion (&rest args) (instance* onion-object :init args))
 
-;; (setq *onion* (instance onion :init :w 90 :l 90 :h 70))
+;; (setq *onion* (onion :w 90 :l 90 :h 60))
 ;; (send *onion* :translate #f(0 0 50))
 
 ;; (send *onion* :cut)

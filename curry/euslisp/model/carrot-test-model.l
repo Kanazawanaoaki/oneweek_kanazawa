@@ -81,12 +81,12 @@
     r))
 
 
-(defclass carrot
+(defclass carrot-object
   :super bodyset-link
   :slots (
 	  ))
 
-(defmethod carrot
+(defmethod carrot-object
   (:init
    (&rest args &key (name "carrot"))
    (let (b1 b2 b3)
@@ -314,7 +314,10 @@
    ) 
   )
 
-;; (setq *carrot* (instance carrot :init))
+
+(defun carrot (&rest args) (instance* carrot-object :init args))
+
+;; (setq *carrot* (carrot))
 ;; (send *carrot* :translate #f(0 0 50))
 
 ;; (send *carrot* :cut)
