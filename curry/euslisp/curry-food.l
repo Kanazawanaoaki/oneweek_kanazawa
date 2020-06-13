@@ -49,7 +49,7 @@
 (setq *kitchen-spot* (make-coords :pos #f(0 0 0)))
 
 ;; set points
-(setq *water-point* (make-coords :pos #f(770 -600 830)))
+(setq *water-point* (make-coords :pos #f(770 -605 830)))
 (setq *trash-point* (make-coords :pos #f(880 -270 835)))
 
 ;; set water
@@ -57,7 +57,10 @@
 (send *water* :set-color :cyan)
 (send *water* :move-to (send *water-point* :copy-worldcoords) :world)
 
-(setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *onion* *carrot* *potato* *arrow*))
+
+;;defin object list for visialize
+(setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *onion* *carrot* *potato*))
+;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *onion* *carrot* *potato* *arrow*))
 
 (objects obj-list) 
 
@@ -65,6 +68,7 @@
 (warn "you can also run (now-devel)~%")
 
 (defun onion-wash ()
+  ;; water point
   (send *onion* :move-to (send *water-point* :copy-worldcoords) :world)
   (send *onion* :copy-worldcoords)
   (send *irtviewer* :look-all
@@ -86,6 +90,7 @@
 	 (flatten (send-all (append (send *onion* :bodies) (list *water*)) :vertices))))
   (unix:usleep 1000000)
 
+  ;; put on cutting board
   (send *onion* :newcoords (send *cutting-board* :copy-worldcoords))
   (send *onion* :translate #f(0 0 30) :world)
   (send *onion* :copy-worldcoords)
@@ -326,6 +331,7 @@
   )
 
 (defun carrot-wash ()
+  ;; water point
   (send *carrot* :move-to (send *water-point* :copy-worldcoords) :world)
   (send *carrot* :rotate (deg2rad -90) :z :world)
   (send *carrot* :copy-worldcoords)
@@ -348,6 +354,7 @@
 	 (flatten (send-all (append (send *carrot* :bodies) (list *water*)) :vertices))))
   (unix:usleep 1000000)
 
+  ;; put on cutting board
   (send *carrot* :newcoords (send *cutting-board* :copy-worldcoords))
   (send *carrot* :translate #f(0 0 30) :world)
   (send *carrot* :rotate (deg2rad -90) :z :world)
@@ -360,6 +367,300 @@
   )
   
 (defun carrot-peel ()
+  (send *carrot* :cut)
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (objects obj-list)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; f-cut-1 
+  (send c2-1-1 :dissoc c1)
+  (send c1 :translate #f(0 -30 0) :world)
+  (send c1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; f-cut-2
+  (send c2-1-1 :dissoc c3-1-1)
+  (send c2-1-1 :translate #f(0 -20 0) :world)
+  (send c2-1-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send c1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send c1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  (send c3-1-1 :move-to (make-coords :pos #f(900 0 845)) :world)
+  (send c3-1-1 :copy-worldcoords)
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+  
+  (warn "please run (carrot-cut)~%")
+  )
+
+(defun carrot-cut ()
+  ;; cut-1
+  (send c2-1-1 :dissoc c2-2-1)
+  (send c2-1-1 :translate #f(0 -20 0))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(690 60 840) :rpy #f(-1.571 0 -1.571)))
+  (send c2-1-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send c2-1-1 :copy-worldcoords)
+  (send *arrow* :newcoords (make-coords :pos #f(610 60 840) :rpy #f(-1.571 0 1.571)))
+  (send c2-2-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send c2-2-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; cut-2
+  (send c2-1-1 :dissoc c2-1-2)
+  (send c2-1-1 :dissoc c2-1-3)
+  (send c2-1-1 :dissoc c2-1-4)
+  (send c2-1-1 :dissoc c2-1-5)
+  (send c2-1-1 :dissoc c2-1-6)
+  (send c2-1-1 :dissoc c2-1-7)
+  (send c2-1-1 :locate #f(-15 0 0))
+  (send c2-1-2 :locate #f(-10 0 0))
+  (send c2-1-3 :locate #f(-5 0 0))
+  (send c2-1-4 :locate #f(0 0 0))
+  (send c2-1-5 :locate #f(5 0 0))
+  (send c2-1-6 :locate #f(10 0 0))
+  (send c2-1-7 :locate #f(15 0 0))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  (send c2-2-1 :dissoc c2-2-2)
+  (send c2-2-1 :dissoc c2-2-3)
+  (send c2-2-1 :dissoc c2-2-4)
+  (send c2-2-1 :dissoc c2-2-5)
+  (send c2-2-1 :dissoc c2-2-6)
+  (send c2-2-1 :dissoc c2-2-7)
+  (send c2-2-1 :locate #f(-15 0 0))
+  (send c2-2-2 :locate #f(-10 0 0))
+  (send c2-2-3 :locate #f(-5 0 0))
+  (send c2-2-4 :locate #f(0 0 0))
+  (send c2-2-5 :locate #f(5 0 0))
+  (send c2-2-6 :locate #f(10 0 0))
+  (send c2-2-7 :locate #f(15 0 0))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send c2-1-1 :assoc c2-1-2)
+  (send c2-1-1 :assoc c2-1-3)
+  (send c2-1-1 :assoc c2-1-4)
+  (send c2-1-1 :assoc c2-1-5)
+  (send c2-1-1 :assoc c2-1-6)
+  (send c2-1-1 :assoc c2-1-7)
+  (send c2-2-1 :assoc c2-2-2)
+  (send c2-2-1 :assoc c2-2-3)
+  (send c2-2-1 :assoc c2-2-4)
+  (send c2-2-1 :assoc c2-2-5)
+  (send c2-2-1 :assoc c2-2-6)
+  (send c2-2-1 :assoc c2-2-7)
+  (send c2-1-1 :move-to (make-coords :pos #f(760 330 835) :rpy #f(-1.571 0 -1.571)) :world)
+  (send c2-2-1 :move-to (make-coords :pos #f(700 330 835) :rpy #f(-1.571 0 1.571)) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  (warn "please run (potato-wash)~%")  
+  )
+
+(defun potato-wash ()
+  ;; water point
+  (send *potato* :move-to (send *water-point* :copy-worldcoords) :world)
+  (send *potato* :rotate (deg2rad -90) :z :world)
+  (send *potato* :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (send *potato* :bodies) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; on water
+  (objects (append obj-list (list *water*)))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *potato* :bodies) (list *water*)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; off water
+  (objects obj-list)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *potato* :bodies) (list *water*)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; put on cutting board
+  (send *potato* :newcoords (send *cutting-board* :copy-worldcoords))
+  (send *potato* :translate #f(0 0 30) :world)
+  (send *potato* :rotate (deg2rad -90) :z :world)
+  (send *potato* :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *potato* :bodies) (send *cutting-board* :bodies)) :vertices))))
+
+  (warn "please run (potato-peel)~%")
+  )
+
+
+(defun potato-peel ()
+  (send *potato* :peel)
+  (objects obj-list)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *potato* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; peel-1
+  (send p1 :set-color :moccasin)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *potato* :rotate (deg2rad 90) :x)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; peel-2
+  (send p2 :set-color :moccasin)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+  
+  ;; set-move
+  (send *potato* :rotate (deg2rad 90) :x)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; peel-3
+  (send p3 :set-color :moccasin)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+    ;; set-move
+  (send *potato* :rotate (deg2rad 90) :x)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; peel-4
+  (send p4 :set-color :moccasin)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *potato* :rotate (deg2rad 90) :x)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+  
+  (warn "please run (potato-cut)~%")
+  )
+
+(defun potato-cut ()
+  (send *potato* :cut)
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (objects obj-list)
+    (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *potato* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; cut-1
+  (send p4 :dissoc p1)
+  (send p4 :dissoc p2)
+  (send p4 :dissoc p3)
+  (send p1 :assoc p2)
+  (send p1 :assoc p3)
+  (setq *potato2* (make-cascoords))
+  (send *potato2* :newcoords (send *potato* :copy-worldcoords))
+  (send *potato2* :assoc p1)
+  (send *potato2* :translate #f(0 -30 0) :world)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(710 100 840) :rpy #f(0.785 1.571 -0.785)))
+  (send *potato* :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  (send *arrow* :newcoords (make-coords :pos #f(650 -60 840) :rpy #f(0.785 -1.571 -2.357)))
+  (send *potato2* :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; cut-2
+  (send *potato2* :dissoc p3)
+  (send p3 :translate #f(0 -20 0) :world)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; cut-3
+  (send *potato2* :dissoc p2)
+  (send p2 :translate #f(0 -10 0) :world)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(650 60 840) :rpy #f(0.785 1.571 -0.785)))
+  (send *potato* :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; cut-4
+  (send *potato* :dissoc p6)
+  (send p6 :translate #f(0 -20 0) :world)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  ;; cut-5
+  (send *potato* :dissoc p5)
+  (send p5 :translate #f(0 -10 0) :world)
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+  
+  )
+  
+
   
 
 
@@ -368,8 +669,23 @@
   (onion-peel)
   (onion-cut)
   (carrot-wash)
-  
+  (carrot-peel)
+  (carrot-cut)  
+  (potato-wash)
+  (potato-peel)
+  (potato-cut)
   )
   
   
 
+(defun carrot-test ()
+  (carrot-wash)
+  (carrot-peel)
+  (carrot-cut)
+  )
+
+(defun potato-test ()
+  (potato-wash)
+  (potato-peel)
+  (potato-cut)
+  )
