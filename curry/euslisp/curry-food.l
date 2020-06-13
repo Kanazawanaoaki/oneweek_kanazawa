@@ -9,6 +9,11 @@
 (setq *knife* (knife))
 (send *knife* :locate #f(550.0 -200.0 850.0))
 
+;; set pan
+(load "models/frying-pan-object.l")
+(setq *pan* (frying-pan))
+(send *pan* :locate #f(680 770 860))
+
 ;; set peeler
 (load "model/peeler.l")
 (setq *peeler* (peeler))
@@ -23,7 +28,6 @@
 (load "model/cooking-pot.l")
 (setq *pot* (cooking-pot))
 (send *pot* :locate #f(680 500 830))
-
 
 ;; set onion
 (load "model/onion-test-model.l")
@@ -59,8 +63,8 @@
 
 
 ;;defin object list for visialize
-(setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *onion* *carrot* *potato*))
-;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *onion* *carrot* *potato* *arrow*))
+(setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato*))
+;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *arrow*))
 
 (objects obj-list) 
 
@@ -104,6 +108,7 @@
 
 (defun onion-peel ()
   (send *onion* :cut)
+  (setq *o-list* (list o3-1 o3-3-1 o3-3-2 o3-3-3 o3-3-4 o3-3-5 o3-3-6 o3-3-7 o3-3-8 o4-1 o4-3-1 o4-3-2 o4-3-3 o4-3-4 o4-3-5 o4-3-6 o4-3-7 o4-3-8))
   (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
   (objects obj-list)
   (send *irtviewer* :look-all
@@ -587,7 +592,7 @@
   (send *potato* :cut)
   (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
   (objects obj-list)
-    (send *irtviewer* :look-all
+  (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *potato* :bodies) (send *cutting-board* :bodies)) :vertices))))
   (unix:usleep 1000000)
@@ -621,12 +626,10 @@
   (send *potato2* :dissoc p3)
   (send p3 :translate #f(0 -20 0) :world)
   (send *viewer* :draw-objects)
-  (unix:usleep 1000000)
 
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
   (send *viewer* :draw-objects)
-  (unix:usleep 1000000)
 
   ;; cut-3
   (send *potato2* :dissoc p2)
@@ -650,16 +653,38 @@
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
   (send *viewer* :draw-objects)
-  (unix:usleep 1000000)
 
   ;; cut-5
   (send *potato* :dissoc p5)
   (send p5 :translate #f(0 -10 0) :world)
   (send *viewer* :draw-objects)
   (unix:usleep 1000000)
+
+  (warn "please run (onion-stir-fry)~%")
+  )
+
+(defun onion-stir-fry ()
+  ;; set-onion
+  (send o3-1 :move-to (send *pan* :copy-worldcoords) :world)
+  (send o3-1 :rotate (deg2rad -90) :z :world) 
+  (send o3-1 :translate #f(30 20 -20) :world)
+  (send o3-1 :rotate (deg2rad -90) :y :world) 
+  (send o3-1 :copy-worldcoords)
+  (send o4-1 :move-to (send *pan* :copy-worldcoords) :world)
+  (send o4-1 :rotate (deg2rad -90) :z :world) 
+  (send o4-1 :translate #f(-30 20 -20) :world)
+  (send o4-1 :rotate (deg2rad 90) :y :world) 
+  (send o4-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append *o-list* (send *pan* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; stir-fry
+  
+  
   
   )
-  
 
   
 
@@ -674,9 +699,15 @@
   (potato-wash)
   (potato-peel)
   (potato-cut)
+  (onion-stir-fry)
   )
-  
-  
+
+(defun onion-test ()
+  (onion-wash)
+  (onion-peel)
+  (onion-cut)
+  (onion-stir-fry)
+  )
 
 (defun carrot-test ()
   (carrot-wash)
