@@ -50,6 +50,7 @@
 
 ;; set points
 (setq *water-point* (make-coords :pos #f(770 -600 830)))
+(setq *trash-point* (make-coords :pos #f(880 -270 835)))
 
 ;; set water
 (setq *water* (make-cylinder 15 100))
@@ -64,19 +65,32 @@
 
 (defun onion-wash ()
   (send *onion* :move-to (send *water-point* :copy-worldcoords) :world)
+  (send *onion* :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (send *onion* :bodies) :vertices))))
   (unix:usleep 1000000)
 
   ;; on water
   (objects (append obj-list (list *water*)))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (list *water*)) :vertices))))
   (unix:usleep 1000000)
 
   ;; off water
   (objects obj-list)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (list *water*)) :vertices))))
   (unix:usleep 1000000)
 
   (send *onion* :newcoords (send *cutting-board* :copy-worldcoords))
   (send *onion* :translate #f(0 0 30) :world)
-  (send *viewer* :draw-objects)
+  (send *onion* :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
 
   (warn "please run (onion-f-cut)~%")
   )
@@ -84,24 +98,108 @@
 
 (defun onion-f-cut ()
   (send *onion* :cut)
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
   (objects obj-list)
-  
-  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))  
-  (send o3-1 :dissoc o4-1)
-  (send o4-1 :translate #f(0 -30 0))
-  (send *viewer* :draw-objects)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
   (unix:usleep 1000000)
 
+  ;; f-cut-1 
+  (send o3-1 :dissoc o4-1)
+  (send o4-1 :translate #f(0 -40 0) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set-move 
   (send *arrow* :newcoords (make-coords :pos #f(710 100 840) :rpy #f(1.571 0 1.571)))
   (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
-  (send *viewer* :draw-objects)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
   (unix:usleep 1000000)
 
+  ;; set-move
   (send *arrow* :newcoords (make-coords :pos #f(650 0 840) :rpy #f(0 0 -1.571)))
   (send o4-1 :move-to (send *arrow* :copy-worldcoords) :world)
-  (send *viewer* :draw-objects)
+  (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; f-cut-2
+  (send o4-1 :dissoc o6-1)
+  (send o6-1 :translate #f(0 -30 0) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send o4-1 :rotate (deg2rad 180) :z :world)
+  (send o4-1 :copy-worldcoords)
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; f-cut-3
+  (send o4-1 :dissoc o2-1)
+  (send o2-1 :translate #f(0 -10 0) :world)
+  (send o2-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
   (unix:usleep 1000000)
   
+  ;; set-move
+  (send o6-1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o2-1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o2-1 :copy-worldcoords)
+  (send o6-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; peel
+  (send o4-1 :dissoc o4-2)
+  (send o4-2 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(710 -100 840) :rpy #f(1.571 0 -1.571)))
+  (send o4-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(650 0 840) :rpy #f(0 0 1.571)))
+  (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; f-cut-4
+  (send o3-1 :dissoc o1-1)
+  (send o1-1 :translate #f(0 -30 0) :world)
+  (send o1-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
   )
 
 
@@ -109,7 +207,8 @@
 
 (defun now-devel ()
   (onion-wash)
-
+  (onion-f-cut)
+  
   )
   
   
