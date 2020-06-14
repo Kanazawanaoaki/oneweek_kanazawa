@@ -34,22 +34,32 @@
   ;; set onion
   (load "model/onion-test-model.l")
   (setq *onion* (onion))
-  (send *onion* :locate #f(860 100 845))
+  (send *onion* :locate #f(860 150 845))
 
   ;; set carrot
   (load "model/carrot-test-model.l")
   (setq *carrot* (carrot))
-  (send *carrot* :locate #f(900 0 845))
+  (send *carrot* :locate #f(900 50 845))
 
   ;; set potato
   (load "model/potato-test-model.l")
   (setq *potato* (potato))
-  (send *potato* :locate #f(860 -100 845))
+  (send *potato* :locate #f(860 -50 845))
 
   ;; set niku
   (load "model/niku-test.l")
   (setq *niku* (niku))
-  (send *niku* :locate #f(980 -150 845))
+  (send *niku* :locate #f(980 -130 845))
+
+  ;; set trash-box
+  (load "model/trash-box.l")
+  (setq *trash-box* (trash-box))
+  (send *trash-box* :locate #f(880 -290 830))
+
+  ;; set mcup
+  (load "model/measuring-cup.l")
+  (setq *mcup* (measuring-cup))
+  (send *mcup* :locate #f(980 160 845))
 
   ;; set arrow
   (load "models/arrow-object.l")
@@ -61,7 +71,7 @@
 
   ;; set points
   (setq *water-point* (make-coords :pos #f(770 -605 830)))
-  (setq *trash-point* (make-coords :pos #f(880 -290 835)))
+  (setq *trash-point* (make-coords :pos #f(880 -290 837)))
 
   ;; set water
   (setq *water* (make-cylinder 15 100))
@@ -70,8 +80,8 @@
 
 
   ;;defin object list for visialize
-  (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku*))
-  ;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *arrow*))
+  (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *trash-box* *mcup*))
+  ;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *trash-box* *mcup* *arrow*))
 
   (objects obj-list)
   )
@@ -394,6 +404,7 @@
 
   ;; set-move
   (send c1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send c1 :translate #f(-80 0 0) :world)
   (send c1 :copy-worldcoords)
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
@@ -866,7 +877,7 @@
   	 (flatten (send-all (append *n-list* (send *pot* :bodies)) :vertices))))
   (send *viewer* :draw-objects)
   (unix:usleep 1000000)
-  (warn "please run (vegs-stir-fry)~%")  
+  (warn "please run (carrot-pot)~%")  
   )
 
 (defun carrot-pot ()
@@ -934,7 +945,75 @@
   (send c2-2-7 :translate #f(20 -30 0) :world)
   (send *viewer* :draw-objects)
   (unix:usleep 1000000)
-  
+
+  (warn "please run (pour-water)~%")  
+  )
+
+(defun pour-water ()
+  ;; sink
+  (send *mcup* :move-to (send *water-point* :copy-worldcoords) :world)
+  (send *mcup* :translate #f(0 0 -70) :world)
+  (send *mcup* :copy-worldcoords)
+  (send *viewer* :draw-objects)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (send *mcup* :bodies) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; on water
+  (setq *mcup-surface* (make-cylinder 43 10))
+  (send *mcup-surface* :move-to (send (elt (send *mcup* :attention) 1) :copy-worldcoords) :world)
+  (send *mcup-surface* :translate #f(0 0 -50) :world)
+  (send *mcup-surface* :set-color :cyan)
+  (send *mcup* :assoc *mcup-surface*)
+  (objects (append obj-list (list *water* *mcup-surface*)))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *mcup* :bodies) (list *water*)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; off water
+  (objects (append obj-list (list *mcup-surface*)))
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (append (send *mcup* :bodies) (list *water*)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set move
+  (send *mcup* :move-to (send *pot* :copy-worldcoords) :world)
+  (send *mcup* :translate #f(0 130 200) :world)
+  (send *mcup* :copy-worldcoords)
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (append (send *mcup* :bodies) (send *pot* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; pour water
+  (send *mcup* :rotate (deg2rad 120) :x :world)
+  (setq *water-current* (make-cylinder 10 120))
+  (send *water-current* :set-color :cyan)
+  (send *water-current* :move-to (send *pot* :copy-worldcoords) :world)
+  (send *water-current* :translate #f(0 60 40) :world)
+  (setq *pot-surface* (make-cylinder 100 10))
+  (send *pot-surface* :move-to (send *pot* :copy-worldcoords) :world)
+  (send *pot-surface* :translate #f(0 0 20) :world)
+  (send *pot-surface* :set-color :cyan)
+  (objects (append obj-list (list *mcup-surface* *water-current* *pot-surface*)))
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (append (send *mcup* :bodies) (send *pot* :bodies)) :vertices))))
+  (unix:usleep 1000000)
+
+  ;; set-move
+  (send *mcup* :move-to (make-coords :pos #f(980 160 845)) :world)
+  (objects (append obj-list (list *pot-surface*)))
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (send *pot* :bodies) :vertices))))
+  (unix:usleep 1000000)
+
+  (warn "please run (potato-pot)~%")  
+    
   )
 
 (defun potato-pot ()
@@ -968,16 +1047,6 @@
   )
 
 
-(defun vegs-stir-fry ()
-  ;; set carrot
-  (carrot-pot)
-  
-  (warn "please run (pour-water)~%")  
-  )
-
-
-
-
 (defun now-devel ()
   (onion-wash)
   (onion-peel)
@@ -990,8 +1059,8 @@
   (potato-cut)
   (onion-stir-fry)
   (niku-stir-fry)
-  (vegs-stir-fry)
-  
+  (carrot-pot)
+  (pour-water)
   )
 
 (defun onion-test ()
