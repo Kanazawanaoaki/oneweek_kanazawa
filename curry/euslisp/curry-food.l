@@ -1,77 +1,82 @@
-;; set kitchen
-(load "models/room73b2-kitchen-object.l")
-(setq *kitchen* (room73b2-kitchen))
-(send *kitchen* :locate #f(800 -200 0))
-(send *kitchen* :rotate (deg2rad 180) :z :world)
+(defun init ()
 
-;; set knife
-(load "models/knife-object.l")
-(setq *knife* (knife))
-(send *knife* :locate #f(550.0 -200.0 850.0))
+  ;; set kitchen
+  (load "models/room73b2-kitchen-object.l")
+  (setq *kitchen* (room73b2-kitchen))
+  (send *kitchen* :locate #f(800 -200 0))
+  (send *kitchen* :rotate (deg2rad 180) :z :world)
 
-;; set pan
-(load "models/frying-pan-object.l")
-(setq *pan* (frying-pan))
-(send *pan* :locate #f(680 770 860))
+  ;; set knife
+  (load "models/knife-object.l")
+  (setq *knife* (knife))
+  (send *knife* :locate #f(550.0 -200.0 850.0))
 
-;; set peeler
-(load "model/peeler.l")
-(setq *peeler* (peeler))
-(send *peeler* :locate #f(550.0 -250.0 850.0))
+  ;; set pan
+  (load "models/frying-pan-object.l")
+  (setq *pan* (frying-pan))
+  (send *pan* :locate #f(680 770 860))
 
-;; set まな板
-(load "model/cutting-board.l")
-(setq *cutting-board* (cutting-board))
-(send *cutting-board* :locate #f(650 0 825))
+  ;; set peeler
+  (load "model/peeler.l")
+  (setq *peeler* (peeler))
+  (send *peeler* :locate #f(550.0 -250.0 850.0))
 
-;; set 調理鍋
-(load "model/cooking-pot.l")
-(setq *pot* (cooking-pot))
-(send *pot* :locate #f(680 500 830))
+  ;; set まな板
+  (load "model/cutting-board.l")
+  (setq *cutting-board* (cutting-board))
+  (send *cutting-board* :locate #f(650 0 825))
 
-;; set onion
-(load "model/onion-test-model.l")
-(setq *onion* (onion))
-(send *onion* :locate #f(860 100 845))
+  ;; set 調理鍋
+  (load "model/cooking-pot.l")
+  (setq *pot* (cooking-pot))
+  (send *pot* :locate #f(680 500 830))
 
-;; set carrot
-(load "model/carrot-test-model.l")
-(setq *carrot* (carrot))
-(send *carrot* :locate #f(900 0 845))
+  ;; set onion
+  (load "model/onion-test-model.l")
+  (setq *onion* (onion))
+  (send *onion* :locate #f(860 100 845))
 
-;; set potato
-(load "model/potato-test-model.l")
-(setq *potato* (potato))
-(send *potato* :locate #f(860 -100 845))
+  ;; set carrot
+  (load "model/carrot-test-model.l")
+  (setq *carrot* (carrot))
+  (send *carrot* :locate #f(900 0 845))
 
-;; set niku
-(load "model/niku-test.l")
-(setq *niku* (niku))
-(send *niku* :locate #f(980 -150 845))
+  ;; set potato
+  (load "model/potato-test-model.l")
+  (setq *potato* (potato))
+  (send *potato* :locate #f(860 -100 845))
 
-;; set arrow
-(load "models/arrow-object.l")
-(setq *arrow* (arrow))
+  ;; set niku
+  (load "model/niku-test.l")
+  (setq *niku* (niku))
+  (send *niku* :locate #f(980 -150 845))
 
-;; set spots
-(setq *sink-spot* (make-coords :pos #f(0 -600 0)))
-(setq *kitchen-spot* (make-coords :pos #f(0 0 0)))
+  ;; set arrow
+  (load "models/arrow-object.l")
+  (setq *arrow* (arrow))
 
-;; set points
-(setq *water-point* (make-coords :pos #f(770 -605 830)))
-(setq *trash-point* (make-coords :pos #f(880 -290 835)))
+  ;; set spots
+  (setq *sink-spot* (make-coords :pos #f(0 -600 0)))
+  (setq *kitchen-spot* (make-coords :pos #f(0 0 0)))
 
-;; set water
-(setq *water* (make-cylinder 15 100))
-(send *water* :set-color :cyan)
-(send *water* :move-to (send *water-point* :copy-worldcoords) :world)
+  ;; set points
+  (setq *water-point* (make-coords :pos #f(770 -605 830)))
+  (setq *trash-point* (make-coords :pos #f(880 -290 835)))
+
+  ;; set water
+  (setq *water* (make-cylinder 15 100))
+  (send *water* :set-color :cyan)
+  (send *water* :move-to (send *water-point* :copy-worldcoords) :world)
 
 
-;;defin object list for visialize
-(setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku*))
-;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *arrow*))
+  ;;defin object list for visialize
+  (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku*))
+  ;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *arrow*))
 
-(objects obj-list) 
+  (objects obj-list)
+  )
+
+(init)
 
 (warn "please run (onion-wash)~%")
 (warn "you can also run (now-devel)~%")
@@ -896,6 +901,37 @@
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  (send c2-1-1 :rotate (deg2rad 20) :z :world)
+  (send c2-1-2 :rotate (deg2rad -10) :z :world) 
+  (send c2-1-3 :rotate (deg2rad 70) :z :world) 
+  (send c2-1-4 :rotate (deg2rad 30) :z :world)
+  (send c2-1-5 :rotate (deg2rad -40) :z :world) 
+  (send c2-1-6 :rotate (deg2rad -110) :z :world) 
+  (send c2-1-7 :rotate (deg2rad 150) :z :world) 
+  (send c2-1-1 :translate #f(5 -100 0) :world) 
+  (send c2-1-2 :translate #f(-5 -70 0) :world)
+  (send c2-1-3 :translate #f(5 -60 0) :world) 
+  (send c2-1-4 :translate #f(-10 30 0) :world) 
+  (send c2-1-5 :translate #f(50 0 0) :world) 
+  (send c2-1-6 :translate #f(50 -160 0) :world)
+  (send c2-1-7 :translate #f(-50 -60 0) :world)
+  (send c2-2-1 :rotate (deg2rad -40) :z :world)
+  (send c2-2-2 :rotate (deg2rad 60) :z :world)
+  (send c2-2-3 :rotate (deg2rad -80) :z :world)
+  (send c2-2-4 :rotate (deg2rad 130) :z :world) 
+  (send c2-2-5 :rotate (deg2rad -110) :z :world) 
+  (send c2-2-6 :rotate (deg2rad 90) :z :world)
+  (send c2-2-7 :rotate (deg2rad -20) :z :world)
+  (send c2-2-1 :translate #f(30 20 0) :world)
+  (send c2-2-2 :translate #f(0 -20 0) :world)
+  (send c2-2-3 :translate #f(70 -80 0) :world)
+  (send c2-2-4 :translate #f(-90 -80 0) :world)
+  (send c2-2-5 :translate #f(60 -110 0) :world)
+  (send c2-2-6 :translate #f(-100 -10 0) :world)
+  (send c2-2-7 :translate #f(20 -30 0) :world)
   (send *viewer* :draw-objects)
   (unix:usleep 1000000)
   
