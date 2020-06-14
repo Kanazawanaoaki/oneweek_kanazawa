@@ -54,13 +54,18 @@
   ;; set trash-box
   (load "model/trash-box.l")
   (setq *trash-box* (trash-box))
-  (send *trash-box* :locate #f(880 -290 830))
+  (send *trash-box* :locate #f(800 -290 830))
 
   ;; set mcup
   (load "model/measuring-cup.l")
   (setq *mcup* (measuring-cup))
-  (send *mcup* :locate #f(980 160 845))
+  (send *mcup* :locate #f(980 -330 845))
 
+  ;; set roux
+  (load "model/roux-test.l")
+  (setq *roux* (roux))
+  (send *roux* :locate #f(980 180 845))
+  
   ;; set arrow
   (load "models/arrow-object.l")
   (setq *arrow* (arrow))
@@ -71,7 +76,7 @@
 
   ;; set points
   (setq *water-point* (make-coords :pos #f(770 -605 830)))
-  (setq *trash-point* (make-coords :pos #f(880 -290 837)))
+  (setq *trash-point* (make-coords :pos #f(800 -290 837)))
 
   ;; set water
   (setq *water* (make-cylinder 15 100))
@@ -80,8 +85,8 @@
 
 
   ;;defin object list for visialize
-  (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *trash-box* *mcup*))
-  ;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *trash-box* *mcup* *arrow*))
+  (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *trash-box* *mcup* *roux*))
+  ;; (setq obj-list (list *kitchen* *knife* *peeler* *cutting-board* *pot* *pan* *onion* *carrot* *potato* *niku* *trash-box* *mcup* *roux* *arrow*))
 
   (objects obj-list)
   )
@@ -1036,7 +1041,7 @@
   (send *pot-surface* :move-to (send *pot* :copy-worldcoords) :world)
   (send *pot-surface* :translate #f(0 0 52) :world)
   (send *pot-surface* :set-color :cyan 0.5)
-  (send *mcup* :move-to (make-coords :pos #f(980 160 845)) :world)
+  (send *mcup* :move-to (make-coords :pos #f(980 -330 845)) :world)
   (objects (append obj-list (list *pot-surface*)))
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
@@ -1109,11 +1114,69 @@
   )
 
 (defun put-curry-roux ()
+  ;; set roux
+  (send rb1 :dissoc r1)
+  (send rb1 :dissoc r2)
+  (send rb1 :dissoc r3)
+  (send rb1 :dissoc r4)
+  (send rb1 :dissoc r5)
+  (send rb1 :dissoc r6)
+  (send r1 :assoc r2)
+  (send r1 :assoc r3)
+  (send r1 :assoc r4)
+  (send r1 :assoc r5)
+  (send r1 :assoc r6)
+  (setq *r-list* (list r1 r2 r3 r4 r5 r6))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+  	 (flatten (send-all (append *r-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  (send r1 :move-to (send *pot* :copy-worldcoords) :world)
+  (send r1 :translate #f(10 40 84) :world)
+
+  (setq *r* (make-cascoords))
+  (send *r* :newcoords (send r1 :copy-worldcoords))
+  (send r1 :dissoc r2)
+  (send r1 :dissoc r3)
+  (send r1 :dissoc r4)
+  (send r1 :dissoc r5)
+  (send r1 :dissoc r6)
+
+  (send r1 :rotate (deg2rad 60) :z :world)
+  (send r2 :rotate (deg2rad -20) :z :world)
+  (send r3 :rotate (deg2rad -80) :z :world)
+  (send r4 :rotate (deg2rad 50) :z :world)
+  (send r6 :rotate (deg2rad -70) :z :world)
+  (send r1 :translate #f(-40 30 0) :world)
+  (send r2 :translate #f(30 0 0) :world)
+  (send r3 :translate #f(45 -5 0) :world)
+  (send r4 :translate #f(-25 -5 0) :world) 
+  (send r6 :translate #f(-40 -20 0) :world)
+
+  (send *r* :assoc r1)
+  (send *r* :assoc r2)
+  (send *r* :assoc r3)
+  (send *r* :assoc r4)
+  (send *r* :assoc r5)
+  (send *r* :assoc r6)  
+
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (append *r-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+  
+
+  
   ;; change curry
   (if *pot-surface*
       (send *pot-surface* :set-color :Sienna))
   (if (boundp '*o*)
       (send *o* :translate #f(0 0 -42) :world))
+  (if (boundp '*r*)
+      (send *r* :translate #f(0 0 -42) :world))
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (send *pot* :bodies) :vertices))))
