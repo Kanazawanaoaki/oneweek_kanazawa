@@ -6,12 +6,12 @@
 (defmethod roux-object
   (:init
    (&rest args &key (name "roux") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
-   (let (nb2)
-     (setq nb1 (make-cube 60 130 15))
-     (setq nb2 (make-cube 56 126 13))
-     (send nb2 :locate #f(0 0 1))
-     (setq nb1 (body- nb1 nb2))
-     (send nb1 :set-color :SandyBrown)
+   (let (rb2)
+     (setq rb1 (make-cube 60 130 15))
+     (setq rb2 (make-cube 56 126 13))
+     (send rb2 :locate #f(0 0 1))
+     (setq rb1 (body- nb1 nb2))
+     (send rb1 :set-color :SandyBrown)
      
      (setq r1 (make-cube 26 40 10))
      (send r1 :locate #f(14 42 0))
@@ -37,14 +37,14 @@
      (send r6 :locate #f(-14 -42 0))
      (send r6 :set-color :Sienna)
 
-     (send nb1 :assoc r1)
-     (send nb1 :assoc r2)
-     (send nb1 :assoc r3)
-     (send nb1 :assoc r4)
-     (send nb1 :assoc r5)
-     (send nb1 :assoc r6)
+     (send rb1 :assoc r1)
+     (send rb1 :assoc r2)
+     (send rb1 :assoc r3)
+     (send rb1 :assoc r4)
+     (send rb1 :assoc r5)
+     (send rb1 :assoc r6)
 
-     (send-super* :init (make-cascoords) :bodies (list nb1 r1 r2 r3 r4 r5 r6) args)))
+     (send-super* :init (make-cascoords) :bodies (list rb1 r1 r2 r3 r4 r5 r6) args)))
   )
 
 (defun roux (&rest args) (instance* roux-object :init args))
