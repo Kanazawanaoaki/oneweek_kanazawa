@@ -42,6 +42,8 @@
      (send b1 :set-color :LightCyan)
      (send b5 :set-color :LightCyan)
 
+     (send b1 :assoc b5)
+
      (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list b1 b5) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
 
