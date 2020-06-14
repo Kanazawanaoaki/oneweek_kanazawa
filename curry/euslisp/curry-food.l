@@ -75,7 +75,7 @@
 
   ;; set water
   (setq *water* (make-cylinder 15 100))
-  (send *water* :set-color :cyan)
+  (send *water* :set-color :cyan 0.5)
   (send *water* :move-to (send *water-point* :copy-worldcoords) :world)
 
 
@@ -887,6 +887,12 @@
   (send *c* :assoc c2-1-1)
   (send *c* :assoc c2-2-1)
   (setq *c-list* (list c2-1-1 c2-1-2 c2-1-3 c2-1-4 c2-1-5 c2-1-6 c2-1-7 c2-2-1 c2-2-2 c2-2-3 c2-2-4 c2-2-5 c2-2-6 c2-2-7))
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
 
   (send *c* :move-to (send *pot* :copy-worldcoords) :world)
   (send *c* :rotate (deg2rad -90) :x)
@@ -952,10 +958,13 @@
   (send *c* :assoc c2-2-5)
   (send *c* :assoc c2-2-6)
   (send *c* :assoc c2-2-7)
-  
+
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
   (send *viewer* :draw-objects)
   (unix:usleep 1000000)
-
+  
   (warn "please run (pour-water)~%")  
   )
 
@@ -974,7 +983,7 @@
   (setq *mcup-surface* (make-cylinder 43 10))
   (send *mcup-surface* :move-to (send (elt (send *mcup* :attention) 1) :copy-worldcoords) :world)
   (send *mcup-surface* :translate #f(0 0 -50) :world)
-  (send *mcup-surface* :set-color :cyan)
+  (send *mcup-surface* :set-color :cyan 0.5)
   (send *mcup* :assoc *mcup-surface*)
   (objects (append obj-list (list *water* *mcup-surface*)))
   (send *irtviewer* :look-all
@@ -1001,13 +1010,13 @@
   ;; pour water
   (send *mcup* :rotate (deg2rad 120) :x :world)
   (setq *water-current* (make-cylinder 10 120))
-  (send *water-current* :set-color :cyan)
+  (send *water-current* :set-color :cyan 0.5)
   (send *water-current* :move-to (send *pot* :copy-worldcoords) :world)
   (send *water-current* :translate #f(0 60 40) :world)
   (setq *pot-surface* (make-cylinder 100 10))
   (send *pot-surface* :move-to (send *pot* :copy-worldcoords) :world)
   (send *pot-surface* :translate #f(0 0 20) :world)
-  (send *pot-surface* :set-color :cyan)
+  (send *pot-surface* :set-color :cyan 0.5)
   (objects (append obj-list (list *mcup-surface* *water-current* *pot-surface*)))
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
@@ -1023,10 +1032,10 @@
       (send *c* :translate #f(0 0 53) :world))
   (if (boundp '*p*)
       (send *p* :translate #f(0 0 42) :world))
-  (setq *pot-surface* (make-cylinder 120 10))
+  (setq *pot-surface* (make-cylinder 110 30))
   (send *pot-surface* :move-to (send *pot* :copy-worldcoords) :world)
-  (send *pot-surface* :translate #f(0 0 72) :world)
-  (send *pot-surface* :set-color :cyan)
+  (send *pot-surface* :translate #f(0 0 52) :world)
+  (send *pot-surface* :set-color :cyan 0.5)
   (send *mcup* :move-to (make-coords :pos #f(980 160 845)) :world)
   (objects (append obj-list (list *pot-surface*)))
   (send *irtviewer* :look-all
@@ -1044,6 +1053,12 @@
   (send p4 :assoc p5)
   (send p4 :assoc p6)
   (setq *p-list* (list p1 p2 p3 p4 p5 p6))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+  	 (flatten (send-all (append *p-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
 
   (send p1 :move-to (send *pot* :copy-worldcoords) :world)
   (send p1 :rotate (deg2rad -90) :z :world)
@@ -1125,6 +1140,28 @@
   (potato-pot)
   (put-curry-roux)
   )
+
+(defun sitasyori ()
+  (onion-wash)
+  (onion-peel)
+  (onion-cut)
+  (carrot-wash)
+  (carrot-peel)
+  (carrot-cut)  
+  (potato-wash)
+  (potato-peel)
+  (potato-cut)
+  )
+
+(defun kanetu ()
+  (onion-stir-fry)
+  (niku-stir-fry)
+  (carrot-pot)
+  (pour-water)
+  (potato-pot)
+  (put-curry-roux)
+  )  
+
 
 (defun onion-test ()
   (onion-wash)
