@@ -909,12 +909,6 @@
   (send c2-2-1 :dissoc c2-2-6)
   (send c2-2-1 :dissoc c2-2-7)  
 
-  (send *irtviewer* :look-all
-  	(geo::make-bounding-box
-  	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
-  (send *viewer* :draw-objects)
-  (unix:usleep 1000000)
-
   (send c2-1-1 :rotate (deg2rad 20) :z :world)
   (send c2-1-2 :rotate (deg2rad -10) :z :world) 
   (send c2-1-3 :rotate (deg2rad 70) :z :world) 
@@ -943,6 +937,22 @@
   (send c2-2-5 :translate #f(60 -110 0) :world)
   (send c2-2-6 :translate #f(-100 -10 0) :world)
   (send c2-2-7 :translate #f(20 -30 0) :world)
+
+  (send *c* :assoc c2-1-1)
+  (send *c* :assoc c2-1-2)
+  (send *c* :assoc c2-1-3)
+  (send *c* :assoc c2-1-4)
+  (send *c* :assoc c2-1-5)
+  (send *c* :assoc c2-1-6)
+  (send *c* :assoc c2-1-7)
+  (send *c* :assoc c2-2-1)
+  (send *c* :assoc c2-2-2)
+  (send *c* :assoc c2-2-3)
+  (send *c* :assoc c2-2-4)
+  (send *c* :assoc c2-2-5)
+  (send *c* :assoc c2-2-6)
+  (send *c* :assoc c2-2-7)
+  
   (send *viewer* :draw-objects)
   (unix:usleep 1000000)
 
@@ -1005,6 +1015,18 @@
   (unix:usleep 1000000)
 
   ;; set-move
+  (if (boundp '*o*)
+      (send *o* :translate #f(0 0 42) :world))
+  (if (boundp '*n*)
+      (send *n* :translate #f(0 0 56) :world))
+  (if (boundp '*c*)
+      (send *c* :translate #f(0 0 53) :world))
+  (if (boundp '*p*)
+      (send *p* :translate #f(0 0 42) :world))
+  (setq *pot-surface* (make-cylinder 120 10))
+  (send *pot-surface* :move-to (send *pot* :copy-worldcoords) :world)
+  (send *pot-surface* :translate #f(0 0 72) :world)
+  (send *pot-surface* :set-color :cyan)
   (send *mcup* :move-to (make-coords :pos #f(980 160 845)) :world)
   (objects (append obj-list (list *pot-surface*)))
   (send *irtviewer* :look-all
@@ -1037,10 +1059,49 @@
   (send p4 :dissoc p5)
   (send p4 :dissoc p6)
 
+  (setq *p* (make-cascoords))
+  (send *p* :newcoords (send p1 :copy-worldcoords))
+
+  (send p1 :rotate (deg2rad -40) :z :world)
+  (send p2 :rotate (deg2rad 80) :z :world)
+  (send p3 :rotate (deg2rad 20) :z :world)
+  (send p4 :rotate (deg2rad 50) :z :world)
+  (send p5 :rotate (deg2rad -70) :z :world)
+  (send p6 :rotate (deg2rad 60) :z :world)
+  (send p1 :translate #f(30 -5 0) :world)
+  (send p2 :translate #f(-10 50 0) :world)
+  (send p4 :translate #f(-5 40 0) :world)
+  (send p5 :translate #f(-10 0 0) :world)
+  (send p6 :translate #f(-15 -40 0) :world)
   
+  (send *p* :assoc p1)
+  (send *p* :assoc p2)
+  (send *p* :assoc p3)
+  (send *p* :assoc p4)
+  (send *p* :assoc p5)
+  (send *p* :assoc p6)
+
+  (if (boundp '*pot-surface*)
+      (send *p* :translate #f(0 0 42) :world))
+ 
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (append *p-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (unix:usleep 1000000)
+
+  (warn "please run (put-curry-roux)~%")  
+  )
+
+(defun put-curry-roux ()
+  ;; change curry
+  (if *pot-surface*
+      (send *pot-surface* :set-color :Sienna))
+  (if (boundp '*o*)
+      (send *o* :translate #f(0 0 -42) :world))
+  (send *irtviewer* :look-all
+  	(geo::make-bounding-box
+  	 (flatten (send-all (send *pot* :bodies) :vertices))))
   (send *viewer* :draw-objects)
   (unix:usleep 1000000)
   
@@ -1061,6 +1122,8 @@
   (niku-stir-fry)
   (carrot-pot)
   (pour-water)
+  (potato-pot)
+  (put-curry-roux)
   )
 
 (defun onion-test ()
