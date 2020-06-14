@@ -10,7 +10,7 @@
      (setq rb1 (make-cube 60 130 15))
      (setq rb2 (make-cube 56 126 13))
      (send rb2 :locate #f(0 0 1))
-     (setq rb1 (body- nb1 nb2))
+     (setq rb1 (body- rb1 rb2))
      (send rb1 :set-color :SandyBrown)
      
      (setq r1 (make-cube 26 40 10))
