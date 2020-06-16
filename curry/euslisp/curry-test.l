@@ -81,6 +81,12 @@
   ;; (potato-peel) ;; じゃがいもの皮を剥く
   ;; (potato-cut) ;; じゃがいもを一口大に切る
   ;; (niku-stir-fry) ;; 肉を炒める
+  (carrot-pot) ;; 人参を鍋に加える
+  (potato-pot) ;; じゃがいもを鍋に加える
+  (onion-pot) ;; 玉ねぎを鍋に加える
+  (pour-water) ;; 水を加える,煮込む
+  (add-stew-mix) ;; カレールーを加える,煮込む
+  (add-milk) ;; 牛乳を加える
   
   (warn "WIP!~%")
 
