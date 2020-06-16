@@ -20,6 +20,7 @@ eusurdfのREADMEに従っても良いし、
 などのようにしても作れる。  
 
 /opt/ros/以下のものだとファイルの書き込み権限などで上手く実行出来なかったので、git cloneしてきて使った。  
+bodyset-linkではおそらく駄目で、cascaded-linkにしておく必要がある。出来たフォルダを移動して使う。
 
 作ったmodelを使えるようにするには、package.xmlに
 ```xml
