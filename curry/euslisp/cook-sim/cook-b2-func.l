@@ -17,52 +17,52 @@
   (send *pan* :locate #f(680 770 860))
 
   ;; set peeler
-  (load "model/peeler.l")
+  (load "../model/peeler.l")
   (setq *peeler* (peeler))
   (send *peeler* :locate #f(550.0 -250.0 850.0))
 
   ;; set まな板
-  (load "model/cutting-board.l")
+  (load "../model/cutting-board.l")
   (setq *cutting-board* (cutting-board))
   (send *cutting-board* :locate #f(650 0 825))
 
   ;; set 調理鍋
-  (load "model/cooking-pot.l")
+  (load "../model/cooking-pot.l")
   (setq *pot* (cooking-pot))
   (send *pot* :locate #f(680 500 830))
 
   ;; set onion
-  (load "model/onion-test-model.l")
+  (load "../model/onion-test-model.l")
   (setq *onion* (onion))
   (send *onion* :locate #f(860 150 845))
 
   ;; set carrot
-  (load "model/carrot-test-model.l")
+  (load "../model/carrot-test-model.l")
   (setq *carrot* (carrot))
   (send *carrot* :locate #f(900 50 845))
 
   ;; set potato
-  (load "model/potato-test-model.l")
+  (load "../model/potato-test-model.l")
   (setq *potato* (potato))
   (send *potato* :locate #f(860 -50 845))
 
   ;; set niku
-  (load "model/niku-test.l")
+  (load "../model/niku-test.l")
   (setq *niku* (niku))
   (send *niku* :locate #f(980 -130 845))
 
   ;; set trash-box
-  (load "model/trash-box.l")
+  (load "../model/trash-box.l")
   (setq *trash-box* (trash-box))
   (send *trash-box* :locate #f(800 -290 830))
 
   ;; set mcup
-  (load "model/measuring-cup.l")
+  (load "../model/measuring-cup.l")
   (setq *mcup* (measuring-cup))
   (send *mcup* :locate #f(980 -330 845))
 
   ;; set roux
-  (load "model/roux-test.l")
+  (load "../model/roux-test.l")
   (setq *roux* (roux))
   (send *roux* :locate #f(980 180 845))
   
@@ -110,52 +110,52 @@
   (send *pan* :locate #f(680 770 860))
 
   ;; set peeler
-  (load "model/peeler.l")
+  (load "../model/peeler.l")
   (setq *peeler* (peeler))
   (send *peeler* :locate #f(550.0 -250.0 850.0))
 
   ;; set まな板
-  (load "model/cutting-board.l")
+  (load "../model/cutting-board.l")
   (setq *cutting-board* (cutting-board))
   (send *cutting-board* :locate #f(650 0 825))
 
   ;; set 調理鍋
-  (load "model/cooking-pot.l")
+  (load "../model/cooking-pot.l")
   (setq *pot* (cooking-pot))
   (send *pot* :locate #f(680 500 830))
 
   ;; set onion
-  (load "model/onion-test-model.l")
+  (load "../model/onion-test-model.l")
   (setq *onion* (onion))
   (send *onion* :locate #f(860 150 845))
 
   ;; set carrot
-  (load "model/carrot-test-model.l")
+  (load "../model/carrot-test-model.l")
   (setq *carrot* (carrot))
   (send *carrot* :locate #f(900 50 845))
 
   ;; set potato
-  (load "model/potato-test-model.l")
+  (load "../model/potato-test-model.l")
   (setq *potato* (potato))
   (send *potato* :locate #f(860 -50 845))
 
   ;; set niku
-  (load "model/niku-test.l")
+  (load "../model/niku-test.l")
   (setq *niku* (niku))
   (send *niku* :locate #f(980 -130 845))
 
   ;; set trash-box
-  (load "model/trash-box.l")
+  (load "../model/trash-box.l")
   (setq *trash-box* (trash-box))
   (send *trash-box* :locate #f(800 -290 830))
 
   ;; set mcup
-  (load "model/measuring-cup.l")
+  (load "../model/measuring-cup.l")
   (setq *mcup* (measuring-cup))
   (send *mcup* :locate #f(980 -330 845))
 
   ;; set mix
-  (load "model/stew-mix.l")
+  (load "../model/stew-mix.l")
   (setq *mix* (stew-mix))
   (send *mix* :locate #f(980 180 845))
   
