@@ -1,6 +1,7 @@
 (defclass cooking-pot-object
   :super cascaded-link
   :slots (content
+	  bottom
          ))
 
 (defmethod cooking-pot-object
@@ -17,6 +18,10 @@
      (setq bc2 (make-solid-of-revolution (list #f(0 0 110) #f(120 0 110) #f(100 0 10) #f(0 0 10))))
      (setq content bc2)
      (send bc1 :assoc content)
+
+     (setq bc3 (make-solid-of-revolution (list #f(0 0 10) #f(100 0 10) #f(100 0 0) #f(0 0 0))))
+     (setq bottom bc3)
+     (send bc1 :assoc bottom)  
 
      (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list bc1) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
@@ -39,6 +44,7 @@
      self))
 
   (:content (&rest args) (forward-message-to content args))
+  (:bottom (&rest args) (forward-message-to bottom args))
 
   (:water
    (&rest args &key (surface 70))
