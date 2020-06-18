@@ -10,12 +10,12 @@
     (send abody2 :copy-worldcoords)
     (setq box2 (make-bounding-box (send abody2 :vertices)))
     (setq m2 (v- (send box2 :maxpoint) (send box2 :minpoint)))
-    (setq mn (v- m2 (float-vector (* (elt m1 0) 2) (* (elt m1 1) 2) 0))) ;; 余分に入れている。
+    (setq mn (v- m2 (float-vector (* (elt m1 0) 1.5) (* (elt m1 1) 1.5) 0))) ;; 余分に入れている。
     
     (if (send abody1 :parent) (send (send abody1 :parent) :dissoc abody1))
     (send bc :assoc abody1)
     
-    (setq target (make-coords :pos (v+ (float-vector (random (elt mn 0)) (random (elt mn 1))  (random (elt mn 2)))  (v+ (send box2 :minpoint)  (float-vector (/ (elt m1 0) 2) (/ (elt m1 1) 2) 0)))))
+    (setq target (make-coords :pos (v+ (float-vector (random (elt mn 0)) (random (elt mn 1))  (random (elt mn 2)))  (v+ (send box2 :minpoint)  (float-vector (* (elt m1 0) 0.75) (* (elt m1 1) 0.75) 0)))))
 
     (send bc :move-to target :world))
     )
