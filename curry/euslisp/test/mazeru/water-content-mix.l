@@ -1,4 +1,4 @@
-(defun move-test (abody1 abody2)
+(defun content-mix-move (abody1 abody2)
   (let (box1 box2 bc m1 m2 mn target)
     (send abody1 :move-to (make-coords :pos (send abody1 :worldpos) :rpy (float-vector (random 6.28) (random 6.28) (random 6.28)) ) :world)
     (send abody1 :copy-worldcoords)
@@ -34,7 +34,7 @@
     (dolist (x bodies)
       (setq c-flag nil)
       (until c-flag
-	     (move-test x nakami)
+	     (content-mix-move x nakami)
 	     (if (list-pqp-check x pqp-list)
 		 (setq c-flag t)))
       (push x pqp-list)
