@@ -519,7 +519,7 @@
   (send c1 :translate #f(0 -30 0) :world)
   (send c1 :copy-worldcoords)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
@@ -541,7 +541,7 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   (send c3-1-1 :move-to (make-coords :pos #f(900 0 845)) :world)
   (send c3-1-1 :copy-worldcoords)
@@ -588,7 +588,7 @@
   (send c2-1-6 :locate #f(10 0 0))
   (send c2-1-7 :locate #f(15 0 0))
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   (send c2-2-1 :dissoc c2-2-2)
   (send c2-2-1 :dissoc c2-2-3)
@@ -687,37 +687,37 @@
   ;; peel-1
   (send p1 :set-color :moccasin)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; peel-2
   (send p2 :set-color :moccasin)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
   
   ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; peel-3
   (send p3 :set-color :moccasin)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
     ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; peel-4
   (send p4 :set-color :moccasin)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
@@ -754,7 +754,7 @@
   (send *arrow* :newcoords (make-coords :pos #f(710 100 840) :rpy #f(0.785 1.571 -0.785)))
   (send *potato* :move-to (send *arrow* :copy-worldcoords) :world)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   (send *arrow* :newcoords (make-coords :pos #f(650 -60 840) :rpy #f(0.785 -1.571 -2.357)))
   (send *potato2* :move-to (send *arrow* :copy-worldcoords) :world)
@@ -766,7 +766,7 @@
   (send *potato2* :dissoc p3)
   (send p3 :translate #f(0 -20 0) :world)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
@@ -789,7 +789,7 @@
   (send *potato* :dissoc p6)
   (send p6 :translate #f(0 -20 0) :world)
   (send *viewer* :draw-objects)
-  (unix:usleep s-time)
+  ;; (unix:usleep s-time)
 
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
@@ -1535,8 +1535,8 @@
 
   ;; set sleep time
   ;; (setq s-time 1000000)
-  ;; (setq s-time 500000)
-  (setq s-time 0)
+  (setq s-time 500000)
+  ;; (setq s-time 0)
 
   ;; 普通のカレーのレシピ
   ;; (onion-wash) ;; 玉ねぎを洗う
