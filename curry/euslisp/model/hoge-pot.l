@@ -1,5 +1,5 @@
-(load "mcup-update-model.l")
-(setq *mcup* (measuring-cup))
+(load "pot-update-model.l")
+(setq *mcup* (cooking-pot))
 
 (send *mcup* :translate #f(0 100 100) :world)
 (send *mcup* :copy-worldcoords)

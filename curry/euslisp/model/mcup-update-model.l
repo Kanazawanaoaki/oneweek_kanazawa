@@ -37,7 +37,8 @@
      (setq b1 (body- b1 b2))
 
      (setq content b2)
-     (send b1 :assoc content)
+     ;; (send b1 :assoc content)
+     (send self :assoc content)
 
      (setq b8 (make-cube 17 10 7))
      (send b8 :locate #f(0 0 -3))
