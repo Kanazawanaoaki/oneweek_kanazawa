@@ -56,8 +56,8 @@
   (setq *trash-box* (trash-box))
   (send *trash-box* :locate #f(800 -290 830))
 
-  ;; set mcup
-  (load "../model/measuring-cup.l")
+  ;; set mcup 
+  (load "../model/mcup-update-model.l")
   (setq *mcup* (measuring-cup))
   (send *mcup* :locate #f(980 -330 845))
 
@@ -152,7 +152,7 @@
   (send *trash-box* :locate #f(800 -290 830))
 
   ;; set mcup
-  (load "../model/measuring-cup.l")
+  (load "../model/mcup-update-model.l")
   (setq *mcup* (measuring-cup))
   (send *mcup* :locate #f(980 -330 845))
 
@@ -1071,11 +1071,10 @@
   (unix:usleep s-time)
 
   ;; on water
-  (setq *mcup-surface* (make-cylinder 43 10))
-  (send *mcup-surface* :move-to (send (elt (send *mcup* :attention) 1) :copy-worldcoords) :world)
-  (send *mcup-surface* :translate #f(0 0 -50) :world)
+  (setq *mcup-surface* (send *mcup* :water :surface 80))
   (send *mcup-surface* :set-color :cyan 0.5)
   (send *mcup* :assoc *mcup-surface*)
+
   (objects (append obj-list (list *water* *mcup-surface*)))
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
@@ -1223,119 +1222,3 @@
   (unix:usleep s-time)
   )
 
-
-
-
-;; 普通のカレーの作り方の例（だと僕が思うレシピ）
-(defun nomal-curry ()
-  ;; ;; カレー用の初期準備
-  (curry-init)
-
-  ;; 時間がかかるので先にcutモードにしておく
-  (send *onion* :cut)
-
-  ;; set sleep time
-  ;; (setq s-time 1000000)
-  (setq s-time 500000)
-
-  ;; 普通のカレーのレシピ
-  (onion-slice) ;; 玉ねぎ薄切りにする
-  (carrot-half-moon) ;;人参を半月切りにする
-  (potato-bite-size) ;;じゃがいもを一口大にする
-
-  (niku-pan-test)
-  (niku-pot-test)
-  (onion-pan-test)
-  (onion-pot-test)
-  (potato-pot-test)
-  (carrot-pot-test)
-  (pour-water)
-  (put-curry-roux)
-  
-  )
-
-(defun easy-curry ()
-  ;; ;; カレー用の初期準備
-  (curry-init)
-
-  ;; 時間がかかるので先にcutモードにしておく
-  (send *onion* :cut)
-
-  ;; set sleep time
-  ;; (setq s-time 1000000)
-  (setq s-time 500000)
-
-  ;; 簡単なカレーのレシピ
-  (onion-slice) ;; 玉ねぎ薄切りにする
-  (carrot-half-moon) ;;人参を半月切りにする
-  (potato-bite-size) ;;じゃがいもを一口大にする
-
-  (niku-pan-test)
-  (niku-pot-test)
-  (onion-pot-test)
-  (potato-pot-test)
-  (carrot-pot-test)
-  (pour-water)
-  (put-curry-roux)  
-
-  ;; (init)
-  ) 
-
-
-(defun now-devel ()
-  ;; ;; カレー用の初期準備
-  (curry-init)
-
-  ;; 時間がかかるので先にcutモードにしておく
-  (send *onion* :cut)
-
-  ;; set sleep time
-  ;; (setq s-time 1000000)
-  ;; (setq s-time 500000)
-  (setq s-time 100000)
-  ;; (setq s-time 0)
-
-  ;; 普通のカレーのレシピ
-  (onion-slice) ;; 玉ねぎ薄切りにする
-  (carrot-half-moon) ;;人参を半月切りにする
-  (potato-bite-size) ;;じゃがいもを一口大にする
-
-  (niku-pan-test)
-  (niku-pot-test)
-  (onion-pan-test)
-  (onion-pot-test)
-  (potato-pot-test)
-  (carrot-pot-test)
-  (pour-water)
-  (put-curry-roux)
-  )
-
-
-(defun stew-test ()
-  ;; ;; シチュー用の初期準備
-  (stew-init)
-
-  ;; 時間がかかるので先にcutモードにしておく
-  (send *onion* :cut)
-
-  ;; set sleep time
-  ;; (setq s-time 1000000)
-  (setq s-time 500000)
-
-  ;; 普通のシチューのレシピ
-  (onion-slice) ;; 玉ねぎ薄切りにする
-  (carrot-half-moon) ;;人参を半月切りにする
-  (potato-bite-size) ;;じゃがいもを一口大にする
-
-  (niku-pan-test)
-  (niku-pot-test)
-  (onion-pot-test)
-  (potato-pot-test)
-  (carrot-pot-test)
-  (pour-water)
-  (add-stew-mix)
-  
-  )
-
-
-(warn "please run (nomal-curry) (easy-curry) (stew-test)~%")
