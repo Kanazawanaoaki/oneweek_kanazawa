@@ -195,6 +195,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (send *onion* :bodies) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; on water
@@ -202,6 +204,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; off water
@@ -209,6 +213,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; put on cutting board
@@ -218,6 +224,9 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
+  (unix:usleep s-time)  
   )
 
 
@@ -232,6 +241,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; f-cut-1 
@@ -240,12 +251,15 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move 
   (send *arrow* :newcoords (make-coords :pos #f(710 100 840) :rpy #f(1.571 0 1.571)))
   (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
@@ -253,12 +267,14 @@
   (send o4-1 :move-to (send *arrow* :copy-worldcoords) :world)
   (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; f-cut-2
   (send o4-1 :dissoc o6-1)
   (send o6-1 :translate #f(0 -30 0) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
@@ -266,6 +282,7 @@
   (send o4-1 :copy-worldcoords)
   (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; f-cut-3
@@ -273,6 +290,7 @@
   (send o2-1 :translate #f(0 -10 0) :world)
   (send o2-1 :copy-worldcoords)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
   ;; set-move
@@ -283,6 +301,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; peel
@@ -292,6 +312,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -300,6 +322,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
@@ -307,6 +331,7 @@
   (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
   (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; f-cut-4
@@ -321,6 +346,7 @@
   (send o3-1 :copy-worldcoords)
   (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; f-cut-5
@@ -328,6 +354,7 @@
   (send o5-1 :translate #f(0 -10 0) :world)
   (send o5-1 :copy-worldcoords)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -338,6 +365,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; peel
@@ -347,6 +376,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   )
 
@@ -361,6 +392,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; cut-1
@@ -382,6 +415,7 @@
   (send o3-3-2 :locate #f(15 0 0))
   (send o3-3-1 :locate #f(20 0 0))  
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   (send o4-1 :dissoc o4-3-1)
@@ -402,6 +436,7 @@
   (send o4-3-2 :locate #f(15 0 0))
   (send o4-3-1 :locate #f(20 0 0))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -437,6 +472,7 @@
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   )
 
@@ -456,6 +492,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (send *carrot* :bodies) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; on water
@@ -463,6 +501,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; off water
@@ -470,6 +510,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; put on cutting board
@@ -480,6 +522,9 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
   )
   
 (defun carrot-peel ()
@@ -492,6 +537,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; f-cut-1 
@@ -499,11 +546,13 @@
   (send c1 :translate #f(0 -30 0) :world)
   (send c1 :copy-worldcoords)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   
   ;; f-cut-2
   (send c2-1-1 :dissoc c3-1-1)
@@ -512,6 +561,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -521,6 +572,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   (send c3-1-1 :move-to (make-coords :pos #f(900 0 845)) :world)
@@ -529,6 +582,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   )
 
@@ -537,6 +592,7 @@
   (send c2-1-1 :dissoc c2-2-1)
   (send c2-1-1 :translate #f(0 -20 0))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -549,6 +605,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; cut-2
@@ -566,6 +624,7 @@
   (send c2-1-6 :locate #f(10 0 0))
   (send c2-1-7 :locate #f(15 0 0))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   (send c2-2-1 :dissoc c2-2-2)
@@ -582,6 +641,7 @@
   (send c2-2-6 :locate #f(10 0 0))
   (send c2-2-7 :locate #f(15 0 0))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -603,6 +663,7 @@
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   )
 
@@ -623,6 +684,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (send *potato* :bodies) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; on water
@@ -630,6 +693,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *potato* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; off water
@@ -637,6 +702,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *potato* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; put on cutting board
@@ -647,6 +714,9 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *potato* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
   )
 
 
@@ -656,46 +726,56 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *potato* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; peel-1
   (send p1 :set-color :moccasin)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; peel-2
   (send p2 :set-color :moccasin)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
   
   ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; peel-3
   (send p3 :set-color :moccasin)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
     ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; peel-4
   (send p4 :set-color :moccasin)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
   (send *potato* :rotate (deg2rad 90) :x)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   )
 
@@ -709,6 +789,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *potato* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; cut-1
@@ -722,34 +804,40 @@
   (send *potato2* :assoc p1)
   (send *potato2* :translate #f(0 -30 0) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
   (send *arrow* :newcoords (make-coords :pos #f(710 100 840) :rpy #f(0.785 1.571 -0.785)))
   (send *potato* :move-to (send *arrow* :copy-worldcoords) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   (send *arrow* :newcoords (make-coords :pos #f(650 -60 840) :rpy #f(0.785 -1.571 -2.357)))
   (send *potato2* :move-to (send *arrow* :copy-worldcoords) :world)
   (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; cut-2
   (send *potato2* :dissoc p3)
   (send p3 :translate #f(0 -20 0) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
 
   ;; cut-3
   (send *potato2* :dissoc p2)
   (send p2 :translate #f(0 -10 0) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -757,22 +845,26 @@
   (send *potato* :move-to (send *arrow* :copy-worldcoords) :world)
   (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; cut-4
   (send *potato* :dissoc p6)
   (send p6 :translate #f(0 -20 0) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   ;; (unix:usleep s-time)
 
   ;; set-move
   (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
 
   ;; cut-5
   (send *potato* :dissoc p5)
   (send p5 :translate #f(0 -10 0) :world)
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   (send p1 :assoc p2)
@@ -872,6 +964,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *n-list* (send *pan* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   (dolist (x *n-list*)
@@ -884,6 +978,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *n-list* (send *pan* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
   ;; stir-fry
@@ -891,6 +987,7 @@
     (send x :set-color :RosyBrown)
     )
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)  
   )
 
@@ -898,6 +995,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *n-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
   (dolist (x *n-list*)
@@ -912,6 +1011,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *n-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   (push *n-list* *pot-list*)
@@ -922,6 +1023,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *o-list* (send *pan* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; onion-init for mix
@@ -944,6 +1047,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *o-list* (send *pan* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; stir-fry
@@ -951,6 +1056,7 @@
     (send x :set-color :BurlyWood)
     )
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   )
 
@@ -958,6 +1064,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *o-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
   ;; onion
@@ -981,6 +1089,8 @@
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (append *o-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)  
 
   (push *o-list-3* *pot-list*)
@@ -993,6 +1103,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *p-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
   ;; potato init for bottom mix
@@ -1016,6 +1128,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *p-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   (push *p-list* *pot-list*)
@@ -1025,6 +1139,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
   ;; carrot
@@ -1049,6 +1165,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   (push *c-list-1* *pot-list*)
@@ -1064,10 +1182,11 @@
   (send *mcup* :move-to (send *water-point* :copy-worldcoords) :world)
   (send *mcup* :translate #f(0 0 -70) :world)
   (send *mcup* :copy-worldcoords)
-  (send *viewer* :draw-objects)
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (send *mcup* :bodies) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; on water
@@ -1079,6 +1198,8 @@
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *mcup* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; off water
@@ -1086,6 +1207,8 @@
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (append (send *mcup* :bodies) (list *water*)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set move
@@ -1095,6 +1218,8 @@
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (append (send *mcup* :bodies) (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; pour water
@@ -1111,6 +1236,8 @@
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (append (send *mcup* :bodies) (send *pot* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   ;; set-move
@@ -1126,6 +1253,8 @@
   (send *irtviewer* :look-all
   	(geo::make-bounding-box
   	 (flatten (send-all (send *pot* :bodies) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)    
   )
 
@@ -1147,6 +1276,7 @@
 	(geo::make-bounding-box
   	 (flatten (send-all (append *r-list* (send *pot* :bodies)) :vertices))))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
 
   (send r1 :move-to (send *pot* :copy-worldcoords) :world)
@@ -1182,6 +1312,7 @@
   	(geo::make-bounding-box
   	 (flatten (send-all (append *r-list* (send *pot* :bodies)) :vertices))))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
 
@@ -1196,6 +1327,7 @@
   	(geo::make-bounding-box
   	 (flatten (send-all (send *pot* :bodies) :vertices))))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)  
   )
 
@@ -1206,6 +1338,7 @@
 	(geo::make-bounding-box
   	 (flatten (send-all (append (send *mix* :bodies) (send *pot* :bodies)) :vertices))))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   
   ;; change curry
@@ -1219,6 +1352,7 @@
   	(geo::make-bounding-box
   	 (flatten (send-all (send *pot* :bodies) :vertices))))
   (send *viewer* :draw-objects)
+  (x::window-main-one)
   (unix:usleep s-time)
   )
 
