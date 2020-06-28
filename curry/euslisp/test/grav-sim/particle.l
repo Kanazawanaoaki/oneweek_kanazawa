@@ -225,4 +225,14 @@
   (sim-stop)
   (all-status))
 
-(warn "(particle) ;; for particle simulation~%")
+;;; add 
+(defun particle-test ()
+  (init)
+  (sim-start)
+  (format t "please run (stop)~%"))
+
+(defun stop ()
+  (sim-stop)
+  (all-status))
+  
+(warn "(particle) or (particle-test);; for particle simulation~%")
