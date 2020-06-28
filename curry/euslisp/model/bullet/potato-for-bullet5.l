@@ -10,12 +10,12 @@
   (setq b2 (convex-hull-3d v-list))
   )
 
-(defclass potato-object-1
+(defclass potato-object-5
   :super cascaded-link
   :slots (
          ))
 
-(defmethod potato-object-1
+(defmethod potato-object-5
   (:init
    (&rest args &key (name "potato") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
    (let (b1 b2 b3 b4 b5 b6 r)
@@ -55,7 +55,7 @@
      (send p5 :set-color :moccasin)
      (send p6 :set-color :moccasin)
      
-     (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list p1) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
+     (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list p5) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
 
      ;; definition of assoc
@@ -77,4 +77,4 @@
 
   )
 
-(defun potato1 (&rest args) (instance* potato-object-1 :init args))
+(defun potato5 (&rest args) (instance* potato-object-5 :init args))
