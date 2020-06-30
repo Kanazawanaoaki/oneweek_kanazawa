@@ -253,3 +253,169 @@
   (unix:sleep 1)
   )
 
+
+
+;;;;;;;
+;; (setq *carrot* (carrot))
+;; (send *carrot* :translate #f(0 0 50))
+
+;; (send *carrot* :cut)
+
+;; ;; set arrow
+;; (load "models/arrow-object.l")
+;; (setq *arrow* (arrow))
+
+;; (objects (list *carrot* *arrow*))
+
+;; (send *viewer* :draw-objects)
+
+;; (warn "please run (f-cut1-1)~%")
+;; (warn "you can also run (now-devel) or (exec-all)~%")
+
+;; (defun f-cut1-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (f-cut1-2)~%")
+;;   )
+
+;; (defun f-cut1-2 ()
+;;   (send c2-1-1 :dissoc c1)
+;;   (send c1 :translate #f(30 0 0))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (f-cut2-1)~%")
+;;   )
+
+;; (defun f-cut2-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (f-cut2-2)~%")
+;;   )
+
+;; (defun f-cut2-2 ()
+;;   (send c2-1-1 :dissoc c3-1-1)
+;;   (send c2-1-1 :translate #f(20 0 0))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (f-cut3-1)~%")
+;;   )
+
+;; (defun f-cut3-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (f-cut3-2)~%")
+;;   )
+
+;; (defun f-cut3-2 ()
+;;   (send c3-1-1 :dissoc c4)
+;;   (send c4 :translate #f(-20 0 0))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (cut1-1)~%")
+;;   )
+
+;; (defun cut1-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (cut1-2)~%")
+;;   )
+
+;; (defun cut1-2 ()
+;;   (send c2-1-1 :dissoc c2-2-1)
+;;   (send c2-1-1 :translate #f(0 -20 0))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (cut2-1)~%")
+;;   )
+
+;; (defun cut2-1 ()
+;;   (send c2-1-1 :dissoc c2-1-2)
+;;   (send c2-1-1 :dissoc c2-1-3)
+;;   (send c2-1-1 :dissoc c2-1-4)
+;;   (send c2-1-1 :dissoc c2-1-5)
+;;   (send c2-1-1 :dissoc c2-1-6)
+;;   (send c2-1-1 :dissoc c2-1-7)
+
+
+;;   (send c2-1-1 :locate #f(-30 0 0))
+;;   (send c2-1-2 :locate #f(-20 0 0))
+;;   (send c2-1-3 :locate #f(-10 0 0))
+;;   (send c2-1-4 :locate #f(0 0 0))
+;;   (send c2-1-5 :locate #f(10 0 0))
+;;   (send c2-1-6 :locate #f(20 0 0))
+;;   (send c2-1-7 :locate #f(30 0 0))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (cut2-2)~%")
+;;   )
+
+;; (defun cut2-2 ()
+;;   (send c2-2-1 :dissoc c2-2-2)
+;;   (send c2-2-1 :dissoc c2-2-3)
+;;   (send c2-2-1 :dissoc c2-2-4)
+;;   (send c2-2-1 :dissoc c2-2-5)
+;;   (send c2-2-1 :dissoc c2-2-6)
+;;   (send c2-2-1 :dissoc c2-2-7)
+
+
+;;   (send c2-2-1 :locate #f(-30 0 0))
+;;   (send c2-2-2 :locate #f(-20 0 0))
+;;   (send c2-2-3 :locate #f(-10 0 0))
+;;   (send c2-2-4 :locate #f(0 0 0))
+;;   (send c2-2-5 :locate #f(10 0 0))
+;;   (send c2-2-6 :locate #f(20 0 0))
+;;   (send c2-2-7 :locate #f(30 0 0))
+
+;;   (send *viewer* :draw-objects)
+;;   )
+
+
+
+
+;; (defun now-devel ()
+;;   (f-cut1-1)
+;;   (f-cut1-2)
+;;   (f-cut2-1)
+;;   (f-cut2-2)
+;;   (f-cut3-1)
+;;   (f-cut3-2)
+
+;;   (unix:sleep 1)
+;;   (send *carrot* :translate #f(0 0 50))
+;;   (send *viewer* :draw-objects)  
+;;   )
+
+
+
+
+;; (defun exec-all ()
+;;   (f-cut1-1)
+;;   (unix:usleep 1000000)
+;;   (f-cut1-2)
+;;   (unix:usleep 1000000)
+;;   (f-cut2-1)
+;;   (unix:usleep 1000000)
+;;   (f-cut2-2)
+;;   (unix:usleep 1000000)
+;;   (f-cut3-1)
+;;   (unix:usleep 1000000)
+;;   (f-cut3-2)
+
+;;   (unix:sleep 1)
+;;   (send *carrot* :translate #f(0 0 50))
+;;   (send *viewer* :draw-objects)
+;;   (unix:usleep 1000000)
+
+;;   (cut1-1)
+;;   (unix:usleep 1000000)
+;;   (cut1-2)
+;;   (unix:usleep 1000000)
+;;   (cut2-1)
+;;   (unix:usleep 1000000)
+;;   (cut2-2)
+;;   )
+
