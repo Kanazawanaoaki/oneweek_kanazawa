@@ -12,7 +12,7 @@
     )
 
 
-(defun body-cut-x (abody box)
+(defun body-cut-x-with-c (abody box coords)
   (let (b1 b2 c-flag i)
     (setq c-flag nil)
     (setq i 0)
@@ -25,7 +25,7 @@
 		   (setq c-flag t)
 		   0)
 	       (setq *error-handler* #'euserror)));;エラーハンドラをもとに戻す
-	   (send box :locate #f(-1 0 0))
+	   (send coords :locate #f(-1 0 0))
 	   (setq i (+ i 1))
 	   )
 
@@ -97,27 +97,29 @@
 (send b4-coords :assoc b4)
 
 (send b3-coords :rotate (deg2rad -45) :z)
-(setq o3-3-1 (body- o3-1 b3))
-(setq o3-1 (body- o3-1 o3-3-1))
+(setq tmp (body-cut-x-with-c o3-1 b3 b3-coords))
+(setq o3-3-1 (elt tmp 0))
+(setq o3-1 (elt tmp 1))
 (send b4-coords :rotate (deg2rad 45) :z)
-(setq o4-3-1 (body- o4-1 b4))
-(setq o4-1 (body- o4-1 o4-3-1))
+(setq tmp (body-cut-x-with-c o4-1 b4 b4-coords))
+(setq o4-3-1 (elt tmp 0))
+(setq o4-1 (elt tmp 1))
 
 (send b3-coords :rotate (deg2rad 45) :z)
-(setq tmp (body-cut-x o3-1 b3))
+(setq tmp (body-cut-x-with-c o3-1 b3 b3-coords))
 (setq o3-3-2 (elt tmp 0))
 (setq o3-1 (elt tmp 1))
 (send b4-coords :rotate (deg2rad -45) :z)
-(setq tmp (body-cut-x o4-1 b4))
+(setq tmp (body-cut-x-with-c o4-1 b4 b4-coords))
 (setq o4-3-2 (elt tmp 0))
 (setq o4-1 (elt tmp 1))
 
 (send b3-coords :rotate (deg2rad 45) :z)
-(setq tmp (body-cut-x o3-1 b3))
+(setq tmp (body-cut-x-with-c o3-1 b3 b3-coords))
 (setq o3-3-3 (elt tmp 0))
 (setq o3-1 (elt tmp 1))
 (send b4-coords :rotate (deg2rad -45) :z)
-(setq tmp (body-cut-x o4-1 b4))
+(setq tmp (body-cut-x-with-c o4-1 b4 b4-coords))
 (setq o4-3-3 (elt tmp 0))
 (setq o4-1 (elt tmp 1))
 
@@ -200,136 +202,136 @@
 
 
 
-;; ;; cut part visulaization
-;; (setq *o-list-3* (list o3-3-1 o3-3-2 o3-3-3 o3-1))
-;; (setq *o-list-4* (list o4-3-1 o4-3-2 o4-3-3 o4-1))
+;; cut part visulaization
+(setq *o-list-3* (list o3-3-1 o3-3-2 o3-3-3 o3-1))
+(setq *o-list-4* (list o4-3-1 o4-3-2 o4-3-3 o4-1))
 
-;; (setq leng (length *o-list-3*))
-;; (dolist (x *o-list-3*)
-;;   (send x :translate (float-vector (* leng 10) 10 0) :world)
-;;   (setq leng (- leng 1))
+(setq leng (length *o-list-3*))
+(dolist (x *o-list-3*)
+  (send x :translate (float-vector (* leng 10) 10 0) :world)
+  (setq leng (- leng 1))
+  )
+
+(setq leng (length *o-list-4*))
+(dolist (x *o-list-4*)
+  (send x :translate (float-vector (* leng 10) -10 0) :world)
+  (setq leng (- leng 1))
+  )
+
+
+(objects (append *o-list-3* *o-list-4*))
+
+
+
+
+;; ;; peel part test
+;; (load "models/arrow-object.l")
+;; (setq *arrow* (arrow))
+;; (send *arrow* :move-to *cut-point-1* :world)
+
+;; ;; (objects (list p1-1 p1-2 p1-3 p1-4 p2-1 p2-2 p2-3 p2-4 p3-1 p3-2 p4-1 p4-2 p5-1 p5-2 p6-1 p6-2 *arrow*))
+;; (objects (list *onion* *arrow*))
+
+
+;; (warn "please run (c1-1) or (exec-all)~%")
+
+;; (defun c1-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c1-2)~%")
 ;;   )
 
-;; (setq leng (length *o-list-4*))
-;; (dolist (x *o-list-4*)
-;;   (send x :translate (float-vector (* leng 10) -10 0) :world)
-;;   (setq leng (- leng 1))
+;; (defun c1-2 ()
+;;   (send o3-1 :dissoc o4-1)
+;;   (send o4-1 :translate #f(0 -30 0))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c2-1)~%")
+;;   )
+
+;; (defun c2-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c2-2)~%")
 ;;   )
 
 
-;; (objects (append *o-list-3* *o-list-4*))
+;; (defun c2-2 ()
+;;   (send o4-1 :dissoc o2-1)
+;;   (send o2-1 :translate #f(0 0 20))
 
-
-
-
-;; peel part test
-(load "models/arrow-object.l")
-(setq *arrow* (arrow))
-(send *arrow* :move-to *cut-point-1* :world)
-
-;; (objects (list p1-1 p1-2 p1-3 p1-4 p2-1 p2-2 p2-3 p2-4 p3-1 p3-2 p4-1 p4-2 p5-1 p5-2 p6-1 p6-2 *arrow*))
-(objects (list *onion* *arrow*))
-
-
-(warn "please run (c1-1) or (exec-all)~%")
-
-(defun c1-1 ()
-  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
-
-  (send *viewer* :draw-objects)
-  (warn "please run (c1-2)~%")
-  )
-
-(defun c1-2 ()
-  (send o3-1 :dissoc o4-1)
-  (send o4-1 :translate #f(0 -30 0))
-
-  (send *viewer* :draw-objects)
-  (warn "please run (c2-1)~%")
-  )
-
-(defun c2-1 ()
-  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
-
-  (send *viewer* :draw-objects)
-  (warn "please run (c2-2)~%")
-  )
-
-
-(defun c2-2 ()
-  (send o4-1 :dissoc o2-1)
-  (send o2-1 :translate #f(0 0 20))
-
-  (send *viewer* :draw-objects)
-  (warn "please run (c3-1)~%")
-  )
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c3-1)~%")
+;;   )
   
-(defun c3-1 ()
-  (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+;; (defun c3-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
 
-  (send *viewer* :draw-objects)
-  (warn "please run (c3-2)~%")
-  )
-
-
-(defun c3-2 ()
-  (send o4-1 :dissoc o6-1)
-  (send o6-1 :translate #f(0 0 -20))
-
-  (send *viewer* :draw-objects)
-  (warn "please run (c4-1)~%")
-  )
-
-(defun c4-1 ()
-  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
-
-  (send *viewer* :draw-objects)
-  (warn "please run (c4-2)~%")
-  )
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c3-2)~%")
+;;   )
 
 
-(defun c4-2 ()
-  (send o3-1 :dissoc o1-1)
-  (send o1-1 :translate #f(0 0 20))
+;; (defun c3-2 ()
+;;   (send o4-1 :dissoc o6-1)
+;;   (send o6-1 :translate #f(0 0 -20))
 
-  (send *viewer* :draw-objects)
-  (warn "please run (c5-1)~%")
-  )
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c4-1)~%")
+;;   )
 
-(defun c5-1 ()
-  (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
+;; (defun c4-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
 
-  (send *viewer* :draw-objects)
-  (warn "please run (c5-2)~%")
-  )
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c4-2)~%")
+;;   )
 
 
-(defun c5-2 ()
-  (send o3-1 :dissoc o5-1)
-  (send o5-1 :translate #f(0 0 -20))
+;; (defun c4-2 ()
+;;   (send o3-1 :dissoc o1-1)
+;;   (send o1-1 :translate #f(0 0 20))
 
-  (send *viewer* :draw-objects)
-  )
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c5-1)~%")
+;;   )
 
-(defun exec-all ()
-  (c1-1)
-  (unix:usleep 1000000)
-  (c1-2)
-  (unix:usleep 1000000)
-  (c2-1)
-  (unix:usleep 1000000)
-  (c2-2)
-  (unix:usleep 1000000)
-  (c3-1)
-  (unix:usleep 1000000)
-  (c3-2)
-  (unix:usleep 1000000)
-  (c4-1)
-  (unix:usleep 1000000)
-  (c4-2)
-  (unix:usleep 1000000)
-  (c5-1)
-  (unix:usleep 1000000)
-  (c5-2)
-  (unix:usleep 1000000)
-  )
+;; (defun c5-1 ()
+;;   (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
+
+;;   (send *viewer* :draw-objects)
+;;   (warn "please run (c5-2)~%")
+;;   )
+
+
+;; (defun c5-2 ()
+;;   (send o3-1 :dissoc o5-1)
+;;   (send o5-1 :translate #f(0 0 -20))
+
+;;   (send *viewer* :draw-objects)
+;;   )
+
+;; (defun exec-all ()
+;;   (c1-1)
+;;   (unix:usleep 1000000)
+;;   (c1-2)
+;;   (unix:usleep 1000000)
+;;   (c2-1)
+;;   (unix:usleep 1000000)
+;;   (c2-2)
+;;   (unix:usleep 1000000)
+;;   (c3-1)
+;;   (unix:usleep 1000000)
+;;   (c3-2)
+;;   (unix:usleep 1000000)
+;;   (c4-1)
+;;   (unix:usleep 1000000)
+;;   (c4-2)
+;;   (unix:usleep 1000000)
+;;   (c5-1)
+;;   (unix:usleep 1000000)
+;;   (c5-2)
+;;   (unix:usleep 1000000)
+;;   )
