@@ -11,7 +11,7 @@
 (defun init-stew ()
   (stew-init)
 
-  (warn "~%please run (nomal-stew)~%")
+  (warn "~%please run (nomal-stew) or (easy-curry)~%")
   )
 
 
@@ -92,8 +92,7 @@
   )
   
 
-
-(defun nomal-stew ()
+(defun easy-stew ()
   ;; ;; シチュー用の初期準備
   ;; (stew-init)
 
@@ -121,13 +120,43 @@
 
   (init)
   )
-  
-(defun init ()
-  (warn "~%if you want to make curry with pot, please run (init-curry) first and then run (nomal-curry) or (easy-curry) ~%")
-  (warn "You can also make stew by running (init-stew) and then run (nomal-stew) ~%")
 
+
+(defun nomal-stew ()
+  ;; ;; シチュー用の初期準備
+  ;; (stew-init)
+
+  ;; 時間がかかるので先にcutモードにしておく
+  (send *onion* :wedges)
+
+  ;; set sleep time
+  ;; (setq s-time 1000000)
+  (setq s-time 500000)
+
+  ;; 普通のシチューのレシピ
+  (onion-wedges) ;; 玉ねぎをくし切りする
+  (carrot-random) ;;人参を半月切りにする
+  (potato-bite-size) ;;じゃがいもを一口大にする
+  (niku-pan-test) ;; 肉を炒める
+  (niku-pot-test) ;; 肉を加える
+  (onion-pot-test) ;; 玉ねぎを加える
+  (potato-pot-test) ;; じゃがいもを加える
+  (carrot-pot-test) ;; 人参を加える
+  (pour-water) ;; 水を加える
+  (add-stew-mix) ;; シチューミックスを加える,煮込む
+  ;; (add-milk) ;; 牛乳を加える
+  
+  (warn "WIP!~%")
+
+  (init)
   )
 
+
+(defun init ()
+  (warn "~%if you want to make curry with pot, please run (init-curry) first and then run (nomal-curry) or (easy-curry) ~%")
+  (warn "You can also make stew by running (init-stew) and then run (nomal-stew) or (easy-stew) ~%")
+
+  )
 
 
 (init)

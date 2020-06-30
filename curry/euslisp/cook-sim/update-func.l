@@ -230,7 +230,7 @@
   )
 
 
-(defun onion-peel ()
+(defun onion-cut-slice ()
   (if (not (boundp 'o3-3-1))
       (send *onion* :cut))
   (setq *o-list-3* (list o3-3-1 o3-3-2 o3-3-3 o3-3-4 o3-3-5 o3-3-6 o3-3-7 o3-3-8 o3-1))
@@ -379,9 +379,8 @@
   (send *viewer* :draw-objects)
   (x::window-main-one)
   (unix:usleep s-time)
-  )
 
-(defun onion-cut ()
+  ;; (defun onion-cut ()
   ;; set-move
   (send *arrow* :newcoords (make-coords :pos #f(680 0 840) :rpy #f(1.571 0 1.571)))
   (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
@@ -476,13 +475,231 @@
   (unix:usleep s-time)
   )
 
-;; add
+(defun onion-cut-wedges ()
+  (if (not (boundp 'o3-3-1))
+      (send *onion* :wedges))
+  (setq *o-list-3* (list o3-3-1 o3-3-2 o3-3-3 o3-1))
+  (setq *o-list-4* (list o4-3-1 o4-3-2 o4-3-3 o4-1))
+  (setq *o-list* (append *o-list-3* *o-list-4*))
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (objects obj-list)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; f-cut-1 
+  (send o3-1 :dissoc o4-1)
+  (send o4-1 :translate #f(0 -40 0) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)  
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; set-move 
+  (send *arrow* :newcoords (make-coords :pos #f(710 100 840) :rpy #f(1.571 0 1.571)))
+  (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(650 0 840) :rpy #f(0 0 -1.571)))
+  (send o4-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *arrow* :newcoords (send *cut-point-3* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; f-cut-2
+  (send o4-1 :dissoc o6-1)
+  (send o6-1 :translate #f(0 -30 0) :world)
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; set-move
+  (send o4-1 :rotate (deg2rad 180) :z :world)
+  (send o4-1 :copy-worldcoords)
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; f-cut-3
+  (send o4-1 :dissoc o2-1)
+  (send o2-1 :translate #f(0 -10 0) :world)
+  (send o2-1 :copy-worldcoords)
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+  
+  ;; set-move
+  (send o6-1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o2-1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o2-1 :copy-worldcoords)
+  (send o6-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; peel
+  (send o4-1 :dissoc o4-2)
+  (send o4-2 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o4-2 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(710 -100 840) :rpy #f(-1.571 0 -1.571)))
+  (send o4-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(650 0 840) :rpy #f(0 0 1.571)))
+  (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; f-cut-4
+  (send o3-1 :dissoc o1-1)
+  (send o1-1 :translate #f(0 -30 0) :world)
+  (send o1-1 :copy-worldcoords)
+  (send *viewer* :draw-objects)
+  ;; (unix:usleep s-time)
+
+  ;; set-move
+  (send o3-1 :rotate (deg2rad 180) :z :world)
+  (send o3-1 :copy-worldcoords)
+  (send *arrow* :newcoords (send *cut-point-5* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; f-cut-5
+  (send o3-1 :dissoc o5-1)
+  (send o5-1 :translate #f(0 -10 0) :world)
+  (send o5-1 :copy-worldcoords)
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; set-move
+  (send o5-1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o1-1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o5-1 :copy-worldcoords)
+  (send o1-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; peel
+  (send o3-1 :dissoc o3-2)
+  (send o3-2 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send o3-2 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; cut-part
+  ;; set-move
+  (send *arrow* :newcoords (make-coords :pos #f(680 0 840) :rpy #f(1.571 0 1.571)))
+  (send o3-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send o3-1 :copy-worldcoords)
+  (send *arrow* :newcoords (make-coords :pos #f(620 0 840) :rpy #f(-1.571 0 -1.571)))
+  (send o4-1 :move-to (send *arrow* :copy-worldcoords) :world)
+  (send o4-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; cut-1
+  (send o3-1 :dissoc o3-3-1)
+  (send o3-1 :dissoc o3-3-2)
+  (send o3-1 :dissoc o3-3-3)
+  (send o3-1 :locate #f(-15 0 0))
+  (send o3-3-3 :locate #f(-5 0 0))
+  (send o3-3-2 :locate #f(5 0 0))
+  (send o3-3-1 :locate #f(15 0 0))  
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  (send o4-1 :dissoc o4-3-1)
+  (send o4-1 :dissoc o4-3-2)
+  (send o4-1 :dissoc o4-3-3)
+  (send o4-1 :locate #f(-15 0 0))
+  (send o4-3-3 :locate #f(-5 0 0))
+  (send o4-3-2 :locate #f(5 0 0))
+  (send o4-3-1 :locate #f(15 0 0))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; set-move
+  (send o3-1 :assoc o3-3-1)
+  (send o3-1 :assoc o3-3-2)
+  (send o3-1 :assoc o3-3-3)
+  (send o4-1 :assoc o4-3-1)
+  (send o4-1 :assoc o4-3-2)
+  (send o4-1 :assoc o4-3-3)
+
+  (send o3-1 :move-to (make-coords :pos #f(870 200 835)) :world)
+  (send o3-1 :rotate (deg2rad -90) :z :world) 
+  (send o3-1 :translate #f(30 20 0) :world)
+  (send o3-1 :rotate (deg2rad -90) :y :world) 
+  (send o3-1 :copy-worldcoords)
+  (send o4-1 :move-to (make-coords :pos #f(870 200 835)) :world)
+  (send o4-1 :rotate (deg2rad -90) :z :world) 
+  (send o4-1 :translate #f(-30 20 0) :world)
+  (send o4-1 :rotate (deg2rad 90) :y :world) 
+  (send o4-1 :copy-worldcoords)
+
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *onion* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+  )
+
+
 (defun onion-slice ()
   (onion-wash)
-  (onion-peel)
-  (onion-cut)
+  (onion-cut-slice)
   )
-;;
+
+(defun onion-wedges ()
+  (onion-wash)
+  (onion-cut-wedges)
+  )
 
 (defun carrot-wash ()
   ;; water point
@@ -527,8 +744,10 @@
   (unix:usleep s-time)
   )
   
-(defun carrot-peel ()
-  (send *carrot* :cut)
+;; (defun carrot-peel ()
+(defun  carrot-cut-half-moon ()
+  (if (not (boundp 'c2-1-1))
+      (send *carrot* :cut))  
   (setq *c-list-1* (list c2-1-1 c2-1-2 c2-1-3 c2-1-4 c2-1-5 c2-1-6 c2-1-7))
   (setq *c-list-2* (list c2-2-1 c2-2-2 c2-2-3 c2-2-4 c2-2-5 c2-2-6 c2-2-7))
   (setq *c-list* (append *c-list-1* *c-list-2*))
@@ -585,9 +804,8 @@
   (send *viewer* :draw-objects)
   (x::window-main-one)
   (unix:usleep s-time)
-  )
 
-(defun carrot-cut ()
+  ;; (defun carrot-cut ()
   ;; cut-1
   (send c2-1-1 :dissoc c2-2-1)
   (send c2-1-1 :translate #f(0 -20 0))
@@ -665,16 +883,117 @@
   (send *viewer* :draw-objects)
   (x::window-main-one)
   (unix:usleep s-time)
+)
+
+(defun  carrot-cut-random ()
+  (if (not (boundp 'c2-1-1))
+      (send *carrot* :random))  
+  (setq *c-list-1* (list c2-1-1 c2-1-2 c2-1-3 c2-1-4))
+  (setq *c-list-2* (list c2-1-5 c2-1-6 c2-1-7 c2-1-8))
+  (setq *c-list* (append *c-list-1* *c-list-2*))
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (objects obj-list)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; f-cut-1 
+  (send c2-1-1 :dissoc c1)
+  (send c1 :translate #f(0 -30 0) :world)
+  (send c1 :copy-worldcoords)
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  ;; set-move
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  
+  ;; f-cut-2
+  (send c2-1-1 :dissoc c3-1-1)
+  (send c2-1-1 :translate #f(0 -20 0) :world)
+  (send c2-1-1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; set-move
+  (send c1 :move-to (send *trash-point* :copy-worldcoords) :world)
+  (send c1 :translate #f(-80 0 0) :world)
+  (send c1 :copy-worldcoords)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  ;; (unix:usleep s-time)
+
+  (send c3-1-1 :move-to (make-coords :pos #f(900 0 845)) :world)
+  (send c3-1-1 :copy-worldcoords)
+  (send *arrow* :newcoords (send *cut-point-4* :copy-worldcoords))
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+;; (defun carrot-cut ()
+
+  ;; cut
+  (send c2-1-1 :dissoc c2-1-2)
+  (send c2-1-1 :dissoc c2-1-3)
+  (send c2-1-1 :dissoc c2-1-4)
+  (send c2-1-1 :dissoc c2-1-5)
+  (send c2-1-1 :dissoc c2-1-6)
+  (send c2-1-1 :dissoc c2-1-7)
+  (send c2-1-1 :dissoc c2-1-8)
+  (send c2-1-1 :locate #f(25 0 0))
+  (send c2-1-2 :locate #f(20 0 0))
+  (send c2-1-3 :locate #f(15 0 0))
+  (send c2-1-4 :locate #f(10 0 0))
+  (send c2-1-5 :locate #f(5 0 0))
+  (send c2-1-6 :locate #f(0 0 0))
+  (send c2-1-7 :locate #f(-5 0 0))
+  (send c2-1-8 :locate #f(-10 0 0))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
+
+  ;; set-move
+  (send c2-1-1 :assoc c2-1-2)
+  (send c2-1-1 :assoc c2-1-3)
+  (send c2-1-1 :assoc c2-1-4)
+  (send c2-1-1 :assoc c2-1-5)
+  (send c2-1-1 :assoc c2-1-6)
+  (send c2-1-1 :assoc c2-1-7)
+  (send c2-1-1 :assoc c2-1-8)
+  (send c2-1-1 :move-to (make-coords :pos #f(760 300 835) :rpy #f(-1.571 0 -1.571)) :world)
+  (send *irtviewer* :look-all
+	(geo::make-bounding-box
+	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
   )
 
-;; add
 
 (defun carrot-half-moon () ;;人参を半月切り
   (carrot-wash)
-  (carrot-peel)
-  (carrot-cut)
+  (carrot-cut-half-moon)
   )
-;;
+
+(defun carrot-random () ;;人参を半月切り
+  (carrot-wash)
+  (carrot-cut-random)
+  )
 
 (defun potato-wash ()
   ;; water point
@@ -874,7 +1193,6 @@
   
   )
 
-;; add
 (defun potato-bite-size () ;;じゃがいもを一口大にする
   (potato-wash)
   (potato-peel)
