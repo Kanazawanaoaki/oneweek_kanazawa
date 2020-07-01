@@ -945,9 +945,11 @@
   (x::window-main-one)
   (unix:usleep s-time)
 
-;; (defun carrot-cut ()
+  ;; (defun carrot-cut ()
 
   ;; cut
+  (send c2-1-1 :translate #f(0 60 0) :world)
+  
   (send c2-1-1 :dissoc c2-1-2)
   (send c2-1-1 :dissoc c2-1-3)
   (send c2-1-1 :dissoc c2-1-4)
@@ -955,14 +957,14 @@
   (send c2-1-1 :dissoc c2-1-6)
   (send c2-1-1 :dissoc c2-1-7)
   (send c2-1-1 :dissoc c2-1-8)
-  (send c2-1-1 :locate #f(25 0 0))
-  (send c2-1-2 :locate #f(20 0 0))
-  (send c2-1-3 :locate #f(15 0 0))
-  (send c2-1-4 :locate #f(10 0 0))
-  (send c2-1-5 :locate #f(5 0 0))
-  (send c2-1-6 :locate #f(0 0 0))
-  (send c2-1-7 :locate #f(-5 0 0))
-  (send c2-1-8 :locate #f(-10 0 0))
+  (send c2-1-1 :locate #f(48 0 0))
+  (send c2-1-2 :locate #f(36 0 0))
+  (send c2-1-3 :locate #f(24 0 0))
+  (send c2-1-4 :locate #f(12 0 0))
+  (send c2-1-5 :locate #f(0 0 0))
+  (send c2-1-6 :locate #f(-12 0 0))
+  (send c2-1-7 :locate #f(-24 0 0))
+  (send c2-1-8 :locate #f(-36 0 0))
   (send *viewer* :draw-objects)
   (x::window-main-one)
   (unix:usleep s-time)
@@ -975,7 +977,7 @@
   (send c2-1-1 :assoc c2-1-6)
   (send c2-1-1 :assoc c2-1-7)
   (send c2-1-1 :assoc c2-1-8)
-  (send c2-1-1 :move-to (make-coords :pos #f(760 300 835) :rpy #f(-1.571 0 -1.571)) :world)
+  (send c2-1-1 :move-to (make-coords :pos #f(760 280 835) :rpy #f(-1.571 0 -1.571)) :world)
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
