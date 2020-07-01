@@ -11,7 +11,7 @@
 (defun init-stew ()
   (stew-init)
 
-  (warn "~%please run (nomal-stew) or (easy-curry)~%")
+  (warn "~%please run (nomal-stew) or (easy-stew)~%")
   )
 
 
