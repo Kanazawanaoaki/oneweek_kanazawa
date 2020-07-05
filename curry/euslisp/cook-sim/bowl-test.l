@@ -5,6 +5,7 @@
 (defun test ()
   (curry-init)
 
+  (setq s-time 1000000)
 
   ;; (send *onion* :cut)
 
@@ -43,14 +44,19 @@
 
   ;; (carrot-pot)
 
-  (setq s-time 500000)
-  (potato-bite-size);;じゃがいもを一口大に
 
-  (potato-pot)
+  ;; (setq s-time 500000)
+  ;; (potato-bite-size);;じゃがいもを一口大に
+
+  ;; (potato-pot)
+
+
+  (pour-water)
+  (put-curry-roux);;カレールーを加える
 
   )
 
-(test)
+;; (test)
 
 
 
