@@ -18,25 +18,36 @@
   ;; (onion-slice);;玉ねぎを薄切りに
 
 
-  (send *onion* :wedges)
+  ;; (send *onion* :wedges)
 
-  ;; set sleep time
+  ;; ;; set sleep time
+  ;; ;; (setq s-time 1000000)
+  ;; ;; (setq s-time 500000)
+  ;; (setq s-time 0)
+
+  ;; ;; 普通のシチューのレシピ
+  
+  ;; (onion-wedges);;玉ねぎをくし切りに
+
+  
   ;; (setq s-time 1000000)
+
+
+  ;; (onion-pan)
+  ;; (onion-pot)
+
+
   ;; (setq s-time 500000)
-  (setq s-time 0)
+  ;; ;; (carrot-half-moon);;人参を半月切りに
+  ;; (carrot-random);;人参を乱切りに
 
-  ;; 普通のシチューのレシピ
-  
-  (onion-wedges);;玉ねぎをくし切りに
+  ;; (carrot-pot)
 
-  
-  (setq s-time 1000000)
+  (setq s-time 500000)
+  (potato-bite-size);;じゃがいもを一口大に
 
+  (potato-pot)
 
-  (onion-pan)
-  (onion-pot)
-
-  
   )
 
 (test)

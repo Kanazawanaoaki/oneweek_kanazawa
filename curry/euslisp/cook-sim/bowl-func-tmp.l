@@ -771,7 +771,6 @@
 
   ;; set-move
   (setq *bowl1-surface* (send *bowl1* :content))
-
   (setq *bowl1-list* (list))
   (push *o-list-3* *bowl1-list*)
   (push *o-list-4* *bowl1-list*)
@@ -971,27 +970,32 @@
   (unix:usleep s-time)
 
   ;; set-move
-  (send c2-1-1 :assoc c2-1-2)
-  (send c2-1-1 :assoc c2-1-3)
-  (send c2-1-1 :assoc c2-1-4)
-  (send c2-1-1 :assoc c2-1-5)
-  (send c2-1-1 :assoc c2-1-6)
-  (send c2-1-1 :assoc c2-1-7)
-  (send c2-2-1 :assoc c2-2-2)
-  (send c2-2-1 :assoc c2-2-3)
-  (send c2-2-1 :assoc c2-2-4)
-  (send c2-2-1 :assoc c2-2-5)
-  (send c2-2-1 :assoc c2-2-6)
-  (send c2-2-1 :assoc c2-2-7)
-  (send c2-1-1 :move-to (make-coords :pos #f(760 330 835) :rpy #f(-1.571 0 -1.571)) :world)
-  (send c2-2-1 :move-to (make-coords :pos #f(700 330 835) :rpy #f(-1.571 0 1.571)) :world)
+  (setq *bowl2-surface* (send *bowl2* :content))
+  (setq *bowl2-list* (list))
+  (push *c-list-1* *bowl2-list*)
+  (push *c-list-2* *bowl2-list*)
+  
+  (if (not (null *bowl2-list*))
+      (dolist (x *bowl2-list*)
+	(water-mix *bowl2* *bowl2-surface* x)))
+
+  (dolist (x *c-list-1*)
+    (grav-sim-func x *bowl2*)
+    (send *bowl2* :assoc x))  
+  (dolist (x *c-list-2*)
+    (grav-sim-func x *bowl2*)
+    (send *bowl2* :assoc x)) 
+
+  (setq c-flag 'bowl)
+  
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+
   (send *viewer* :draw-objects)
   (x::window-main-one)
   (unix:usleep s-time)
-)
+  )
 
 (defun  carrot-cut-random ()
   (if (not (boundp 'c2-1-1))
@@ -1078,17 +1082,28 @@
   (unix:usleep s-time)
 
   ;; set-move
-  (send c2-1-1 :assoc c2-1-2)
-  (send c2-1-1 :assoc c2-1-3)
-  (send c2-1-1 :assoc c2-1-4)
-  (send c2-1-1 :assoc c2-1-5)
-  (send c2-1-1 :assoc c2-1-6)
-  (send c2-1-1 :assoc c2-1-7)
-  (send c2-1-1 :assoc c2-1-8)
-  (send c2-1-1 :move-to (make-coords :pos #f(760 280 835) :rpy #f(-1.571 0 -1.571)) :world)
+  (setq *bowl2-surface* (send *bowl2* :content))
+  (setq *bowl2-list* (list))
+  (push *c-list-1* *bowl2-list*)
+  (push *c-list-2* *bowl2-list*)
+  
+  (if (not (null *bowl2-list*))
+      (dolist (x *bowl2-list*)
+	(water-mix *bowl2* *bowl2-surface* x)))
+
+  (dolist (x *c-list-1*)
+    (grav-sim-func x *bowl2*)
+    (send *bowl2* :assoc x))  
+  (dolist (x *c-list-2*)
+    (grav-sim-func x *bowl2*)
+    (send *bowl2* :assoc x)) 
+
+  (setq c-flag 'bowl)
+  
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append (send *carrot* :bodies) (send *cutting-board* :bodies)) :vertices))))
+
   (send *viewer* :draw-objects)
   (x::window-main-one)
   (unix:usleep s-time)
@@ -1526,9 +1541,9 @@
 
   ;; set pot-bottom
   (setq *pot-bottom* (send *pot* :bottom))
-  (send *pot-bottom* :translate #f(0 0 5) :world)  
-  
+  (send *pot-bottom* :translate #f(0 0 5) :world)    
   (bottom-mix *pot* *pot-bottom* *p-list*)
+
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *p-list* (send *pot* :bodies)) :vertices))))
@@ -1540,6 +1555,17 @@
   )
 
 (defun carrot-pot ()
+  (if (equal c-flag 'bowl)
+      (progn
+	(send *bowl2* :move-to (send *pot* :copy-worldcoords) :world)
+	(send *bowl2* :translate #f(0 -130 130) :world)
+	))
+  (if (equal c-flag 'pan)
+      (progn
+	(send *pan* :move-to (send *pot* :copy-worldcoords) :world)
+	(send *pan* :translate #f(0 160 200) :world)
+	))
+
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
@@ -1563,9 +1589,18 @@
   ;; set pot-bottom
   (setq *pot-bottom* (send *pot* :bottom))
   (send *pot-bottom* :translate #f(0 0 5) :world)  
-
   (bottom-mix *pot* *pot-bottom* *c-list-1*)
   (bottom-mix *pot* *pot-bottom* *c-list-2*)
+
+  (if (equal c-flag 'bowl)
+      (progn
+	(send *bowl2* :rotate (deg2rad -45) :x :world)
+	))
+  (if (equal c-flag 'pan)
+      (progn
+	(send *pan* :rotate (deg2rad 30) :x :world)
+	))
+
   (send *irtviewer* :look-all
 	(geo::make-bounding-box
 	 (flatten (send-all (append *c-list* (send *pot* :bodies)) :vertices))))
@@ -1575,11 +1610,22 @@
 
   (push *c-list-1* *pot-list*)
   (push *c-list-2* *pot-list*)
+  (if (equal c-flag 'bowl)
+      (progn
+	(send *bowl2* :move-to (make-coords :pos #f(860 245 825)) :world)
+	(setq c-flag 'pot)
+	))
+  (if (equal c-flag 'pan)
+      (progn
+	(send *pan* :move-to (make-coords :pos #f(680 770 860)) :world)
+	(setq c-flag 'pot)
+	))
+
+  (send *viewer* :draw-objects)
+  (x::window-main-one)
+  (unix:usleep s-time)
   )
 
-
-
-;;
 
 (defun pour-water ()
   ;; sink
