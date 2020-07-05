@@ -1,7 +1,6 @@
 (load "chukan-func.l")
 
 ;; define init funcs
-
 (defun init-curry ()
   (curry-init)
 
