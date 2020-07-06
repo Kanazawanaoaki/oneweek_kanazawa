@@ -57,6 +57,7 @@
 
      ;; definition of :attention
      (setq attention0 (make-cascoords :pos (float-vector 140 0 -20) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "attention0"))
+     (send attention0 :rotate (deg2rad -7) :y)
      (send blink0 :assoc attention0)
 
      ;; init-ending 
