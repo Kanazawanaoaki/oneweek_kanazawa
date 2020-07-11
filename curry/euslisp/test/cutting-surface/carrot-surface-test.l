@@ -278,7 +278,7 @@
   )
 
 (defun put-carrot ()
-  (send (send *pr2* :larm :end-coords) :assoc *carrot*) 
+  (send *pr2* :larm :end-coords :assoc *carrot*)
   
   (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
   (send *arrow* :translate #f(0 0 150) :world)
@@ -296,16 +296,19 @@
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:move-target *cut-point-1*
+	;; :move-target *carrot*
 	:rotation-axis t
 	:debug-view t)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send (send *pr2* :larm :end-coords) :dissoc *carrot*)
-  (send *ri* :stop-grasp :larm :wait t)
+  (send *carrot* :worldcoords)
 
-  (send *arrow* :newcoords (make-coords :pos (send *carrot* :worldpos)))
+  (send *ri* :stop-grasp :larm :wait t)
+  (send *pr2* :larm :end-coords :dissoc *carrot*)
+  
+  (send *arrow* :newcoords (make-coords :pos (send (send *carrot* :copy-worldcoords) :worldpos)))
   (send *arrow* :rotate (deg2rad 90) :z)
   (send *arrow* :translate #f(0 -100 100) :world)
   (send *pr2* :larm :inverse-kinematics
@@ -360,9 +363,10 @@
 (set-larm)
 (cut-test3)
 (move-carrot)
-;; (change-peeler)
-;; (peel-test)
+(change-peeler)
+(peel-test)
 (finish-pose)
 (put-carrot)
-;; (next-grasp)
-;; (set-peel)
+(next-grasp)
+(set-peel)
+
