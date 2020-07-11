@@ -12,13 +12,13 @@
  ;; set まな板
 (load "../../model/cutting-board.l")
 (setq *cutting-board* (cutting-board))
-(send *cutting-board* :transform (make-coords :pos (float-vector 500.0 2000.0 820.0) :rot #2f((1.0 2.449294e-16 0.0) (-2.449294e-16 1.0 0.0) (0.0 0.0 1.0))))
+(send *cutting-board* :transform (make-coords :pos (float-vector 480.0 1950.0 820.0) :rot #2f((1.0 2.449294e-16 0.0) (-2.449294e-16 1.0 0.0) (0.0 0.0 1.0))))
 
 ;; set objects
-(load "../../model/carrot-test-model.l")
 (load "../../model/peeler.l")
 (load "../../model/my-knife.l")
 (load "models/arrow-object.l")
+(setq *arrow* (arrow))
 
 ;; set spots
 (setq *cook-spot* (send *room73b2* :spot "cook-spot"))
@@ -34,34 +34,28 @@
 (send *pr2* :reset-manip-pose)
 (send *pr2* :torso_lift_joint :joint-angle 325)
 
-(objects (list *kitchen* *pr2* *cutting-board*))
-(send *irtviewer* :look-all
-      (geo::make-bounding-box 
-       (flatten (send-all (send *pr2* :bodies) :vertices))))
-
 ;; def global values
 (setq s-time 4)
 
-(setq width 100)
+;; set carrot
+(setq width1 20)
+(setq width2 180)
 (setq length 60)
-(setq height 50)
+(setq height 60)
 
-(warn "please run (set-carrot) or (now-devel)~%")
+(load "carrot-new-type.l")
+(setq *carrot* (carrot :w1 width1 :w2 width2 :l length :h height))
+(send *carrot* :transform (make-coords :pos (float-vector 480.0 1980.0 (+ 830.0 (/ height 2))) :rot #2f((1.194340e-15 -1.0 0.0) (1.0 1.194340e-15 0.0) (0.0 0.0 1.0))))
+(send *carrot* :cut)
 
-(defun set-carrot ()
+(objects (list *kitchen* *pr2* *cutting-board* *carrot*))
+(send *irtviewer* :look-all
+      (geo::make-bounding-box 
+       (flatten (send-all (send *pr2* :bodies) :vertices))))
+(send *viewer* :draw-objects)
 
-  (setq *carrot* (carrot))
-  (send *carrot* :transform (make-coords :pos (float-vector 500.0 1910.0 (+ 830.0 (/ height 2))) :rot #2f((1.194340e-15 -1.0 0.0) (1.0 1.194340e-15 0.0) (0.0 0.0 1.0))))
-  (send *carrot* :cut)
-  
-  (objects (list *kitchen* *pr2* *cutting-board* *carrot*))
-  (send *irtviewer* :look-all
-	(geo::make-bounding-box 
-	 (flatten (send-all (send *pr2* :bodies) :vertices))))
 
-  (warn "please run (set-knife) ~%")
-  )
-
+(warn "please run (set-knife-ver)~%")
 
 (defun set-knife-ver ()
   ;; set pose
@@ -91,7 +85,6 @@
   )
 
 (defun set-larm ()
-  (setq *arrow* (arrow))
 
   (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
   (send *arrow* :translate #f(0 0 200) :world)
@@ -103,22 +96,17 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (objects (list *kitchen* *pr2* *cutting-board* *carrot* *knife* *arrow*))
-  (send *irtviewer* :look-all
-	(geo::make-bounding-box 
-	 (flatten (send-all (send *pr2* :bodies) :vertices))))
-
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
   (send *arrow* :rotate (deg2rad 20) :y)
 
   (send *ri* :stop-grasp :larm :wait t)
-  (send *arrow* :translate #f(0 -100 100) :world)
+  (send *arrow* :translate (float-vector 0 (- (* -1 width2) 20) 100) :world)
   (send *pr2* :larm :inverse-kinematics (send *arrow* :copy-worldcoords))
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :translate #f(0 70 -100) :world)
+  (send *arrow* :translate #f(0 20 -100) :world)
   (send *pr2* :larm :inverse-kinematics (send *arrow* :copy-worldcoords))
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
@@ -129,10 +117,31 @@
   )
 
 (defun cut-test3 ()
-  (if (not (boundp '*carrot*))
-      (set-carrot))
+  ;; (if (not (boundp '*carrot*))
+  ;;     (set-carrot))
 
   ;; 少し上に包丁を
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (send *arrow* :translate (float-vector 0 0 (+ (* height 1) 60)))  
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *knife* :attention))
+	:rotation-axis :y
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *arrow* :translate (float-vector 0 0 -40) :world)  
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *knife* :attention))
+	:rotation-axis :y
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+  
   (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
   (send *arrow* :translate (float-vector 0 0 (* height 1)))  
   (send *pr2* :rarm :inverse-kinematics
@@ -173,12 +182,12 @@
   )
 
 (defun move-carrot ()
-  (send c2-1-1 :dissoc c1)
+  (send c2 :dissoc c1)
   (send c1 :translate #f(0 100 0) :world)
   (send *viewer* :draw-objects)
 
   (send *arrow* :newcoords (send (car (send *knife* :attention)) :copy-worldcoords))
-  (send *arrow* :translate #f(0 0 100) :world)
+  (send *arrow* :translate #f(0 0 60) :world)
   (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:move-target (car (send *knife* :attention))
@@ -190,6 +199,7 @@
     
   (warn "(change-peeler)~&")
   )
+
 
 (defun change-peeler ()
   ;; set pose
@@ -252,7 +262,7 @@
   (send *ri* :wait-interpolation)
 
   ;; 剥き終わり
-  (send *arrow* :translate (float-vector 0 (* (+ width 20) 1) 0) :world)
+  (send *arrow* :translate (float-vector 0 (* (+ (+ width1 width2) 20) 1) 0) :world)
   (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:move-target (car (send *peeler* :attention))
@@ -330,7 +340,7 @@
   ;;
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
   (send *arrow* :rotate (deg2rad 20) :y)
-  (send *arrow* :translate #f(0 0 30) :world)
+  (send *arrow* :translate (float-vector 0 0 width2) :world)
   (send *arrow* :rotate (deg2rad -30) :z :world)
 
   (send *pr2* :larm :inverse-kinematics (send *arrow* :copy-worldcoords))
@@ -425,18 +435,23 @@
 (defun set-peel2 ()
   (set-peel)
   
-  (warn "please run (peel-test2)~&")
   )
 
-(set-carrot)
-(set-knife-ver)
-(set-larm)
-(cut-test3)
-(move-carrot)
-(change-peeler)
-(peel-test)
-(finish-pose)
-(put-carrot)
-(next-grasp)
-(set-peel)
+
+(warn "please run (exec-all)~&")  
+
+(defun exec-all ()
+
+  (set-knife-ver)
+  (set-larm)
+  (cut-test3)
+  (move-carrot)
+  (change-peeler)
+  (peel-test)
+  (finish-pose)
+  (put-carrot)
+  (next-grasp)
+  (set-peel)
+  )
+
 

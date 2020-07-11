@@ -200,12 +200,23 @@
      (send c3 :set-color :orangered)
      (send c4 :set-color :orangered)     
 
-     (setq *cut-point-1* (make-cascoords :pos (float-vector (- width1 10) 0 0)))
+     (setq *cut-point-1* (make-cascoords :pos (float-vector (- width1 10) 0 (/ height -2))))
      (send *cut-point-1* :rotate (deg2rad 90) :z)
-     (setq *cut-point-2* (make-cascoords :pos (float-vector (+ width1 (* -0.55 (+ width1 width2))) 0 0)))
+     (setq *cut-point-2* (make-cascoords :pos (float-vector (+ width1 (* -0.55 (+ width1 width2))) 0 (/ height -2))))
      (send *cut-point-2* :rotate (deg2rad 90) :z)
-     (setq *cut-point-3* (make-cascoords :pos (float-vector (- 10 width2) 0 0)))
+     (setq *cut-point-3* (make-cascoords :pos (float-vector (- 10 width2) 0 (/ height -2))))
      (send *cut-point-3* :rotate (deg2rad 90) :z)
+
+     (send c2 :assoc *cut-point-1*)
+     (send c2 :assoc *cut-point-2*)
+     (send c3 :assoc *cut-point-3*)
+
+     (send c2 :assoc c1)
+     (send c2 :assoc c3)
+     (send c3 :assoc c4)
+
+     (send c2 :newcoords (send self :copy-worldcoords))
+     (send self :assoc c2)
      
      (push c2 r)
      (push c1 r)
@@ -219,12 +230,12 @@
      (setq b1 (make-ellipsoid-ratio width1 width2 length height))
 
      (setq b2 (make-cube (* (+ width1 width2) 2) (* 2 length) (* 2 height)))
-     (send b2 :locate (float-vector (- (+ (* 2 width1) width2) 10) 0 0))
+     (send b2 :locate (float-vector (- (+ (* 2 width1) width2) 15) 0 0))
      (setq b-list (body-cut-x b1 b2))
      (setq b1 (elt b-list 0))
      (setq c1 (elt b-list 1))
 
-     (send b2 :locate (float-vector (+ (* -1 (+ width1 width2)) 20) 0 0))
+     (send b2 :locate (float-vector (+ (* -1 (+ width1 width2)) 30) 0 0))
      (setq b-list (body-cut-x b1 b2))
      (setq c3 (elt b-list 0))
      (setq c2 (elt b-list 1))
@@ -233,11 +244,20 @@
      (send c2 :set-color :orangered)
      (send c3 :set-color :orangered)
 
-     (setq *cut-point-1* (make-cascoords :pos (float-vector (- width1 10) 0 0)))
+     (setq *cut-point-1* (make-cascoords :pos (float-vector (- width1 10) 0 (/ height -2))))
      (send *cut-point-1* :rotate (deg2rad 90) :z)
-     (setq *cut-point-2* (make-cascoords :pos (float-vector (- 10 width2) 0 0)))
+     (setq *cut-point-2* (make-cascoords :pos (float-vector (- 10 width2) 0 (/ height -2))))
      (send *cut-point-2* :rotate (deg2rad -90) :z)
-     
+
+     (send c2 :assoc *cut-point-1*)
+     (send c2 :assoc *cut-point-2*)
+
+     (send c2 :assoc c1)
+     (send c2 :assoc c3)
+
+     (send c2 :newcoords (send self :copy-worldcoords))
+     (send self :assoc c2)
+
      (push c2 r)
      (push c1 r)
      (push c3 r)
