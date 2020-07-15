@@ -150,7 +150,7 @@
      (send p4 :assoc p6)
      (send p4 :assoc p7)
 
-     (setq *cut-point-1* (make-cascoords :pos (float-vector (- width 15) 0 (/ height -2))))
+     (setq *cut-point-1* (make-cascoords :pos (float-vector (- (/ width 2) 15) 0 (/ height -2))))
      (send *cut-point-1* :rotate (deg2rad 90) :z)
      (send p1 :assoc *cut-point-1*)
      
