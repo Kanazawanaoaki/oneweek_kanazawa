@@ -111,29 +111,42 @@
 
      (setq b7 (make-cube (* 2 width) (* 2 length) (* 2 height)))
      (send b7 :locate (float-vector (- (/ width -2) 15) 0 0))
-     (setq p7 (body- b1 b7))
-     (setq b1 (body- b1 p7))
+     (setq b-list (body-cut-x b1 b7))
+     (setq p7 (elt b-list 0))
+     (setq b1 (elt b-list 1))
+     
+     (setq b7 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b7 :locate (float-vector (+ (/ width 2) 15) 0 0))
+     (setq b-list (body-cut-x b1 b7))
+     (setq p8 (elt b-list 0))
+     (setq b1 (elt b-list 1))
      
      (setq b2 (make-cube (* 2 width) (* 2 length) (* 2 height)))
      (send b2 :locate (float-vector (+ (* -1 width) 1) 0 0))
-
-     (setq b3 (body- b1 b2))
-     (setq b4 (body- b1 b3))
+     (setq b-list (body-cut-x b1 b2))
+     (setq b3 (elt b-list 0))
+     (setq b4 (elt b-list 1))
 
      (setq b5 (make-cube (* 2 width) (* 2 length) (* 2 height)))
      (send b5 :locate (float-vector 0 0 (/ (* -5 height) 6)))
      (setq b6 (make-cube (* 2 width) (* 2 length) (* 2 height)))
      (send b6 :locate (float-vector 0 0 (/ (* -7 height) 6)))
      
-     (setq p1 (body- b3 b5))
-     (setq p4 (body- b4 b5))
-     (setq b3 (body- b3 p1))
-     (setq b4 (body- b4 p4))
+     (setq b-list (body-cut-x b3 b5))
+     (setq p1 (elt b-list 0))
+     (setq b3 (elt b-list 1))
 
-     (setq p2 (body- b3 b6))
-     (setq p5 (body- b4 b6))
-     (setq p3 (body- b3 p2))
-     (setq p6 (body- b4 p5))
+     (setq b-list (body-cut-x b4 b5))
+     (setq p4 (elt b-list 0))
+     (setq b4 (elt b-list 1))
+
+     (setq b-list (body-cut-x b3 b6))
+     (setq p2 (elt b-list 0))
+     (setq p3 (elt b-list 1))
+
+     (setq b-list (body-cut-x b4 b6))
+     (setq p5 (elt b-list 0))
+     (setq p6 (elt b-list 1))
 
      (send p1 :set-color :saddlebrown)
      (send p2 :set-color :saddlebrown)
@@ -142,6 +155,7 @@
      (send p5 :set-color :saddlebrown)
      (send p6 :set-color :saddlebrown)
      (send p7 :set-color :saddlebrown)
+     (send p8 :set-color :saddlebrown)
 
      (send p4 :assoc p1)
      (send p4 :assoc p2)
@@ -149,34 +163,39 @@
      (send p4 :assoc p5)
      (send p4 :assoc p6)
      (send p4 :assoc p7)
+     (send p4 :assoc p8)
 
      (setq *cut-point-1* (make-cascoords :pos (float-vector (- (/ width 2) 15) 0 (/ height -2))))
      (send *cut-point-1* :rotate (deg2rad 90) :z)
      (send p1 :assoc *cut-point-1*)
+
+     (setq *cut-point-2* (make-cascoords :pos (float-vector (+ (/ width -2) 15) 0 (/ height -2))))
+     (send *cut-point-2* :rotate (deg2rad -90) :z)
+     (send p1 :assoc *cut-point-2*)
      
-     (setq *cut-point-2* (make-cascoords :pos (float-vector 0 0 (/ height -2))))
-     (send *cut-point-2* :rotate (deg2rad 90) :z)
+     (setq *cut-point-3* (make-cascoords :pos (float-vector 0 0 (/ height -2))))
+     (send *cut-point-3* :rotate (deg2rad 90) :z)
      (send p1 :assoc *cut-point-2*)
 
-     (setq *cut-point-3* (make-cascoords :pos (float-vector 0 0 (/ height -6))))
-     (send *cut-point-3* :rotate (deg2rad 90) :y)
-     (send *cut-point-3* :rotate (deg2rad 90) :z)
-     (send p2 :assoc *cut-point-3*)
-     
-     (setq *cut-point-4* (make-cascoords :pos (float-vector 0 0 (/ height 6))))
+     (setq *cut-point-4* (make-cascoords :pos (float-vector 0 0 (/ height -6))))
      (send *cut-point-4* :rotate (deg2rad 90) :y)
      (send *cut-point-4* :rotate (deg2rad 90) :z)
-     (send p1 :assoc *cut-point-4*)
+     (send p2 :assoc *cut-point-3*)
+     
+     (setq *cut-point-5* (make-cascoords :pos (float-vector 0 0 (/ height 6))))
+     (send *cut-point-5* :rotate (deg2rad 90) :y)
+     (send *cut-point-5* :rotate (deg2rad 90) :z)
+     (send p1 :assoc *cut-point-5*)
 
-     (setq *cut-point-5* (make-cascoords :pos (float-vector 0 0 (/ height -6))))
-     (send *cut-point-5* :rotate (deg2rad -90) :z)
-     (send *cut-point-5* :rotate (deg2rad 90) :x)
-     (send p5 :assoc *cut-point-5*)
-
-     (setq *cut-point-6* (make-cascoords :pos (float-vector 0 0 (/ height 6))))
+     (setq *cut-point-6* (make-cascoords :pos (float-vector 0 0 (/ height -6))))
      (send *cut-point-6* :rotate (deg2rad -90) :z)
      (send *cut-point-6* :rotate (deg2rad 90) :x)
-     (send p4 :assoc *cut-point-6*)
+     (send p5 :assoc *cut-point-6*)
+
+     (setq *cut-point-7* (make-cascoords :pos (float-vector 0 0 (/ height 6))))
+     (send *cut-point-7* :rotate (deg2rad -90) :z)
+     (send *cut-point-7* :rotate (deg2rad 90) :x)
+     (send p4 :assoc *cut-point-7*)
 
      (send p4 :newcoords (send self :copy-worldcoords))
      (send self :assoc p4)
@@ -188,6 +207,7 @@
      (push p5 r)
      (push p6 r)
      (push p7 r)
+     (push p8 r)
      (setq geo::bodies r))
    )
   )
