@@ -41,3 +41,10 @@
 
 (send p6 :translate #f(0 0 -20))
 (send p5 :translate #f(0 0 -10))
+
+
+(load "models/arrow-object.l")
+(setq *arrow* (arrow))
+
+(send *arrow* :move-to (send *cut-point-2* :copy-worldcoords))
+(objects (list *potato* *arrow*))
