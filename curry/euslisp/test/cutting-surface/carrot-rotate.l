@@ -64,10 +64,6 @@
   
   (setq *carrot* (carrot :w w :l l :h h))
   (send *carrot* :transform (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ h 2))) :rot #2f((1.194340e-15 -1.0 0.0) (1.0 1.194340e-15 0.0) (0.0 0.0 1.0))))
-
-  (send *carrot* :translate #f(-50 60 0) :world)
-  (send *carrot* :rotate (deg2rad 30) :z :world)
-
   (send *carrot* :cut)
   
   (objects (list *kitchen* *pr2* *cutting-board* *carrot*))
@@ -78,6 +74,14 @@
   (warn "please run (move-carrot) ~%")
   )
 
+(defun move-carrot-1 ()
+  (send c2 :dissoc c1)
+  (send c1 :translate #f(0 100 0) :world)
+
+  (send *carrot* :rotate (deg2rad 180) :z :world)
+  (send *viewer* :draw-objects)
+ 
+  )
 
 (defun move-carrot ()
   ;;少し上に
@@ -97,6 +101,7 @@
     ;;人参の掴む所に
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
   (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
+  (send *arrow* :rotate (deg2rad 180) :z :world)
   (send *arrow* :rotate (deg2rad 90) :y)
   (send *arrow* :translate #f(0 0 100) :world)
   (send *pr2* :larm :inverse-kinematics
@@ -132,7 +137,8 @@
   (send *ri* :wait-interpolation)
 
   ;; 置く
-  (send *arrow* :move-to (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ height 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))) :world)
+  (send *arrow* :move-to (make-coords :pos (float-vector 500.0 1940.0 (+ 850.0 (/ height 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))) :world)
+  (send *arrow* :rotate (deg2rad 180) :z :world)  
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:move-target *carrot*
@@ -172,13 +178,15 @@
 
 (defun now-devel ()
   (set-carrot :w width :l length :h height)
-  (move-carrot)
+  (move-carrot-1)
   
   )
 
 
 (defun now-test ()
   (set-carrot :w width :l length :h height)
+  (move-carrot-1)
+
   (move-carrot)
 
   (finish)

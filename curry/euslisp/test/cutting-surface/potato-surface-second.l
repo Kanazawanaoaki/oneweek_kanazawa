@@ -543,6 +543,32 @@
   (warn "please run (set-peel)~&")  
   )
 
+(defun finish ()
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 0 200) :world)
+  (send *pr2* :rarm :inverse-kinematics
+	(send *arrow* :copy-worldcoords)
+	:rotation-axis nil
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *ri* :stop-grasp :larm :wait t)
+  (send *arrow* :newcoords (send *potato* :copy-worldcoords))
+  (send *arrow* :translate #f(0 -100 100) :world)
+  (send *pr2* :larm :inverse-kinematics (send *arrow* :copy-worldcoords))
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *pr2* :reset-manip-pose)
+  (send *pr2* :torso_lift_joint :joint-angle 325)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+  
+  )
 
 (defun next-set ()
   (peel-test2)
@@ -597,7 +623,9 @@
   (next-grasp-second)
   (set-peel)
 
-  (dotimes (i 11)
+  (dotimes (i 10)
     (next-set)
     )
+  (peel-test2)
+  (finish)
   )
