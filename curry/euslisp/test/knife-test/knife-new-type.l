@@ -1,3 +1,5 @@
+;; 73b2の包丁で実測した値
+
 (defclass knife-object
   :super cascaded-link
   :slots (sensors
