@@ -16,6 +16,7 @@ http://www.jsk.t.u-tokyo.ac.jp/~k-okada/paper/2008_jrsj_okada_hrp2.pdf
 
 ### IRTホームアシスタントロボットによる掃除片付け作業シーケンスのPR2による実現
 2013年  
+https://jglobal.jst.go.jp/detail?JGLOBAL_ID=201302251087214890  
 IRT研究プロジェクトにおいて開発したAR(Assistant Robot)ロボットで行われた実験をROSとPR2を使って行った研究.  
 タスクとしては,トレイ運搬,洗濯物片付け,床面掃引.
 IRTにおいてARを使った時とPR2を使った今回の比較をしている.  
