@@ -89,7 +89,7 @@
 
   ;; 人参の掴む所に
   (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
-  (send *arrow* :translate (float-vector 0 20 (/ height 2)))
+  (send *arrow* :translate (float-vector 0 40 (/ height 2)))
   (send *arrow* :rotate (deg2rad -90) :z)
   (send *arrow* :rotate (deg2rad 70) :y)
 

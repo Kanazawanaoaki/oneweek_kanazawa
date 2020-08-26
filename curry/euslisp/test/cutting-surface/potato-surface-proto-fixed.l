@@ -42,7 +42,7 @@
   (objects (list *pr2* *cutting-board*))
 
   ;; def global values
-  (setq s-time 2)
+  (setq s-time 3)
 
   ;; set potato
   (load "../../model/potato-new-type.l")
@@ -261,6 +261,17 @@
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
   (send *ri* :wait-interpolation)
+
+  (send *arrow* :newcoords (send (car (send *knife* :attention)) :copy-worldcoords))
+  (send *arrow* :translate (float-vector 0 0 150) :world)
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *knife* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
+  (send *ri* :wait-interpolation)
   
   ;; set pose
   (send *arrow* :newcoords (make-coords :pos #f(700.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
@@ -405,7 +416,7 @@
 
   ;; release potato
   (send *pr2* :larm :end-coords :dissoc *potato*)
-  (send *ri* :stop-grasp :rarm :wait t)
+  (send *ri* :stop-grasp :larm :wait t)
 
 
   (send *arrow* :newcoords (send *larm-put-coords* :copy-worldcoords))
