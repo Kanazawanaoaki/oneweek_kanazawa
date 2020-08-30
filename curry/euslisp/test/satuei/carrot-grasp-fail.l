@@ -126,8 +126,8 @@
   (send (send *pr2* :rarm :end-coords) :dissoc *knife*)
   (send *arrow* :newcoords (send (car (send *knife* :handle)) :copy-worldcoords))
   (send *arrow* :assoc *knife*)
-  (send *arrow* :rotate (deg2rad -2) :z :world)
-  (send *arrow* :rotate (deg2rad -6) :x)
+  (send *arrow* :rotate (deg2rad -3) :z :world)
+  (send *arrow* :rotate (deg2rad -10) :x)
   (send *arrow* :dissoc *knife*)
   (send (send *pr2* :rarm :end-coords) :assoc *knife*)
   
