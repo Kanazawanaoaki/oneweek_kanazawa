@@ -6,7 +6,8 @@
 (load "models/arrow-object.l")
 (setq *arrow* (arrow))
 (send *arrow* :newcoords (make-coords :pos #f(600 0 1000)))
-(objects (list *pr2* *arrow*))
+;; (objects (list *pr2* *arrow*))
+(objects (list *pr2*))
 
 (setq *rt* (arrow))
 (send *rt* :newcoords (make-coords :pos #f(600 -25 1000)))
