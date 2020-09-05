@@ -12,11 +12,10 @@
 
      ;; definition of link
      (setq b1 (make-cube 160 25 8))
-     (send b1 :locate #f(20 0 0))
+     (send b1 :locate #f(30 0 0))
 
      (setq b2 (make-cube 20 70 15))
-     ;; (send b2 :locate #f(80 0 -3.5))
-     (send b2 :locate #f(100 0 -3.5))
+     (send b2 :locate #f(110 0 -3.5))
 
      ;; (setq b2 (make-cylinder 30 5))
      ;; (setq b3 (make-cylinder 25 5))
@@ -33,8 +32,10 @@
      ;; (send b2 :locate #f(80 0 0))
 
      (send b1 :assoc b2)
-     (send b2 :set-color :red)
-     (send b1 :set-color :red)
+     ;; (send b2 :set-color :red)
+     ;; (send b1 :set-color :red)
+     (send b2 :set-color :yellow)
+     (send b1 :set-color :yellow)
      
      ;; (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list b1 b2 b5) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
      (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list b1 b2) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
@@ -53,7 +54,7 @@
 
      ;; definition of :attention
      ;; (setq attention0 (make-cascoords :pos #f(80 0 0) :name "attention0"))
-     (setq attention0 (make-cascoords :pos #f(100 0 -10) :name "attention0"))
+     (setq attention0 (make-cascoords :pos #f(115 0 -10) :name "attention0"))
      (send link1 :assoc attention0)
 
      ;; init-ending 
