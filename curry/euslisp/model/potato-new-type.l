@@ -28,7 +28,7 @@
 	   )
     
     (setq b2 (body- abody b1))
-    (list b1 b2))) 
+    (list b1 b2)))
 
 (defclass potato-object
   :super bodyset-link

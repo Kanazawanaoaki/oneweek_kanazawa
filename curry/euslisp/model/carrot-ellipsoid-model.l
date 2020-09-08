@@ -51,7 +51,16 @@
     (list b1 b2)))
 
 (defun body-cut-x (abody box)
-  (let (b1 b2 c-flag i)
+  (let (b bbox b1 b2 m m2 c-flag i)
+    (setq b (make-bounding-box (send abody :vertices)))
+
+    (setq m (v- (send b :maxpoint) (send b :minpoint)))
+    (setq m2 (v+ (send b :maxpoint) (send b :minpoint)))
+    (setq m2 (float-vector (/ (elt m2 0) 2) (/ (elt m2 1) 2) (/ (elt m2 2) 2)))
+    
+    (setq bbox (make-cube (* (elt m 0) 2) (* (elt m 1) 2) (* (elt m 2) 2)))
+    (send bbox :locate m2)
+
     (setq c-flag nil)
     (setq i 0)
     (until c-flag
@@ -60,6 +69,8 @@
 		 (progn
 		   (setq *error-handler* #'(lambda (code msg1 form &optional msg2) (throw 'hoge -1)));;エラーハンドラを変える
 		   (setq b1 (body- abody box)) ;;ここでエラーが起こるとcatchを抜ける
+		   (setq bbox (body- bbox box))
+		   (setq b2 (body- abody bbox)) ;;ここでエラーが起こるとcatchを抜ける
 		   (setq c-flag t)
 		   0)
 	       (setq *error-handler* #'euserror)));;エラーハンドラをもとに戻す
@@ -67,7 +78,6 @@
 	   (setq i (+ i 1))
 	   )
     
-    (setq b2 (body- abody b1))
     (list b1 b2))) 
 
 (defun dev-2-y (abody)
