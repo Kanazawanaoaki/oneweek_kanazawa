@@ -218,7 +218,7 @@
   (send *arrow* :rotate (deg2rad -90) :z :world)
   (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
   (send *arrow* :rotate (deg2rad 30) :y)
-  (send *arrow* :translate (float-vector 0 100 100) :world)
+  (send *arrow* :translate (float-vector 0 80 80) :world)
   
   ;; (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
   ;; (send *arrow* :rotate (deg2rad 180) :z)
@@ -235,7 +235,7 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :translate (float-vector 0 -100 -100) :world)
+  (send *arrow* :translate (float-vector 0 -80 -80) :world)
   (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:move-target (car (send *peeler* :attention))
