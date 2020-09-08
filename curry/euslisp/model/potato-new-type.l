@@ -30,6 +30,36 @@
     (setq b2 (body- abody b1))
     (list b1 b2)))
 
+(defun body-cut-y (abody box)
+  (let (b bbox b1 b2 m m2 c-flag i)
+    (setq b (make-bounding-box (send abody :vertices)))
+    
+    (setq m (v- (send b :maxpoint) (send b :minpoint)))
+    (setq m2 (v+ (send b :maxpoint) (send b :minpoint)))
+    (setq m2 (float-vector (/ (elt m2 0) 2) (/ (elt m2 1) 2) (/ (elt m2 2) 2)))
+    
+    (setq bbox (make-cube (* (elt m 0) 2) (* (elt m 1) 2) (* (elt m 2) 2)))
+    (send bbox :locate m2)
+    
+    (setq c-flag nil)
+    (setq i 0)
+    (until c-flag
+	   (catch 'hoge
+	     (unwind-protect
+		 (progn
+		   (setq *error-handler* #'(lambda (code msg1 form &optional msg2) (throw 'hoge -1)));;エラーハンドラを変える
+		   (setq b1 (body- abody box)) ;;ここでエラーが起こるとcatchを抜ける
+		   (setq bbox (body- bbox box))
+		   (setq b2 (body- abody bbox)) ;;ここでエラーが起こるとcatchを抜ける
+		   (setq c-flag t)
+		   0)
+	       (setq *error-handler* #'euserror)));;エラーハンドラをもとに戻す
+	   (send box :locate #f(0 -1 0))
+	   (setq i (+ i 1))
+	   )
+
+    (list b1 b2)))
+
 (defclass potato-object
   :super bodyset-link
   :slots (width
@@ -62,46 +92,38 @@
    ()
    (let (b1 b2 b3 b4 r)
      (setq b1 (make-ellipsoid width length height))
-     
-     (setq b5 (make-cube (* 2 width) (* 2 length) (* 2 height)))
-     (send b5 :locate (float-vector (+ (/ width 2) 15) 0 0))
-     (setq p5 (body- b1 b5))
-     (setq b1 (body- b1 p5))
-     
+
      (setq b2 (make-cube (* 2 width) (* 2 length) (* 2 height)))
-     (send b2 :locate (float-vector 0 (* (/ -2 3.0) length) 0))
+     (send b2 :locate (float-vector 0 (- (* length 1.5) 10) 0))
+     (setq b-list (body-cut-y b1 b2))
+     (setq b1 (elt b-list 0))
+     (setq p1 (elt b-list 1))
+
+     (setq b2 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b2 :locate (float-vector 0 (+ (* length -1.5) 10) 0))
+     (setq b-list (body-cut-y b1 b2))
+     (setq p2 (elt b-list 0))
+     (setq p3 (elt b-list 1))     
    
-     (setq b3 (make-cube (* 2 width) (* 2 length) (* 2 height)))
-     (send b3 :locate (float-vector 0 (* (/ 2 3.0) length) 0))
-   
-     (setq b4 (make-cube (* 2 width) (* 2 length) (* 2 height)))
-     (send b4 :locate (float-vector 0 0 (+ (* -1 height) 1)))
-   
-     (setq p2 (body- b1 b2))
-     (setq b1 (body- b1 p2))
-     (setq p4 (body- b1 b3))
-     (setq b1 (body- b1 p4))
-     (setq p1 (body- b1 b4))
-     (setq p3 (body- b1 p1))
-   
-     (send p1 :assoc p2)
-     (send p1 :assoc p3)
-     (send p1 :assoc p4)
-     (send p1 :assoc p5)
+     (setq *cut-point-1* (make-cascoords :pos (float-vector 0 (- (/ length 2) 10) (/ height -2))))
+     (send *cut-point-1* :rotate (deg2rad -180) :z)
+     (send p2 :assoc *cut-point-1*)
+
+     (setq *cut-point-2* (make-cascoords :pos (float-vector 0 (+ (/ length -2) 10) (/ height -2))))
+     (send p2 :assoc *cut-point-2*)
+
+     (send p2 :assoc p1)
+     (send p2 :assoc p3)
 
      (send p1 :set-color :saddlebrown)
      (send p2 :set-color :saddlebrown)
      (send p3 :set-color :saddlebrown)
-     (send p4 :set-color :saddlebrown)
-     (send p5 :set-color :saddlebrown)
-     (send p1 :newcoords (send self :copy-worldcoords))
-     (send self :assoc p1)
+     (send p2 :newcoords (send self :copy-worldcoords))
+     (send self :assoc p2)
      
-     (push p1 r)
      (push p2 r)
+     (push p1 r)
      (push p3 r)
-     (push p4 r)
-     (push p5 r)
      (setq geo::bodies r))
      )
   (:cut
