@@ -231,6 +231,8 @@
   ;; じゃがいもを置く．
   ;; (send *arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ height 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
   (send *arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (- (+ 850.0 (/ height 2)) 30)) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
+  (send *arrow* :rotate (deg2rad 180) :z :world)
+  
   (send *arrow* :translate #f(0 0 100) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
@@ -257,6 +259,7 @@
 (defun set-larm ()
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
+  (send (send *pr2* :larm :end-coords) :dissoc *potato*)
 
   ;; 左手を上げる
   (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
@@ -342,8 +345,8 @@
 
   ;; 少し上に包丁を
 
-  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
-  ;; (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
+  ;; (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (send *arrow* :newcoords (send *cut-point-2* :copy-worldcoords))
   (send *arrow* :translate (float-vector 0 0 (* height 1)))
 
   ;;調整
@@ -515,7 +518,7 @@
   (send *arrow* :translate #f(0 0 80) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
-	:move-target *cut-point-1*
+	:move-target *cut-point-2*
 	:rotation-axis t
 	:debug-view t)
   (send *viewer* :draw-objects)
@@ -525,7 +528,7 @@
   (send *arrow* :translate #f(0 0 -80) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
-	:move-target *cut-point-1*
+	:move-target *cut-point-2*
 	:rotation-axis t
 	:debug-view t)
   (send *viewer* :draw-objects)
