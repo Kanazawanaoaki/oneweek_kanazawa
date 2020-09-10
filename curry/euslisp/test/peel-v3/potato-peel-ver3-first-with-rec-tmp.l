@@ -746,7 +746,8 @@
   (send *arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (- (+ 850.0 (/ width 2)) 15)) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
   (send *arrow* :rotate (deg2rad -90) :x :world)
   (send *arrow* :rotate (deg2rad 180) :z :world)
-  (send *arrow* :rotate (deg2rad -30) :z :world)
+
+  (send *arrow* :rotate (deg2rad 90) :z :world)
 
   (send *arrow* :translate #f(0 0 80) :world)
   (send *pr2* :larm :inverse-kinematics
@@ -886,19 +887,7 @@
   (put-potato-rotate)
   (reset-larm)
   )
-  
-
-(defun now-peel ()
-  ;; (set-potato-peel :w width :l length :h height)
-  (grasp-potato-peel)
-  (set-potato)
-  (set-peeler)
-  (peel-test2)
-  (finish-pose-peel)
-  (put-potato-rotate)
-  (reset-larm)  
-  )
-  
+    
 
 (defun now-peel ()
   ;; (set-potato-peel :w width :l length :h height)

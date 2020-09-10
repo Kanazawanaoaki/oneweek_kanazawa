@@ -170,7 +170,7 @@
 (send *ri* :wait-interpolation)
 
 ;; (send *ri* :start-grasp :rarm :wait t)
-(send *ri* :start-grasp :rarm :wait t :gain 100)
+;; (send *ri* :start-grasp :rarm :wait t :gain 100)
 
 (objects (list *pr2* *cutting-board* *peeler*))
 
