@@ -376,9 +376,9 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (setq interval 20)
+  (setq interval 10)
   (dotimes (i (+ (round (/ height interval)) 1))
-    (send *arrow* :translate (float-vector (* interval 1) 0 (* interval -1)))
+    (send *arrow* :translate (float-vector (* interval 2) 0 (* interval -1)))
     (send *pr2* :rarm :inverse-kinematics
 	  *arrow*
 	  :move-target (car (send *knife* :attention))
@@ -393,7 +393,7 @@
     (send *k-arrow* :newcoords (send (car (send *knife* :attention)) :copy-worldcoords))
     (send *k-arrow* :translate (float-vector (* interval -2) 0 (/ interval 2)))
     
-    (send *arrow* :translate (float-vector (* interval -1) 0 0))
+    (send *arrow* :translate (float-vector (* interval -2) 0 0))
 
     (send *pr2* :rarm :inverse-kinematics
 	  *k-arrow*

@@ -55,8 +55,8 @@
   (setq adj 10)
 
   ;; set carrot
-  ;; (load "../../model/carrot-test-new-type.l")
-  (load "../../model/carrot-ellipsoid-model.l")
+  (load "../../model/carrot-test-new-type.l")
+  ;; (load "../../model/carrot-ellipsoid-model.l")
 
   (setq width 160)
   (setq length 40)

@@ -57,12 +57,17 @@
   ;; set potato
   (load "../../model/potato-new-type.l")
 
-  (setq width 90)
+  ;; (setq width 90)
+  ;; (setq length 60)
+  ;; (setq height 60)
+
+  (setq width 60)
   (setq length 60)
-  (setq height 60)
+  (setq height 75)
   )
 
 (init)
+
 
 ;; トピックなどを定義
 (defvar *topic-name* "/segmentation_decomposer/boxes")
@@ -229,8 +234,8 @@
   (send *ri* :wait-interpolation)
 
   ;; じゃがいもを置く．
-  ;; (send *arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ height 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
-  (send *arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (- (+ 850.0 (/ height 2)) 30)) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
+  (send *arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ height 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
+  ;; (send *arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (- (+ 850.0 (/ height 2)) 30)) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
   (send *arrow* :rotate (deg2rad 180) :z :world)
   
   (send *arrow* :translate #f(0 0 100) :world)
@@ -429,14 +434,14 @@
   (warn "you can retry (cut-test), (continue-cut 4) or you want to finish please run (finish-pose)  ~%")
   )
 
-(defun move-potato-1 ()
-  (send p4 :dissoc p7)
-  (send p7 :translate #f(0 100 0) :world)
+(defun move-potato-2 ()
+  (send p4 :dissoc p8)
+  (send p8 :translate #f(0 100 0) :world)
   (send *viewer* :draw-objects)
   )
 
 (defun finish-pose ()
-  (move-potato-1)
+  (move-potato-2)
 
   (send *pr2* :angle-vector (send *ri* :state :potantio-vector))
   
@@ -513,7 +518,7 @@
   (send *ri* :wait-interpolation)
 
   ;; 置く
-  (send *arrow* :move-to (make-coords :pos (float-vector 500.0 2000.0 850.0) :rot #2f((1.0 0.0 0.0) (0.0 0.0 -1.0) (0.0 1.0 0.0))) :world)
+  (send *arrow* :move-to (make-coords :pos (float-vector 500.0 2050.0 850.0) :rot #2f((1.0 0.0 0.0) (0.0 0.0 -1.0) (0.0 1.0 0.0))) :world)
 
   (send *arrow* :translate #f(0 0 80) :world)
   (send *pr2* :larm :inverse-kinematics
@@ -565,37 +570,24 @@
   (send *ri* :wait-interpolation)
 
   ;; 少し上にして水平に
-  (send *arrow* :newcoords (make-coords :pos (send *arrow* :worldpos)))
-  (send *arrow* :translate #f(0 0 50) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
+  (setq *angle-vector-1* #f(325.0 12.552 -19.901 139.547 -54.063 -57.4827 -69.6801 293.874 -30.0232 1.63454 -169.175 -116.784 100.846 -98.3126 -58.1016 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-1*)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
   ;; 手前にする
-  (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
-  (send *arrow* :translate #f(150 -100 100) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
+  (setq *angle-vector-2* #f(325.0 41.1317 -20.1303 95.7333 -86.5142 -24.458 -46.5343 275.749 -30.0232 1.63454 -169.175 -116.784 100.846 -98.3126 -58.1016 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-2*)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
-  
-  (send *arrow* :newcoords (make-coords :pos #f(800.191 1810.896 866.677) :rpy #f(2.341 -0.222 -0.133)))
-  (send *pr2* :larm :inverse-kinematics
-	*arrow*
-	:rotation-axis t
-	:debug-view t)
+
+  (setq *angle-vector-3* #f(325.0 76.1311 52.8797 107.905 -109.722 -356.011 -9.48103 672.193 -30.0232 1.63454 -169.175 -116.784 100.846 -98.3126 -58.1016 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-3*)
   (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 8000)
-  (send *ri* :wait-interpolation)  
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
 
   (warn "please run (change-peeler)~&")
   )
@@ -627,7 +619,7 @@
   )
 
 (defun now-devel ()
-  ;; (set-potato :w width :l length :h height)
+  (set-potato-cut :w width :l length :h height)
   (grasp-potato)
   (set-potato)
   (set-larm)
@@ -641,7 +633,7 @@
 
 
 (defun now-test ()
-  ;; (set-potato :w width :l length :h height)
+  (set-potato-cut :w width :l length :h height)
   (grasp-potato)
   (set-potato)
   (set-larm)
@@ -654,7 +646,7 @@
 
 
 (defun exec-all ()
-  ;; (set-potato :w width :l length :h height)
+  (set-potato-cut :w width :l length :h height)
   (grasp-potato)
   (set-potato)
   (set-larm)
@@ -667,7 +659,7 @@
   )
 
 (defun now-cut ()
-  ;; (set-potato :w width :l length :h height)
+  (set-potato-cut :w width :l length :h height)
   (grasp-potato)
   (set-potato)
   (set-larm)
