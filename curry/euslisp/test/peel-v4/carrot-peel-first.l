@@ -485,52 +485,61 @@
   (send *ri* :wait-interpolation)
 
   ;; 少し上にして水平に
-  (send *arrow* :newcoords (make-coords :pos (send *arrow* :worldpos)))
-  (send *arrow* :translate #f(0 0 50) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
+  (setq *angle-vector-1* #f(325.0 19.8423 -8.21823 103.656 -49.9233 -17.8074 -61.6826 -444.344 -75.9572 52.4233 -108.235 -109.764 -0.12391 -9.4595 8.93627 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-1*)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
   ;; 手前にする
-  (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
-  (send *arrow* :translate #f(140 -100 90) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
+  (setq *angle-vector-2* #f(325.0 41.6856 -14.6471 88.8332 -81.5531 -11.5752 -49.6524 -454.261 -75.9572 52.4233 -108.235 -109.764 -0.12391 -9.4595 8.93627 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-2*)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
-  (send *arrow* :translate #f(20 -10 0) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
+  (setq *angle-vector-3* #f(325.0 44.2075 -13.6922 86.5799 -85.3975 -9.44283 -48.0339 -455.926 -75.9572 52.4233 -108.235 -109.764 -0.12391 -9.4595 8.93627 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-3*)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :newcoords (make-coords :pos #f(800.191 1810.896 866.677) :rpy #f(2.341 -0.222 -0.133)))
-  (send *pr2* :larm :inverse-kinematics
-	*arrow*
-	:rotation-axis t
-	:debug-view t)
+
+  (setq *angle-vector-4* #f(325.0 75.9096 52.2991 108.325 -109.775 -0.931123 -9.46065 -403.181 -75.9572 52.4233 -108.235 -109.764 -0.12391 -9.4595 8.93627 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-4*)
   (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
-  (send *ri* :wait-interpolation)  
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
 
   ;; (warn "please run (change-peeler)~&")
   )
 
+(defun avoid-larm ()
+  ;; 左手を少し上に
+  (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 0 150) :world)
+  (send *pr2* :larm :inverse-kinematics
+  	(send *arrow* :copy-worldcoords)
+  	:rotation-axis t
+  	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  ;; 少し上にして水平に
+  (setq *angle-vector-1* #f(325.0 3.90826 -19.7839 166.352 -51.2831 -79.3544 -82.7576 -59.6161 -75.9561 52.4204 -108.237 -109.764 -0.099029 -9.45949 8.91288 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-1*)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+  
+  ;; 手前にする
+  (setq *angle-vector-2* #f(325.0 45.918 -19.9401 104.684 -121.15 -182.857 -72.0687 66.4371 -75.9561 52.4204 -108.237 -109.764 -0.099029 -9.45949 8.91288 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-2*)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+  )
 
 
 
@@ -594,6 +603,5 @@
   (peel-test)
   (finish-pose-peel)
   (put-carrot-rotate)
-  (reset-larm)
-  
+  (avoid-larm)  
   )

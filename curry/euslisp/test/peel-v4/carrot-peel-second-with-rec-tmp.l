@@ -41,8 +41,13 @@
     (send *pr2* :move-to *kitchen-spot* :world)
     )
   (move-to-kitchen-irt)
-  (send *pr2* :reset-manip-pose)
-  (send *pr2* :torso_lift_joint :joint-angle 325)
+  ;; (send *pr2* :reset-manip-pose)
+  ;; (send *pr2* :torso_lift_joint :joint-angle 325)
+  ;; (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  ;; (send *ri* :wait-interpolation)
+  (setq *angle-vector-0* #f(325.0 45.918 -19.9401 104.684 -121.15 -182.857 -72.0687 66.4371 -75.9561 52.4204 -108.237 -109.764 -0.099029 -9.45949 8.91288 0.0 50.0))
+  (send *pr2* :angle-vector *angle-vector-0*)
+  (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
@@ -169,28 +174,28 @@
 (warn "please run (grasp-carrot-peel) or (now-devel)~%")
 
 (defun grasp-carrot-peel ()
-  ;;少し上に
-  (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(0 0 250) :world)
-  (send *pr2* :larm :inverse-kinematics
-	(send *arrow* :copy-worldcoords)
-	:rotation-axis nil
-	:debug-view t)
-  (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
-  (send *ri* :wait-interpolation)
+  ;; ;;少し上に
+  ;; (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
+  ;; (send *arrow* :translate #f(0 0 250) :world)
+  ;; (send *pr2* :larm :inverse-kinematics
+  ;; 	(send *arrow* :copy-worldcoords)
+  ;; 	:rotation-axis nil
+  ;; 	:debug-view t)
+  ;; (send *viewer* :draw-objects)
+  ;; (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  ;; (send *ri* :wait-interpolation)
 
-  ;; 左手を少し前に
-  (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
-  (send *arrow* :translate #f(-200 50 50) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
-  (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
-  (send *ri* :wait-interpolation)
+  ;; ;; 左手を少し前に
+  ;; (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
+  ;; (send *arrow* :translate #f(-200 50 50) :world)
+  ;; (send *arrow* :rotate (deg2rad 90) :z :world)
+  ;; (send *pr2* :larm :inverse-kinematics
+  ;; 	(send *arrow* :copy-worldcoords)
+  ;; 	:rotation-axis t
+  ;; 	:debug-view t)
+  ;; (send *viewer* :draw-objects)
+  ;; (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  ;; (send *ri* :wait-interpolation)
 
   ;; 人参の掴む所に
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
@@ -612,6 +617,7 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
   )
+
 
 
 (defun now-devel ()
