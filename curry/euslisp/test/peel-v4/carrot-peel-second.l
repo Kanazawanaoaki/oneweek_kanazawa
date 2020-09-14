@@ -240,7 +240,9 @@
   )
 
 (defun peel-test ()
-  ;; (send *ri* :start-grasp :larm :wait t :gain 0.1)
+  (send *pr2* :angle-vector (send *ri* :state :potentio-vector))
+  (send *pr2* :head :look-at (send (send *pr2* :larm :end-coords) :worldpos))
+  (send *ri* :angle-vector (send *pr2* :angle-vector))
 
   (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
   (send *arrow* :translate #f(0 0 200) :world)
