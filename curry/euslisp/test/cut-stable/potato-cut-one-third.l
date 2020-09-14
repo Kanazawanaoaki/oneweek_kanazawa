@@ -421,16 +421,6 @@
 	:rotation-axis t
 	:debug-view t)
   (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
-  (send *ri* :wait-interpolation)
-  
-  ;; set pose
-  (send *arrow* :newcoords (make-coords :pos #f(800.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
-  (send *pr2* :rarm :inverse-kinematics
-	*arrow*
-	:rotation-axis t
-	:debug-view t)
-  (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
   (send *ri* :wait-interpolation)
   )
@@ -450,59 +440,16 @@
 (defun finish-pose-5 ()
   (move-potato-5)
   (finish-pose)
-  (warn "please run (reset-larm)~%")  
-  )
 
-(defun reset-larm ()
-  ;; release potato
-  (send *pr2* :larm :end-coords :dissoc *potato*)
-  (send *ri* :stop-grasp :larm :wait t)
-
-  ;; 左手を少し上に
-  (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(0 0 100) :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
-  (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
-  (send *ri* :wait-interpolation)
-
-  ;; 少し上にして水平に
-  (send *arrow* :newcoords (make-coords :pos (send *arrow* :worldpos)))
-  (send *arrow* :translate #f(0 0 50) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
-  (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
-  (send *ri* :wait-interpolation)
-
-  ;; 手前にする
-  (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
-  (send *arrow* :translate #f(150 -100 100) :world)
-  (send *arrow* :rotate (deg2rad 90) :z :world)
-  (send *pr2* :larm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
-  	:rotation-axis t
-  	:debug-view t)
-  (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
-  (send *ri* :wait-interpolation)
-
-  (send *arrow* :newcoords (make-coords :pos #f(800.191 1810.896 866.677) :rpy #f(2.341 -0.222 -0.133)))
-  (send *pr2* :larm :inverse-kinematics
+  ;; set pose
+  (send *arrow* :newcoords (make-coords :pos #f(800.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
+  (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:rotation-axis t
 	:debug-view t)
   (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
-  (send *ri* :wait-interpolation)  
-
-  ;; (warn "please run (change-peeler)~&")
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
+  (send *ri* :wait-interpolation)
   )
 
 (defun now-devel ()
@@ -513,7 +460,6 @@
   (finish-pose-4)
   (cut-test-5)
   (finish-pose-5)
-  ;; (reset-larm)
   )
 
 
@@ -526,7 +472,6 @@
   (finish-pose-4)
   (cut-test-5)
   (finish-pose-5)
-  (reset-larm)
   )
 
 
@@ -538,6 +483,4 @@
   (finish-pose-4)
   (cut-test-5)
   (finish-pose-5)
-  (reset-larm)
-  (change-peeler)
   )

@@ -52,7 +52,7 @@
   (setq s-time 3)
 
   ;; 調整用
-  (setq adj 5)
+  (setq adj 0)
 
   ;; set potato
   (load "../../model/potato-new-type.l")
