@@ -58,27 +58,86 @@
 (init)
 
 
-(warn "please run (set-potato-peel :w 90 :l 60 :h 60) or (now-devel)~%")
+;; トピックなどを定義
+(defvar *topic-name* "/segmentation_decomposer/boxes")
 
-(defun set-potato-peel (&rest args &key (w 90) (l 60) (h 60) &allow-other-keys)
-  
-  (setq width w)
-  (setq length l)
-  (setq height h)
-  
-  (setq *potato* (potato :w w :l l :h h))
-  (send *potato* :transform (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ h 2))) :rot #2f((1.194340e-15 -1.0 0.0) (1.0 1.194340e-15 0.0) (0.0 0.0 1.0))))
-  (send *potato* :cut)
-  
-  (objects (list *kitchen* *pr2* *cutting-board* *potato*))
-  (send *irtviewer* :look-all
-	(geo::make-bounding-box 
-	 (flatten (send-all (send *pr2* :bodies) :vertices))))
+;; ros init
+(ros::roseus "potato_rec_test" :anonymous t)
+(ros::load-ros-manifest "jsk_recognition_msgs")
+(setq *l* (instance ros::transform-listener :init))
+(setq found-obj nil)
+(setq obj-pos #f(0 0 0))
+(setq obj-coord (make-coords :pos #f(0 0 0)))
+(print 0)
 
-  (setq interval height)
-  
-  (warn "please run (grasp-potato-peel) ~%")
+
+;; define cb
+(defun object-pose-cb (msg)
+  (setq *msg* msg)
+  (setq *bbox* (car (send msg :boxes)))
+  ;; (print 1)
+  (when msg
+    (setq tm2 (send *l* :get-latest-common-time "base_footprint" "head_mount_kinect_rgb_optical_frame"))    
+    (setq *dim* (send *bbox* :dimensions))
+    (setq width (* (send *dim* :x) 1000))
+    (setq length (* (send *dim* :y) 1000))
+    (setq height (* (send *dim* :z) 1000))
+    (setq *pose* (send *bbox* :pose))
+    (setq cam->obj-coords (ros::tf-pose->coords *pose*))
+    (setq cam-coords (send (send *pr2* :copy-worldcoords) :transform (send *l* :lookup-transform "base_footprint" "head_mount_kinect_rgb_optical_frame" tm2)))
+
+    (setq obj-coord (send cam-coords :transform cam->obj-coords))
+    ;; 補完して位置を決める
+    (setq tmp (- (+ (elt (send obj-coord :pos) 2) (/ height 2)) (+ (elt (send *cutting-board* :worldpos) 2) 10)))
+    (send obj-coord :translate (float-vector 0 0 (- (/ height 2) (/ tmp 2))) :world)
+    (setq height tmp)
+    
+    (setq obj-pos (scale 0.001 (send obj-coord :worldpos)))
+    (setq found-obj t)
+    (print (list 'found? found-obj obj-pos))
+    obj-pos))
+
+
+;; subscribeして認識
+(ros::subscribe *topic-name* jsk_recognition_msgs::BoundingBoxArray #'object-pose-cb 1)
+(setq *b* (instance ros::transform-broadcaster :init))
+
+(print 3)
+(setq *cube* (make-cube 10 50 50))
+(send *cube* :set-color :red)
+(send *cube* :locate #f(500 0 1000) :world)
+(objects (list *cube* *pr2*))
+
+(setq found-obj nil)
+;; (do-until-key ;;
+(until found-obj
+  (print 4)
+
+  (x::window-main-one) ;; IRT viewerの視点を変えられる。見にくければ変えよう
+  (ros::spin-once)
+  (ros::sleep)
   )
+
+
+;; ikを解く
+(load "models/arrow-object.l")
+(setq *arrow* (arrow))
+(send *arrow* :newcoords (send obj-coord :copy-worldcoords))
+
+(load "../../model/potato-new-type.l")
+(setq *potato* (potato :w  width :l length :h height))
+(send *potato* :newcoords (send obj-coord :copy-worldcoords))
+(send *potato* :rotate (deg2rad 180) :x)
+(send *potato* :cut)
+(objects (list *potato* *pr2* *cutting-board* *kitchen*))
+(send *irtviewer* :look-all
+      (geo::make-bounding-box 
+       (flatten (send-all (send *pr2* :bodies) :vertices))))
+(send *irtviewer* :draw-objects)
+
+(setq interval height)
+
+(warn "please run (grasp-potato-peel) or (now-devel)~%")
 
 (defun grasp-potato-peel ()
   ;;少し上に
@@ -109,6 +168,9 @@
   (send *arrow* :translate #f(-20 0 0))
   ;; (send *arrow* :rotate (deg2rad 30) :y)
   (send *arrow* :rotate (deg2rad 45) :y)
+
+  ;; (send *arrow* :translate #f(-10 -15 0) :world)
+  (send *arrow* :translate #f(-10 -20 0) :world)
   
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
@@ -210,7 +272,7 @@
 
   ;; 右手を上げる
   (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(0 0 150) :world)
+  (send *arrow* :translate #f(0 0 200) :world)
   (send *pr2* :rarm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis nil
@@ -455,7 +517,7 @@
   )
 
 (defun now-devel ()
-  (set-potato-peel :w width :l length :h height)
+  ;; (set-potato-peel :w width :l length :h height)
   (grasp-potato-peel)
   (set-potato-1)
   (grasp-peeler)
@@ -466,10 +528,6 @@
   (peel-test-3)
   (set-potato-4)
   (peel-test-4)
-  (set-potato-5)
-  (peel-test-5)
-  (set-potato-6)
-  (peel-test-6)
   (finish-pose-peel)
   (put-potato)
   (reset-larm)
@@ -478,7 +536,7 @@
 
 
 (defun now-test ()
-  (set-potato-peel :w width :l length :h height)
+  ;; (set-potato-peel :w width :l length :h height)
   (grasp-potato-peel)
   (set-potato-1)
   (set-peeler)
@@ -489,10 +547,6 @@
   (peel-test-3)
   (set-potato-4)
   (peel-test-4)
-  (set-potato-5)
-  (peel-test-5)
-  (set-potato-6)
-  (peel-test-6)
   (finish-pose-peel)
   (put-potato)
   (reset-larm)
@@ -500,7 +554,7 @@
 
 
 (defun exec-all ()
-  (set-potato-peel :w width :l length :h height)
+  ;; (set-potato-peel :w width :l length :h height)
   (grasp-potato-peel)
   (set-potato-1)
   (grasp-peeler)
@@ -511,10 +565,6 @@
   (peel-test-3)
   (set-potato-4)
   (peel-test-4)
-  (set-potato-5)
-  (peel-test-5)
-  (set-potato-6)
-  (peel-test-6)
   (finish-pose-peel)
   (put-potato)
   (reset-larm)
