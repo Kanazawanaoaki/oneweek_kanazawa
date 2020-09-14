@@ -93,7 +93,7 @@
   (send p1 :assoc p2)
   (send p1 :assoc p3)
   (send p1 :rotate (deg2rad 90) :x :world)
-  (send p1 :translate (float-vector 0 0 (+ (* -0.5 width) 15)) :world)
+  (send p1 :translate (float-vector 0 0 (* -0.5 height)) :world)
   
   (objects (list *kitchen* *pr2* *cutting-board* *potato*))
   (send *irtviewer* :look-all

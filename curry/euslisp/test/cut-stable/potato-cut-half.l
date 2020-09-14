@@ -103,6 +103,18 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
+  ;; 左手を少し前に
+  (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
+  (send *arrow* :translate #f(-200 50 50) :world)
+  (send *arrow* :rotate (deg2rad 90) :z :world)
+  (send *pr2* :larm :inverse-kinematics
+        (send *arrow* :copy-worldcoords)
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
   ;; じゃがいもの掴む所に
   (send *arrow* :newcoords (send *potato* :copy-worldcoords))
   (send *arrow* :translate #f(0 -20 0) :world)
