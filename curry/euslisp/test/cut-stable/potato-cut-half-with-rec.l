@@ -531,7 +531,7 @@
   (grasp-knife-hor)
   (cut-test)
   (finish-pose)
-  ;; (reset-larm)
+  (reset-larm)
   )
 
 
@@ -553,5 +553,4 @@
   (cut-test)
   (finish-pose)
   (reset-larm)
-  (change-peeler)
   )
