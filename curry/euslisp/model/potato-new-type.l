@@ -202,7 +202,7 @@
      (setq *cut-point-4* (make-cascoords :pos (float-vector 0 0 (/ height -6))))
      (send *cut-point-4* :rotate (deg2rad 90) :y)
      (send *cut-point-4* :rotate (deg2rad 90) :z)
-     (send p2 :assoc *cut-point-3*)
+     (send p4 :assoc *cut-point-3*)
      
      (setq *cut-point-5* (make-cascoords :pos (float-vector 0 0 (/ height 6))))
      (send *cut-point-5* :rotate (deg2rad 90) :y)
