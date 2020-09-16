@@ -43,8 +43,11 @@
   ;; def global values
   (setq s-time 3)
 
-  (setq adj 10)
-  
+  ;; (setq adj 10)
+  (setq adj 0)
+
+  (setq adj2 60)
+
   ;; set carrot
   (load "../../model/carrot-ellipsoid-model.l")
 
@@ -164,12 +167,13 @@
   
   ;; 人参の掴む所に
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
+  (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
   (send *arrow* :translate #f(-20 0 0))
   ;; (send *arrow* :rotate (deg2rad 30) :y)
   (send *arrow* :rotate (deg2rad 45) :y)
 
   ;; (send *arrow* :translate #f(-10 -15 0) :world)
-  (send *arrow* :translate #f(-10 -20 0) :world)
+  (send *arrow* :translate #f(20 -15 -10) :world)
 
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
@@ -194,7 +198,9 @@
   ;;gripperを閉じる
   (send *ri* :start-grasp :larm :wait t)
   (send (send *pr2* :larm :end-coords) :assoc *carrot*)
-  (send *ri* :start-grasp :larm :wait t :gain 0.05)
+  ;; (send *ri* :start-grasp :larm :wait t :gain 0.05)
+
+  (send *ri* :start-grasp :larm :wait t :gain 0.1)
      
   (warn "please run  (set-carrot-1) ~%")
   )
@@ -267,6 +273,8 @@
 
 (defun peel-test ()
   (send *pr2* :angle-vector (send *ri* :state :potentio-vector))
+  (send *pr2* :head :look-at (send (send *pr2* :larm :end-coords) :worldpos))
+  (send *ri* :angle-vector (send *pr2* :angle-vector))
 
   ;; 右手を上げる
   (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
@@ -288,7 +296,9 @@
 
   ;;調整
   (send *arrow* :translate (float-vector 0 adj 0))
-  
+
+  (send *arrow* :translate (float-vector adj2 0 0))
+
   (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:move-target (car (send *peeler* :attention))
