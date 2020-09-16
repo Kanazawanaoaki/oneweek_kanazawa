@@ -130,9 +130,13 @@
 
   ;; じゃがいもの掴む所に
   (send *arrow* :newcoords (send p1 :copy-worldcoords))
-  (send *arrow* :translate (float-vector 0 (/ width 4) 0) :world)
+  (send *arrow* :translate (float-vector 0 (/ (- width 30) 4) 0) :world)
   (send *arrow* :rotate (deg2rad 90) :z :world)
   (send *arrow* :rotate (deg2rad 45) :y)
+
+
+  ;; tmp
+  ;; (send *arrow* :translate #f(0 0 -10) :world)
 
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
@@ -161,8 +165,12 @@
   (warn "please run  (caging-test) ~%")
   )
 
+(setq tmp 0)
+
 (defun caging-test ()
-  (send *arrow* :translate (float-vector 0 num 0) :world)
+  (send *arrow* :translate (float-vector 0 0 tmp) :world)
+  
+  (send *arrow* :translate (float-vector 0 (* num -1) 0) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t
@@ -171,7 +179,8 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :translate (float-vector 0 (* num -1) 0) :world)
+  (send *arrow* :translate (float-vector 0 (* num 1.5) 0) :world)
+  ;; (send *arrow* :translate (float-vector 0 (* num -0.5) 0) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t

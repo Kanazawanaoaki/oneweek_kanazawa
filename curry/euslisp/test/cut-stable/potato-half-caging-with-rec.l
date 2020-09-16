@@ -136,11 +136,12 @@
 
 (load "../../model/potato-new-type.l")
 
-;;; WIP!!!!!!!!!!!!!!!!
-
 (setq width (+ (* width 2) 30))
 (setq *potato* (potato :w  width :l length :h height))
 (send *potato* :newcoords (send obj-coord :copy-worldcoords))
+
+(send *potato* :translate (float-vector (* (- width 30) -0.25) 0 0))
+
 (send *potato* :rotate (deg2rad 180) :x)
 (send *potato* :cut)
 
@@ -149,47 +150,24 @@
 (send p4 :dissoc p8)
 (send p8 :translate #f(0 0 -100) :world)  
 
+(send p4 :dissoc p1)
+(send p4 :dissoc p2)
+(send p4 :dissoc p3)
+
+(send p4 :translate #f(0 0 -100) :world)
+(send *viewer* :draw-objects)
+
+(send p1 :assoc p2)
+(send p1 :assoc p3)
+
 (objects (list *potato* *pr2* *cutting-board* *kitchen*))
 (send *irtviewer* :look-all
       (geo::make-bounding-box 
        (flatten (send-all (send *pr2* :bodies) :vertices))))
 (send *irtviewer* :draw-objects)
 
-(warn "please run (grasp-potato) or (now-devel)~%")
+(warn "please run (set-larm) or (now-devel)~%")
 
-(defun set-potato (&rest args &key (w 90) (l 60) (h 60) &allow-other-keys)
-  
-  (setq width w)
-  (setq length l)
-  (setq height h)
-  
-  (setq *potato* (potato :w w :l l :h h))
-  (send *potato* :transform (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ h 2))) :rot #2f((1.194340e-15 -1.0 0.0) (1.0 1.194340e-15 0.0) (0.0 0.0 1.0))))
-  (send *potato* :cut)
-
-  (send p4 :dissoc p7)
-  (send p7 :translate #f(0 0 -100) :world)
-  (send p4 :dissoc p8)
-  (send p8 :translate #f(0 0 -100) :world)
-
-  (send p4 :dissoc p1)
-  (send p4 :dissoc p2)
-  (send p4 :dissoc p3)
-
-  (send p4 :translate #f(0 0 -100) :world)
-  (send *viewer* :draw-objects)
-
-  (send p1 :assoc p2)
-  (send p1 :assoc p3)
-  (send p1 :translate #f(0 50 0) :world)
-  
-  (objects (list *kitchen* *pr2* *cutting-board* *potato*))
-  (send *irtviewer* :look-all
-	(geo::make-bounding-box 
-	 (flatten (send-all (send *pr2* :bodies) :vertices))))
-  
-  (warn "please run (set-larm) ~%")
-  )
 
 (defun set-larm ()
   ;;少し上に
@@ -217,7 +195,7 @@
 
   ;; じゃがいもの掴む所に
   (send *arrow* :newcoords (send p1 :copy-worldcoords))
-  (send *arrow* :translate (float-vector 0 (/ width 4) 0) :world)
+  (send *arrow* :translate (float-vector 0 (/ (- width 30) 4) 0) :world)
   (send *arrow* :rotate (deg2rad 90) :z :world)
   (send *arrow* :rotate (deg2rad 45) :y)
 
@@ -249,7 +227,7 @@
   )
 
 (defun caging-test ()
-  (send *arrow* :translate (float-vector 0 num 0) :world)
+  (send *arrow* :translate (float-vector 0 (* num -1) 0) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t
@@ -258,7 +236,7 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :translate (float-vector 0 (* num -1) 0) :world)
+  (send *arrow* :translate (float-vector 0 (* num 1.5) 0) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t
@@ -305,7 +283,7 @@
   )
 
 (defun now-devel ()
-  (set-potato :w width :l length :h height)
+  ;; (set-potato :w width :l length :h height)
   (set-larm)
   (caging-test)
   ;; (reset-larm)
@@ -314,7 +292,7 @@
 
 
 (defun now-test ()
-  (set-potato :w width :l length :h height)
+  ;; (set-potato :w width :l length :h height)
   (set-larm)
   (caging-test)
   (reset-larm)
@@ -322,7 +300,7 @@
 
 
 (defun exec-all ()
-  (set-potato :w width :l length :h height)
+  ;; (set-potato :w width :l length :h height)
   (set-larm)
   (caging-test)
   (reset-larm)
