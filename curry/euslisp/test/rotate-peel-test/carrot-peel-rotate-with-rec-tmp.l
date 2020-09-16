@@ -46,7 +46,7 @@
   ;; (setq adj 10)
   (setq adj 0)
 
-  (setq adj2 60)
+  (setq adj2 0)
 
   ;; set carrot
   (load "../../model/carrot-ellipsoid-model.l")
