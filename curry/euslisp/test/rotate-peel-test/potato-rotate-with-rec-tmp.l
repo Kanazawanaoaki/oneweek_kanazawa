@@ -73,25 +73,27 @@
   (setq *bbox* (car (send msg :boxes)))
   ;; (print 1)
   (when msg
-    (setq tm2 (send *l* :get-latest-common-time "base_footprint" "head_mount_kinect_rgb_optical_frame"))    
-    (setq *dim* (send *bbox* :dimensions))
-    (setq width (* (send *dim* :x) 1000))
-    (setq length (* (send *dim* :y) 1000))
-    (setq height (* (send *dim* :z) 1000))
-    (setq *pose* (send *bbox* :pose))
-    (setq cam->obj-coords (ros::tf-pose->coords *pose*))
-    (setq cam-coords (send (send *pr2* :copy-worldcoords) :transform (send *l* :lookup-transform "base_footprint" "head_mount_kinect_rgb_optical_frame" tm2)))
-
-    (setq obj-coord (send cam-coords :transform cam->obj-coords))
-    ;; 補完して位置を決める
-    (setq tmp (- (+ (elt (send obj-coord :pos) 2) (/ height 2)) (+ (elt (send *cutting-board* :worldpos) 2) 10)))
-    (send obj-coord :translate (float-vector 0 0 (- (/ height 2) (/ tmp 2))) :world)
-    (setq height tmp)
-    
-    (setq obj-pos (scale 0.001 (send obj-coord :worldpos)))
-    (setq found-obj t)
-    (print (list 'found? found-obj obj-pos))
-    obj-pos))
+    (let ((cam-coords nil))
+      (setq tm2 (send *l* :get-latest-common-time "base_footprint" "head_mount_kinect_rgb_optical_frame"))    
+      (setq *dim* (send *bbox* :dimensions))
+      (setq width (* (send *dim* :x) 1000))
+      (setq length (* (send *dim* :y) 1000))
+      (setq height (* (send *dim* :z) 1000))
+      (setq *pose* (send *bbox* :pose))
+      (setq cam->obj-coords (ros::tf-pose->coords *pose*))
+      (when (send *l* :wait-for-transform  "base_footprint" "head_mount_kinect_rgb_optical_frame" tm2 10)
+        (setq cam-coords (send (send *pr2* :copy-worldcoords) :transform 
+                               (send *l* :lookup-transform "base_footprint" "head_mount_kinect_rgb_optical_frame" tm2))))
+      (when cam-coords
+        (setq obj-coord (send cam-coords :transform cam->obj-coords))
+        (setq tmp (- (+ (elt (send obj-coord :pos) 2) (/ height 2)) (+ (elt (send *cutting-board* :worldpos) 2) 10)))
+        (send obj-coord :translate (float-vector 0 0 (- (/ height 2) (/ tmp 2))) :world)
+        (setq height tmp)
+        
+        (setq obj-pos (scale 0.001 (send obj-coord :worldpos)))
+        (setq found-obj t)
+        (print (list 'found? found-obj obj-pos)))
+      obj-pos)))
 
 
 ;; subscribeして認識

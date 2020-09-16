@@ -43,10 +43,11 @@
   ;; def global values
   (setq s-time 3)
 
-  (setq adj 10)
+  (setq adj 0)
 
   ;; set carrot
-  (load "../../model/carrot-ellipsoid-model.l")
+  ;; (load "../../model/carrot-ellipsoid-model.l")
+  (load "../../model/carrot-test-new-type.l")
 
   (setq width 160)
   (setq length 40)
@@ -67,6 +68,8 @@
   (setq *carrot* (carrot :w w :l l :h h))
   (send *carrot* :transform (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ h 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
   (send *carrot* :cut)
+
+  (send *carrot* :translate (float-vector (- (/ width 2) 20) 0 0))
   
   (objects (list *kitchen* *pr2* *cutting-board* *carrot*))
   (send *irtviewer* :look-all
@@ -104,6 +107,7 @@
   
   ;; 人参の掴む所に
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
+  (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
   (send *arrow* :translate #f(-20 0 0))
   ;; (send *arrow* :rotate (deg2rad 30) :y)
   (send *arrow* :rotate (deg2rad 45) :y)
