@@ -46,7 +46,7 @@
   ;; set carrot
   (load "../../model/carrot-ellipsoid-model.l")
 
-  (setq width 160)
+  (setq width 150)
   (setq length 40)
   (setq height 40)
   )
@@ -54,9 +54,9 @@
 (init)
 
 
-(warn "please run (set-carrot :w 160 :l 40 :h 40) or (now-devel)~%")
+(warn "please run (set-carrot :w 150 :l 40 :h 40) or (now-devel)~%")
 
-(defun set-carrot (&rest args &key (w 160) (l 40) (h 40) &allow-other-keys)
+(defun set-carrot (&rest args &key (w 150) (l 40) (h 40) &allow-other-keys)
 
   (setq width w)
   (setq length l)
@@ -64,7 +64,7 @@
   
   (setq *carrot* (carrot :w w :l l :h h))
   (send *carrot* :transform (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ h 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
-  (send *carrot* :cut)
+  ;; (send *carrot* :cut)
   
   (objects (list *kitchen* *pr2* *cutting-board* *carrot*))
   (send *irtviewer* :look-all

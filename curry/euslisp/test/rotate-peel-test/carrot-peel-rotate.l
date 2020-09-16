@@ -46,10 +46,10 @@
   (setq adj 0)
 
   ;; set carrot
-  ;; (load "../../model/carrot-ellipsoid-model.l")
-  (load "../../model/carrot-test-new-type.l")
+  (load "../../model/carrot-ellipsoid-model.l")
+  ;; (load "../../model/carrot-test-new-type.l")
 
-  (setq width 160)
+  (setq width 150)
   (setq length 40)
   (setq height 40)
   )
@@ -57,9 +57,9 @@
 (init)
 
 
-(warn "please run (set-carrot-peel :w 160 :l 40 :h 40) or (now-devel)~%")
+(warn "please run (set-carrot-peel :w 150 :l 40 :h 40) or (now-devel)~%")
 
-(defun set-carrot-peel (&rest args &key (w 160) (l 40) (h 40) &allow-other-keys)
+(defun set-carrot-peel (&rest args &key (w 150) (l 40) (h 40) &allow-other-keys)
 
   (setq width w)
   (setq length l)
@@ -67,9 +67,9 @@
   
   (setq *carrot* (carrot :w w :l l :h h))
   (send *carrot* :transform (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ h 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
-  (send *carrot* :cut)
+  ;; (send *carrot* :cut)
 
-  (send *carrot* :translate (float-vector (- (/ width 2) 20) 0 0))
+  ;; (send *carrot* :translate (float-vector (- (/ width 2) 20) 0 0))
   
   (objects (list *kitchen* *pr2* *cutting-board* *carrot*))
   (send *irtviewer* :look-all
@@ -107,7 +107,7 @@
   
   ;; 人参の掴む所に
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
-  (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
+  ;; (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
   (send *arrow* :translate #f(-20 0 0))
   ;; (send *arrow* :rotate (deg2rad 30) :y)
   (send *arrow* :rotate (deg2rad 45) :y)
@@ -135,8 +135,10 @@
   ;;gripperを閉じる
   (send *ri* :start-grasp :larm :wait t)
   (send (send *pr2* :larm :end-coords) :assoc *carrot*)
-  (send *ri* :start-grasp :larm :wait t :gain 0.05)
-     
+  ;; (send *ri* :start-grasp :larm :wait t :gain 0.05)
+
+  (send *ri* :start-grasp :larm :wait t :gain 0.1)
+
   (warn "please run  (set-carrot-1) ~%")
   )
 

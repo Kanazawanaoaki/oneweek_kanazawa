@@ -44,8 +44,8 @@
   (setq s-time 3)
 
   ;; set carrot
-  ;; (load "../../model/carrot-ellipsoid-model.l")
-  (load "../../model/carrot-test-new-type.l")
+  (load "../../model/carrot-ellipsoid-model.l")
+  ;; (load "../../model/carrot-test-new-type.l")
 
   (setq width 160)
   (setq length 40)
@@ -126,9 +126,9 @@
 (load "../../model/carrot-test-new-type.l")
 (setq *carrot* (carrot :w  width :l length :h height))
 (send *carrot* :newcoords (send obj-coord :copy-worldcoords))
-(send *carrot* :translate (float-vector (- (/ width 2) 20) 0 0))
+;; (send *carrot* :translate (float-vector (- (/ width 2) 20) 0 0))
 (send *carrot* :rotate (deg2rad 180) :x)
-(send *carrot* :cut)
+;; (send *carrot* :cut)
 (objects (list *carrot* *pr2* *cutting-board* *kitchen*))
 (send *irtviewer* :look-all
       (geo::make-bounding-box 

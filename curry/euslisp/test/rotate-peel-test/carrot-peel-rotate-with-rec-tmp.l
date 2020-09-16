@@ -49,10 +49,10 @@
   (setq adj2 60)
 
   ;; set carrot
-  ;; (load "../../model/carrot-ellipsoid-model.l")
-  (load "../../model/carrot-test-new-type.l")
+  (load "../../model/carrot-ellipsoid-model.l")
+  ;; (load "../../model/carrot-test-new-type.l")
 
-  (setq width 160)
+  (setq width 150)
   (setq length 40)
   (setq height 40)
   )
@@ -131,9 +131,9 @@
 (load "../../model/carrot-test-new-type.l")
 (setq *carrot* (carrot :w  width :l length :h height))
 (send *carrot* :newcoords (send obj-coord :copy-worldcoords))
-(send *carrot* :translate (float-vector (- (/ width 2) 20) 0 0))
+;; (send *carrot* :translate (float-vector (- (/ width 2) 20) 0 0))
 (send *carrot* :rotate (deg2rad 180) :x)
-(send *carrot* :cut)
+;; (send *carrot* :cut)
 (objects (list *carrot* *pr2* *cutting-board* *kitchen*))
 (send *irtviewer* :look-all
       (geo::make-bounding-box 
@@ -169,9 +169,9 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
   
-  ;; 人参の掴む所に
+c  ;; 人参の掴む所に
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
-  (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
+  ;; (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
   (send *arrow* :translate #f(-20 0 0))
   ;; (send *arrow* :rotate (deg2rad 30) :y)
   (send *arrow* :rotate (deg2rad 45) :y)
