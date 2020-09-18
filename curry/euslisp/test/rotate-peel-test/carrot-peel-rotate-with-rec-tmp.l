@@ -169,7 +169,7 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
   
-c  ;; 人参の掴む所に
+  ;; 人参の掴む所に
   (send *arrow* :newcoords (send *carrot* :copy-worldcoords))
   ;; (send *arrow* :translate (float-vector (+ (/ width -2) 20) 0 0))
   (send *arrow* :translate #f(-20 0 0))
@@ -177,7 +177,10 @@ c  ;; 人参の掴む所に
   (send *arrow* :rotate (deg2rad 45) :y)
 
   ;; (send *arrow* :translate #f(-10 -15 0) :world)
-  (send *arrow* :translate #f(20 -15 -10) :world)
+  (send *arrow* :translate #f(20 -15 -20) :world)
+
+  ;; (send *carrot* :translate #f(20 -15 -20) :world)
+  
 
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)

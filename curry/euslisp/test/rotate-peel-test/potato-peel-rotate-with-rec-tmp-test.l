@@ -45,6 +45,7 @@
   ;; def global values
   (setq s-time 3)
 
+  ;; (setq adj 10)
   (setq adj 0)
 
   ;; set potato
@@ -172,7 +173,7 @@
   (send *arrow* :rotate (deg2rad 45) :y)
 
   ;; (send *arrow* :translate #f(-10 -15 0) :world)
-  (send *arrow* :translate #f(20 5 -10) :world)
+  (send *arrow* :translate #f(-10 -20 0) :world)
   
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
@@ -291,6 +292,9 @@
   (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
   (send *arrow* :rotate (deg2rad 30) :y)
   (send *arrow* :translate (float-vector 0 80 80) :world)
+
+  ;;調整
+  (send *arrow* :translate (float-vector 0 adj 0))
   
   ;; (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
   ;; (send *arrow* :rotate (deg2rad 180) :z)
@@ -355,6 +359,99 @@
   
   (warn "you can retry (peel-test) or (finish-pose-peel) , (set-potato-2)~%")
   )
+
+(defun touch-test ()
+  (send *pr2* :angle-vector (send *ri* :state :potentio-vector))
+  (send *pr2* :head :look-at (send (send *pr2* :larm :end-coords) :worldpos))
+  (send *ri* :angle-vector (send *pr2* :angle-vector))
+
+  ;; 右手を上げる
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 0 200) :world)
+  (send *pr2* :rarm :inverse-kinematics
+	(send *arrow* :copy-worldcoords)
+	:rotation-axis nil
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  ;; 剥く位置
+  (send *arrow* :newcoords (make-coords :pos (send *p-arrow* :worldpos)))
+  (send *arrow* :rotate (deg2rad -90) :z :world)
+  (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
+  (send *arrow* :rotate (deg2rad 30) :y)
+  (send *arrow* :translate (float-vector 0 80 80) :world)
+  
+  ;; (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
+  ;; (send *arrow* :rotate (deg2rad 180) :z)
+  ;; (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
+  ;; (send *arrow* :rotate (deg2rad 60) :y)
+  ;; (send *arrow* :translate (float-vector 0 100 100) :world)
+
+  ;;調整
+  (send *arrow* :translate (float-vector 0 adj 0))
+
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *peeler* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *arrow* :translate (float-vector 0 -80 -80) :world)
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *peeler* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  ;; 皮剥き始める所
+  (send *arrow* :translate (float-vector 0 0 (* -1 interval)) :world)
+
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *peeler* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (warn "you can retry (peel-test) or (finish-pose-peel) , (set-carrot-2)~%")
+  (warn "you can retry (finish-touch) ~%")
+  )
+
+(defun finish-touch ()
+  ;; 手を少し上に
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 0 150) :world)
+  (send *pr2* :rarm :inverse-kinematics
+        (send *arrow* :copy-worldcoords)
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 150 0) :world)
+  (send *pr2* :rarm :inverse-kinematics
+        (send *arrow* :copy-worldcoords)
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (warn "please run (set-carrot-2)~%")
+  )
+
 
 (defun set-potato-2 ()
   (send *p-arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 1100) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
