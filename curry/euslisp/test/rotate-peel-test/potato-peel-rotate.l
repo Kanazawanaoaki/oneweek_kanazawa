@@ -45,7 +45,9 @@
   ;; def global values
   (setq s-time 3)
 
-  (setq adj 10)
+  (setq adj 0)
+
+  (setq adj2 0)  
 
   ;; set potato
   (load "../../model/potato-new-type.l")
@@ -93,7 +95,7 @@
   (send *ri* :wait-interpolation)
 
   ;;少し前に
-  (send *arrow* :newcoords (make-coords :pos (send (send *pr2* :larm :end-coords) :worldpos)))
+  (send *arrow* :newcoords (make-coords :pos (send (send (send *pr2* :larm :end-coords) :copy-worldcoords) :worldpos)))
   (send *arrow* :translate #f(-200 50 50) :world)
   (send *arrow* :rotate (deg2rad 90) :z :world)
   (send *pr2* :larm :inverse-kinematics
@@ -222,21 +224,20 @@
   (send *ri* :wait-interpolation)
 
   ;; 剥く位置
-  (send *arrow* :newcoords (make-coords :pos (send *p-arrow* :worldpos)))
+  (send *arrow* :newcoords (make-coords :pos (send (send (send *pr2* :larm :end-coords) :copy-worldcoords) :worldpos)))
+  (send *arrow* :translate #f(0 20 0) :world)
   (send *arrow* :rotate (deg2rad -90) :z :world)
+
   (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
   (send *arrow* :rotate (deg2rad 30) :y)
   (send *arrow* :translate (float-vector 0 80 80) :world)
   
-  ;; (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
-  ;; (send *arrow* :rotate (deg2rad 180) :z)
-  ;; (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
-  ;; (send *arrow* :rotate (deg2rad 60) :y)
-  ;; (send *arrow* :translate (float-vector 0 100 100) :world)
-
   ;;調整
   (send *arrow* :translate (float-vector 0 adj 0))
 
+  (send *arrow* :translate (float-vector adj2 0 0))
+
+  
   (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:move-target (car (send *peeler* :attention))
@@ -258,14 +259,6 @@
 
   ;; 皮剥き始める所
   (send *arrow* :translate (float-vector 0 0 (* -1 interval)) :world)
-
-  ;; (send *arrow* :translate (float-vector 0 0 (* -1 height)) :world)
-
-  ;; (send *arrow* :translate (float-vector 0 0 -40) :world)
-  ;; (send *arrow* :translate (float-vector 0 0 -60) :world)
-  ;; (send *arrow* :translate (float-vector 0 0 -50) :world)
-
-  ;; (send *arrow* :translate (float-vector 0 0 (- (* -1 height) 20)) :world)
   (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:move-target (car (send *peeler* :attention))
