@@ -376,6 +376,125 @@
   (warn "you can retry (peel-test) or (finish-pose-peel) , (set-potato-2)~%")
   )
 
+(defun touch-test ()
+  (send *pr2* :angle-vector (send *ri* :state :potentio-vector))
+  (send *pr2* :head :look-at (send (send *pr2* :larm :end-coords) :worldpos))
+  (send *ri* :angle-vector (send *pr2* :angle-vector))
+
+  ;; 右手を上げる
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 0 200) :world)
+  (send *pr2* :rarm :inverse-kinematics
+	(send *arrow* :copy-worldcoords)
+	:rotation-axis nil
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  ;; 剥く位置
+  (send *arrow* :newcoords (make-coords :pos (send (send (send *pr2* :larm :end-coords) :copy-worldcoords) :worldpos)))
+  (send *arrow* :translate #f(0 20 0) :world)
+  (send *arrow* :rotate (deg2rad -90) :z :world)
+
+  (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
+  (send *arrow* :rotate (deg2rad 30) :y)
+  (send *arrow* :translate (float-vector 0 80 80) :world)
+
+  
+  ;;調整
+  (send *arrow* :translate (float-vector 0 adj 0))
+
+  (send *arrow* :translate (float-vector adj2 0 0))
+
+  
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *peeler* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *arrow* :translate (float-vector 0 -80 -80) :world)
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *peeler* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  ;; 皮剥き始める所
+  (defvar *topic-name* "/right_endeffector/wrench")
+  (setq *cb-flag* nil)
+  (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
+  
+  (until *cb-flag*
+    (send *arrow* :translate (float-vector 0 0 (* 10 -1)))
+    (send *pr2* :rarm :inverse-kinematics
+          *arrow*
+          :move-target (car (send *peeler* :attention))
+          :rotation-axis t
+          :debug-view t)
+    (send *viewer* :draw-objects)
+    (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
+    (send *ri* :wait-interpolation)
+    
+    (ros::spin-once)
+    (ros::sleep)
+    )
+
+  (warn "please run  (finish-touch) or (exec-peel)~%")
+  )
+
+(defun finish-touch ()
+  ;; 手を少し上に
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldc
+oords))
+  (send *arrow* :translate #f(0 0 150) :world)
+  (send *pr2* :rarm :inverse-kinematics
+        (send *arrow* :copy-worldcoords)
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 150 0) :world)
+  (send *pr2* :rarm :inverse-kinematics
+        (send *arrow* :copy-worldcoords)
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (warn "please run  (set-carrot-2)~%")
+  )
+
+(defun exec-peel ()
+  ;; 剥き終わり
+  (send *arrow* :rotate (deg2rad -30) :y)
+  (send *arrow* :translate (float-vector (* (+ width 20) -1) 0 0) )
+  (send *arrow* :rotate (deg2rad 30) :y)
+
+  (send *pr2* :rarm :inverse-kinematics
+        *arrow*
+        :move-target (car (send *peeler* :attention))
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+  
+  (warn "you can retry (peel-test) or (finish-pose-peel) , (set-potato-2)~%")
+  )
+
+
 (defun set-potato-2 ()
   (send *p-arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 1100) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
   (send *p-arrow* :rotate (deg2rad 45) :y :world)
