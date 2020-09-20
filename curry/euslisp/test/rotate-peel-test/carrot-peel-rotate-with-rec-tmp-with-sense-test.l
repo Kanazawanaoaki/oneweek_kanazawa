@@ -304,10 +304,11 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector))
 
   ;; 右手を上げる
-  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(0 0 200) :world)
+  (setq *c* (make-coords))
+  (send *c* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *c* :translate #f(0 0 200) :world)
   (send *pr2* :rarm :inverse-kinematics
-	(send *arrow* :copy-worldcoords)
+	(send *c* :copy-worldcoords)
 	:rotation-axis nil
 	:debug-view t)
   (send *viewer* :draw-objects)
@@ -315,21 +316,21 @@
   (send *ri* :wait-interpolation)
 
   ;; 剥く位置
-  (send *arrow* :newcoords (make-coords :pos (send (send (send *pr2* :larm :end-coords) :copy-worldcoords) :worldpos)))
-  (send *arrow* :translate #f(0 20 0) :world)
-  (send *arrow* :rotate (deg2rad -90) :z :world)
+  (send *c* :newcoords (make-coords :pos (send (send (send *pr2* :larm :end-coords) :copy-worldcoords) :worldpos)))
+  (send *c* :translate #f(0 20 0) :world)
+  (send *c* :rotate (deg2rad -90) :z :world)
 
-  (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
-  (send *arrow* :rotate (deg2rad 30) :y)
-  (send *arrow* :translate (float-vector 0 80 80) :world)
+  (send *c* :translate (float-vector 0 0 (* 1 height)) :world)
+  (send *c* :rotate (deg2rad 30) :y)
+  (send *c* :translate (float-vector 0 80 80) :world)
 
   ;;調整
-  (send *arrow* :translate (float-vector 0 adj 0))
+  (send *c* :translate (float-vector 0 adj 0))
 
-  (send *arrow* :translate (float-vector adj2 0 0))
+  (send *c* :translate (float-vector adj2 0 0))
 
   (send *pr2* :rarm :inverse-kinematics
-	*arrow*
+	*c*
 	:move-target (car (send *peeler* :attention))
 	:rotation-axis t
 	:debug-view t)
@@ -337,9 +338,9 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :translate (float-vector 0 -80 -80) :world)
+  (send *c* :translate (float-vector 0 -80 -80) :world)
   (send *pr2* :rarm :inverse-kinematics
-	*arrow*
+	*c*
 	:move-target (car (send *peeler* :attention))
 	:rotation-axis t
 	:debug-view t)
@@ -354,9 +355,9 @@
   (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
 
   (until *cb-flag*
-    (send *arrow* :translate (float-vector 0 0 (* 10 -1)) :world)
+    (send *c* :translate (float-vector 0 0 (* 10 -1)) :world)
     (send *pr2* :rarm :inverse-kinematics
-  	  *arrow*
+  	  *c*
 	  :move-target (car (send *peeler* :attention))
   	  :rotation-axis t
   	  :debug-view t)
@@ -369,12 +370,12 @@
     )
 
   ;; 剥き終わり
-  (send *arrow* :rotate (deg2rad -30) :y)
-  (send *arrow* :translate (float-vector (* (+ width 20) -1) 0 0) )
-  (send *arrow* :rotate (deg2rad 30) :y)
+  (send *c* :rotate (deg2rad -30) :y)
+  (send *c* :translate (float-vector (* (+ width 20) -1) 0 0) )
+  (send *c* :rotate (deg2rad 30) :y)
 
   (send *pr2* :rarm :inverse-kinematics
-	*arrow*
+	*c*
 	:move-target (car (send *peeler* :attention))
 	:rotation-axis t
 	:debug-view t)
@@ -391,10 +392,11 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector))
 
   ;; 右手を上げる
-  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(0 0 200) :world)
+  (setq *c* (make-coords))
+  (send *c* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *c* :translate #f(0 0 200) :world)
   (send *pr2* :rarm :inverse-kinematics
-	(send *arrow* :copy-worldcoords)
+	(send *c* :copy-worldcoords)
 	:rotation-axis nil
 	:debug-view t)
   (send *viewer* :draw-objects)
@@ -402,21 +404,21 @@
   (send *ri* :wait-interpolation)
 
   ;; 剥く位置
-  (send *arrow* :newcoords (make-coords :pos (send (send (send *pr2* :larm :end-coords) :copy-worldcoords) :worldpos)))
-  (send *arrow* :translate #f(0 15 0) :world)
-  (send *arrow* :rotate (deg2rad -90) :z :world)
+  (send *c* :newcoords (make-coords :pos (send (send (send *pr2* :larm :end-coords) :copy-worldcoords) :worldpos)))
+  (send *c* :translate #f(0 15 0) :world)
+  (send *c* :rotate (deg2rad -90) :z :world)
 
-  (send *arrow* :translate (float-vector 0 0 (* 1 height)) :world)
-  (send *arrow* :rotate (deg2rad 30) :y)
-  (send *arrow* :translate (float-vector 0 80 80) :world)
+  (send *c* :translate (float-vector 0 0 (* 1 height)) :world)
+  (send *c* :rotate (deg2rad 30) :y)
+  (send *c* :translate (float-vector 0 80 80) :world)
 
   ;;調整
-  (send *arrow* :translate (float-vector 0 adj 0))
+  (send *c* :translate (float-vector 0 adj 0))
 
-  (send *arrow* :translate (float-vector adj2 0 0))
+  (send *c* :translate (float-vector adj2 0 0))
 
   (send *pr2* :rarm :inverse-kinematics
-	*arrow*
+	*c*
 	:move-target (car (send *peeler* :attention))
 	:rotation-axis t
 	:debug-view t)
@@ -424,9 +426,9 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :translate (float-vector 0 -80 -80) :world)
+  (send *c* :translate (float-vector 0 -80 -80) :world)
   (send *pr2* :rarm :inverse-kinematics
-	*arrow*
+	*c*
 	:move-target (car (send *peeler* :attention))
 	:rotation-axis t
 	:debug-view t)
@@ -440,9 +442,9 @@
   (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
 
   (until *cb-flag*
-    (send *arrow* :translate (float-vector 0 0 (* 10 -1)) :world)
+    (send *c* :translate (float-vector 0 0 (* 10 -1)) :world)
     (send *pr2* :rarm :inverse-kinematics
-  	  *arrow*
+  	  *c*
 	  :move-target (car (send *peeler* :attention))
   	  :rotation-axis t
   	  :debug-view t)
@@ -459,20 +461,21 @@
 
 (defun finish-touch ()
   ;; 手を少し上に
-  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(0 0 150) :world)
+  (setq *c* (make-coords))
+  (send *c* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *c* :translate #f(0 0 150) :world)
   (send *pr2* :rarm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
+  	(send *c* :copy-worldcoords)
   	:rotation-axis t
   	:debug-view t)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(0 150 0) :world)
+  (send *c* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *c* :translate #f(0 150 0) :world)
   (send *pr2* :rarm :inverse-kinematics
-  	(send *arrow* :copy-worldcoords)
+  	(send *c* :copy-worldcoords)
   	:rotation-axis t
   	:debug-view t)
   (send *viewer* :draw-objects)
@@ -484,12 +487,12 @@
 
 (defun exec-peel ()
   ;; 剥き終わり
-  (send *arrow* :rotate (deg2rad -30) :y)
-  (send *arrow* :translate (float-vector (* (+ width 20) -1) 0 0) )
-  (send *arrow* :rotate (deg2rad 30) :y)
+  (send *c* :rotate (deg2rad -30) :y)
+  (send *c* :translate (float-vector (* (+ width 20) -1) 0 0) )
+  (send *c* :rotate (deg2rad 30) :y)
 
   (send *pr2* :rarm :inverse-kinematics
-	*arrow*
+	*c*
 	:move-target (car (send *peeler* :attention))
 	:rotation-axis t
 	:debug-view t)
