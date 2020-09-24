@@ -645,6 +645,49 @@
   (warn "please run (reset-larm)~&")
   )
 
+(defun regrasp-carrot ()
+  (send *pr2* :larm :end-coords :assoc *carrot*)
+
+  ;; 置く
+  (send *c-arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ height 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
+  
+  (send *c-arrow* :translate #f(0 0 80) :world)
+  (send *pr2* :larm :inverse-kinematics
+        (send *c-arrow* :copy-worldcoords)
+        :move-target *carrot*
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *c-arrow* :translate #f(0 0 -80) :world)
+  (send *pr2* :larm :inverse-kinematics
+        (send *c-arrow* :copy-worldcoords)
+        :move-target *carrot*
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  ;; release carrot
+  (send *pr2* :larm :end-coords :dissoc *carrot*)
+  (send *ri* :stop-grasp :larm :wait t)
+
+  ;; regrasp carrot
+  (send *pr2* :larm :end-coords :assoc *carrot*)
+  (send *ri* :start-grasp :larm :wait t)
+
+  (send *ri* :start-grasp :larm :wait t :gain 0.1)
+
+  ;; set carrot
+  (send *c-arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 1100) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
+  (set-carrot)
+  
+  (warn "please run (set-carrot-2)~&")
+  )
+
 (defun reset-larm ()
   ;; 左手を少し上に
   (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))

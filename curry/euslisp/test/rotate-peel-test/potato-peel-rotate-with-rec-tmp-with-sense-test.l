@@ -617,6 +617,49 @@
   (warn "please run (reset-larm)~&")
   )
 
+(defun put-potato ()
+  (send *pr2* :larm :end-coords :assoc *potato*)
+
+  ;; 置く
+  (send *p-arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 (+ 850.0 (/ height 2))) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
+  
+  (send *p-arrow* :translate #f(0 0 80) :world)
+  (send *pr2* :larm :inverse-kinematics
+	(send *p-arrow* :copy-worldcoords)
+	:move-target *potato*
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (send *p-arrow* :translate #f(0 0 -80) :world)
+  (send *pr2* :larm :inverse-kinematics
+	(send *p-arrow* :copy-worldcoords)
+	:move-target *potato*
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  ;; release potato
+  (send *pr2* :larm :end-coords :dissoc *potato*)
+  (send *ri* :stop-grasp :larm :wait t)
+
+  ;; regrasp potato
+  (send *pr2* :larm :end-coords :assoc *potato*)
+  (send *ri* :start-grasp :larm :wait t)
+
+  (send *ri* :start-grasp :larm :wait t :gain 0.05)
+
+  ;; set potato
+  (send *p-arrow* :newcoords (make-coords :pos (float-vector 500.0 2000.0 1100) :rot #2f((0.0 -1.0 0.0) (1.0 0.0 0.0) (0.0 0.0 1.0))))
+  (set-potato)
+
+  (warn "please run (set-potato-2)~&")
+  )
+
 (defun reset-larm ()
   ;; 左手を少し上に
   (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
