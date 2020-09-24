@@ -182,6 +182,8 @@
   (send *arrow* :translate #f(0 -20 0) :world)
   (send *arrow* :rotate (deg2rad 70) :y)
 
+  (send *arrow* :translate #f(-10 -5 -5) :world)
+
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
   (send *arrow* :translate #f(0 -100 100) :world)
@@ -413,7 +415,7 @@
 	:rotation-axis t
 	:debug-view t)
   (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
   (send *ri* :wait-interpolation)
   
   ;; set pose
@@ -423,7 +425,7 @@
 	:rotation-axis t
 	:debug-view t)
   (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
   (send *ri* :wait-interpolation)
 
   (warn "please run (put-potato)~%")  

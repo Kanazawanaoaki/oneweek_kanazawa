@@ -231,7 +231,7 @@
   (send *arrow* :translate (float-vector 0 adj 0))
 
   ;; 少し上にするために
-  (setq offset 10)
+  (setq offset 50)
  
   (send *arrow* :translate (float-vector 0 0 offset))  
   (send *pr2* :rarm :inverse-kinematics
@@ -306,7 +306,7 @@
   (send *arrow* :translate (float-vector 0 adj 0))
 
   ;; 少し上にするために
-  (setq offset 10)
+  (setq offset 50)
  
   (send *arrow* :translate (float-vector 0 0 offset))  
   (send *pr2* :rarm :inverse-kinematics

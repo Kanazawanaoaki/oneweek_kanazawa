@@ -137,8 +137,13 @@
 (load "../../model/potato-new-type.l")
 
 (setq width (+ (* width 2) 30))
+
 (setq *potato* (potato :w  width :l length :h height))
-(send *potato* :newcoords (send obj-coord :copy-worldcoords))
+(send *potato* :newcoords (make-coords :pos (send obj-coord :worldpos)))
+(send *potato* :rotate (deg2rad 90) :z :world)
+(send *potato* :rotate (deg2rad 180) :x)
+
+;; (send *potato* :newcoords (send obj-coord :copy-worldcoords))
 
 (send *potato* :translate (float-vector (* (- width 30) -0.25) 0 0))
 
@@ -199,6 +204,8 @@
   (send *arrow* :rotate (deg2rad 90) :z :world)
   (send *arrow* :rotate (deg2rad 45) :y)
 
+  
+
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
   (send *arrow* :translate #f(0 -100 100) :world)
@@ -226,7 +233,12 @@
   (warn "please run  (caging-test) ~%")
   )
 
+(setq adj2 0)
+
 (defun caging-test ()
+  (send *arrow* :newcoords (send (send *pr2* :larm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate (float-vector 0 0 (+ (/ height 3) adj2)) :world)
+  
   (send *arrow* :translate (float-vector 0 (* num -1) 0) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
@@ -236,7 +248,8 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-  (send *arrow* :translate (float-vector 0 (* num 1.5) 0) :world)
+  ;; (send *arrow* :translate (float-vector 0 (* num 1.5) 0) :world)
+  (send *arrow* :translate (float-vector 0 (* num 1) 0) :world)
   (send *pr2* :larm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t
