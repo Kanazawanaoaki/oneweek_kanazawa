@@ -403,7 +403,7 @@
   (warn "please run (reset-larm)~&")
   )
 
-(defun put-potato ()
+(defun regrasp-potato ()
   (send *pr2* :larm :end-coords :assoc *potato*)
 
   ;; 置く
