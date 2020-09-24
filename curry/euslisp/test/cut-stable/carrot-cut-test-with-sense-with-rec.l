@@ -551,6 +551,78 @@
   (warn "or please run (set-cut-2) ~%")
   )
 
+(defun cut-test2 ()
+  (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
+  (send *arrow* :translate #f(0 0 150) :world)
+  (send *pr2* :rarm :inverse-kinematics
+	(send *arrow* :copy-worldcoords)
+	:rotation-axis nil
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+
+  ;; 少し上に包丁を
+
+  (send *arrow* :newcoords (send *cut-point-1* :copy-worldcoords))
+  (send *arrow* :translate (float-vector 0 0 (* height 1)))
+
+  ;;調整
+  ;; (send *arrow* :translate #f(0 10 0))
+  (send *arrow* :translate (float-vector 0 adj 0))
+
+  ;; 少し上にするために
+  (setq offset 10)
+ 
+  (send *arrow* :translate (float-vector 0 0 offset))  
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *knife* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+  
+
+  (send *arrow* :translate (float-vector 0 0 (* offset -1)))  
+  (send *pr2* :rarm :inverse-kinematics
+	*arrow*
+	:move-target (car (send *knife* :attention))
+	:rotation-axis t
+	:debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
+  (send *ri* :wait-interpolation)
+
+  (setq interval 20)
+  (dotimes (i (+ (round (/ height interval)) 1))
+    (send *arrow* :translate (float-vector (* interval 1) 0 (/ interval -2)))
+    (send *pr2* :rarm :inverse-kinematics
+	  *arrow*
+	  :move-target (car (send *knife* :attention))
+	  :rotation-axis t
+	  :debug-view t)
+    (send *viewer* :draw-objects)
+    (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
+    (send *ri* :wait-interpolation)
+
+    (send *arrow* :translate (float-vector (* interval -1) 0 (/ interval -2)))
+    (send *pr2* :rarm :inverse-kinematics
+	  *arrow*
+	  :move-target (car (send *knife* :attention))
+	  :rotation-axis t
+	  :debug-view t)
+    (send *viewer* :draw-objects)
+    (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
+    (send *ri* :wait-interpolation)
+
+    )
+  
+  (warn "you can retry (cut-test), (continue-cut 4) or you want to finish please run (finish-pose)  ~%")
+  (warn "or please run (set-cut-2) ~%")
+  )
 
 (defun continue-cut (num)
   (setq interval 10)
