@@ -188,10 +188,12 @@
   (send *ri* :wait-interpolation)
 
   ;; じゃがいもの掴む所に
+  (send *potato* :translate #f(-10 -20 -10) :world)
+  
   (send *arrow* :newcoords (send *potato* :copy-worldcoords))
   (send *arrow* :rotate (deg2rad 70) :y)
 
-  (send *arrow* :translate #f(-10 -20 -10) :world)
+  ;; (send *arrow* :translate #f(-10 -20 -10) :world)
 
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
