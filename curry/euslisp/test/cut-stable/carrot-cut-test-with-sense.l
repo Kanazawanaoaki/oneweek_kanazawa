@@ -90,7 +90,7 @@
   (when msg
     (let ((y nil))
       (setq y (send msg :wrench :force :y))
-      (if (> y -6)
+      (if (> y 0)
 	  (progn 
 	    (setq *cb-flag* t)
 	    (format t "OK!! ~A ~%" y)
@@ -280,6 +280,7 @@
 
   (setq interval 10)
 
+  (setq *topic-name* "/right_endeffector/wrench")
   (setq *cb-flag* nil)
   (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
     

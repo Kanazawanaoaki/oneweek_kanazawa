@@ -109,7 +109,7 @@
 
 
 ;; subscribeして認識
-(ros::subscribe *topic-name* jsk_recognition_msgs::BoundingBoxArray #'object-pose-cb 1)
+;; (ros::subscribe *topic-name* jsk_recognition_msgs::BoundingBoxArray #'object-pose-cb 1)
 (setq *b* (instance ros::transform-broadcaster :init))
 
 (print 3)
@@ -119,13 +119,16 @@
 (objects (list *cube* *pr2*))
 
 (setq found-obj nil)
-;; (do-until-key ;;
 (until found-obj
   (print 4)
 
   (x::window-main-one) ;; IRT viewerの視点を変えられる。見にくければ変えよう
-  (ros::spin-once)
-  (ros::sleep)
+
+  (setq msg (one-shot-subscribe *topic-name* jsk_recognition_msgs::BoundingBoxArray))
+  (object-pose-cb msg)
+  
+  ;; (ros::spin-once)
+  ;; (ros::sleep)
   )
 
 
@@ -150,11 +153,8 @@
 (setq interval height)
 
 
-;; トピックなどを定義
-(defvar *topic-name* "/right_endeffector/wrench")
-
 ;; ros init
-;; (ros::roseus "wrench_listener" :anonymous t)
+(setq *topic-name* "/right_endeffector/wrench")
 (ros::load-ros-manifest "geometry_msgs")
 (setq *cb-flag* nil)
 
@@ -349,7 +349,7 @@
 
   (setq *topic-name* "/right_endeffector/wrench")
   (setq *cb-flag* nil)
-  (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
+  ;; (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
     
   (until *cb-flag*
     (print 4)
@@ -362,9 +362,12 @@
     (send *viewer* :draw-objects)
     (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
     (send *ri* :wait-interpolation)
+
+    (setq msg (one-shot-subscribe *topic-name* geometry_msgs::WrenchStamped))
+    (wrench-y-cb msg)
     
-    (ros::spin-once)
-    (ros::sleep)
+    ;; (ros::spin-once)
+    ;; (ros::sleep)
     )
 
   (send *pr2* :angle-vector (send *ri* :state :potentio-vector))
@@ -380,8 +383,9 @@
 
   (setq interval 5)
 
+  (setq *topic-name* "/right_endeffector/wrench")
   (setq *cb-flag* nil)
-  (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb-2)
+  ;; (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
     
   (until *cb-flag*
     (print 4)
@@ -394,9 +398,12 @@
     (send *viewer* :draw-objects)
     (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
     (send *ri* :wait-interpolation)
+
+    (setq msg (one-shot-subscribe *topic-name* geometry_msgs::WrenchStamped))
+    (wrench-y-cb-2 msg)
     
-    (ros::spin-once)
-    (ros::sleep)
+    ;; (ros::spin-once)
+    ;; (ros::sleep)
     )
 
   (send *pr2* :angle-vector (send *ri* :state :potentio-vector))
@@ -422,8 +429,9 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
+  (setq *topic-name* "/right_endeffector/wrench")
   (setq *cb-flag* nil)
-  (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-z-cb)
+  ;; (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-z-cb)
     
   (until *cb-flag*
     (print 4)
@@ -437,8 +445,11 @@
     (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
     (send *ri* :wait-interpolation)
     
-    (ros::spin-once)
-    (ros::sleep)
+    (setq msg (one-shot-subscribe *topic-name* geometry_msgs::WrenchStamped))
+    (wrench-y-cb-2 msg)
+
+    ;; (ros::spin-once)
+    ;; (ros::sleep)
     )
 
   (send *pr2* :angle-vector (send *ri* :state :potentio-vector))

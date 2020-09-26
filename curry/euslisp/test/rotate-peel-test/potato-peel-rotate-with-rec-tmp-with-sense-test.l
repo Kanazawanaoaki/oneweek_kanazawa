@@ -103,7 +103,7 @@
 
 
 ;; subscribeして認識
-(ros::subscribe *topic-name* jsk_recognition_msgs::BoundingBoxArray #'object-pose-cb 1)
+;; (ros::subscribe *topic-name* jsk_recognition_msgs::BoundingBoxArray #'object-pose-cb 1)
 (setq *b* (instance ros::transform-broadcaster :init))
 
 (print 3)
@@ -113,13 +113,16 @@
 (objects (list *cube* *pr2*))
 
 (setq found-obj nil)
-;; (do-until-key ;;
 (until found-obj
   (print 4)
 
   (x::window-main-one) ;; IRT viewerの視点を変えられる。見にくければ変えよう
-  (ros::spin-once)
-  (ros::sleep)
+
+  (setq msg (one-shot-subscribe *topic-name* jsk_recognition_msgs::BoundingBoxArray))
+  (object-pose-cb msg)
+
+  ;; (ros::spin-once)
+  ;; (ros::sleep)
   )
 
 
@@ -132,7 +135,7 @@
 (setq *potato* (potato :w  width :l length :h height))
 (send *potato* :newcoords (send obj-coord :copy-worldcoords))
 (send *potato* :rotate (deg2rad 180) :x)
-(send *potato* :cut)
+;; (send *potato* :cut)
 (objects (list *potato* *pr2* *cutting-board* *kitchen*))
 (send *irtviewer* :look-all
       (geo::make-bounding-box 
@@ -144,6 +147,7 @@
 (setq *y-thre* -11)
 
 ;; add for sense
+(setq *topic-name* "/segmentation_decomposer/boxes")
 (ros::load-ros-manifest "geometry_msgs")
 (setq *cb-flag* nil)
 (defun wrench-y-cb (msg)
@@ -193,7 +197,7 @@
 
   ;; (send *arrow* :translate #f(-10 -15 0) :world)
   ;; (send *arrow* :translate #f(20 5 -10) :world)
-  (send *arrow* :translate #f(-10 -5 -5) :world)
+  (send *arrow* :translate #f(-10 -15 -5) :world)
   
   ;;gripperを開く
   (send *ri* :stop-grasp :larm :wait t)
@@ -343,9 +347,9 @@
   (send *ri* :wait-interpolation)
 
   ;; 皮剥き始める所
-  (defvar *topic-name* "/right_endeffector/wrench")
+  (setq *topic-name* "/right_endeffector/wrench")
   (setq *cb-flag* nil)
-  (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
+  ;; (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
   
   (until *cb-flag*
     (send *c* :translate (float-vector 0 0 (* 10 -1)) :world)
@@ -357,9 +361,12 @@
     (send *viewer* :draw-objects)
     (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
     (send *ri* :wait-interpolation)
+
+    (setq msg (one-shot-subscribe *topic-name* geometry_msgs::WrenchStamped))
+    (wrench-y-cb msg)
     
-    (ros::spin-once)
-    (ros::sleep)
+    ;; (ros::spin-once)
+    ;; (ros::sleep)
     )
 
   ;; 剥き終わり
@@ -432,9 +439,9 @@
   (send *ri* :wait-interpolation)
 
   ;; 皮剥き始める所
-  (defvar *topic-name* "/right_endeffector/wrench")
+  (setq *topic-name* "/right_endeffector/wrench")
   (setq *cb-flag* nil)
-  (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
+  ;; (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-y-cb)
   
   (until *cb-flag*
     (send *c* :translate (float-vector 0 0 (* 10 -1)) :world)
@@ -446,9 +453,12 @@
     (send *viewer* :draw-objects)
     (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
     (send *ri* :wait-interpolation)
+
+    (setq msg (one-shot-subscribe *topic-name* geometry_msgs::WrenchStamped))
+    (wrench-y-cb msg)
     
-    (ros::spin-once)
-    (ros::sleep)
+    ;; (ros::spin-once)
+    ;; (ros::sleep)
     )
 
   (warn "please run  (finish-touch) or (exec-peel)~%")
