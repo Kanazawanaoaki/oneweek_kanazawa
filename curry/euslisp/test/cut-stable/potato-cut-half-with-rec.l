@@ -375,16 +375,6 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
   (send *ri* :wait-interpolation)
 
-  ;; (send *arrow* :newcoords (send (car (send *knife* :attention)) :copy-worldcoords))
-  ;; (send *arrow* :translate (float-vector 0 0 50) :world)
-  ;; (send *pr2* :rarm :inverse-kinematics
-  ;; 	*arrow*
-  ;; 	:move-target (car (send *knife* :attention))
-  ;; 	:rotation-axis t
-  ;; 	:debug-view t)
-  ;; (send *viewer* :draw-objects)
-  ;; (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
-  ;; (send *ri* :wait-interpolation)
   (send *arrow* :newcoords (send (car (send *knife* :attention)) :copy-worldcoords))
   (send *arrow* :translate (float-vector -30 30 50) :world)
   (send *pr2* :rarm :inverse-kinematics
@@ -417,15 +407,23 @@
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
   (send *ri* :wait-interpolation)
+
+  (send *pr2* :rarm :angle-vector #f(-21.6411 19.3302 -50.7032 -121.525 184.89 -97.5873 497.363))
+  (send *ri* :angle-vector (send *pr2* :angle-vector) nil :rarm-controller);; 右手だけ実機に送る  
+  (send *ri* :wait-interpolation)
   
   ;; set pose
-  (send *arrow* :newcoords (make-coords :pos #f(800.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
-  (send *pr2* :rarm :inverse-kinematics
-	*arrow*
-	:rotation-axis t
-	:debug-view t)
-  (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
+  ;; (send *arrow* :newcoords (make-coords :pos #f(800.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
+  ;; (send *pr2* :rarm :inverse-kinematics
+  ;; 	*arrow*
+  ;; 	:rotation-axis t
+  ;; 	:debug-view t)
+  ;; (send *viewer* :draw-objects)
+  ;; (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
+  ;; (send *ri* :wait-interpolation)
+
+  (send *pr2* :rarm :angle-vector #f(-76.0419 52.6448 -108.075 -109.744 357.997 -9.46491 370.703))
+  (send *ri* :angle-vector (send *pr2* :angle-vector) nil :rarm-controller);; 右手だけ実機に送る
   (send *ri* :wait-interpolation)
 
   (warn "please run (put-potato)~%")  
@@ -545,6 +543,7 @@
   (grasp-knife-hor)
   (cut-test)
   (finish-pose)
+  (put-potato)
   (reset-larm)
   )
 
@@ -556,6 +555,7 @@
   (set-knife-hor)
   (cut-test)
   (finish-pose)
+  (put-potato)
   (reset-larm)
   )
 
@@ -566,5 +566,6 @@
   (grasp-knife-hor)
   (cut-test)
   (finish-pose)
+  (put-potato)
   (reset-larm)
   )

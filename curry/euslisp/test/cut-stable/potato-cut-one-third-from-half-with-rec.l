@@ -385,11 +385,11 @@
   (warn "you can retry (cut-test), (continue-cut 4) or you want to finish please run (finish-pose-4)  ~%")
   )
 
-(defun move-potato-4 ()
-  (send p1 :dissoc p3)
-  (send p3 :translate #f(0 100 0) :world)
-  (send *viewer* :draw-objects)
-  )
+;; (defun move-potato-4 ()
+;;   (send p1 :dissoc p3)
+;;   (send p3 :translate #f(0 100 0) :world)
+;;   (send *viewer* :draw-objects)
+;;   )
 
 (defun finish-pose ()
   (send *pr2* :angle-vector (send *ri* :state :potantio-vector))
@@ -441,30 +441,39 @@
   )
 
 (defun finish-pose-4 ()
-  (move-potato-4)
+  ;; (move-potato-4)
   (finish-pose)
   (warn "please run (cut-test-5)~%")  
   )
 
-(defun move-potato-5 ()
-  (send p1 :dissoc p2)
-  (send p2 :translate #f(0 90 0) :world)
-  (send *viewer* :draw-objects)
-  )
+;; (defun move-potato-5 ()
+;;   (send p1 :dissoc p2)
+;;   (send p2 :translate #f(0 90 0) :world)
+;;   (send *viewer* :draw-objects)
+;;   )
 
 (defun finish-pose-5 ()
-  (move-potato-5)
+  ;; (move-potato-5)
   (finish-pose)
 
-  ;; set pose
-  (send *arrow* :newcoords (make-coords :pos #f(800.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
-  (send *pr2* :rarm :inverse-kinematics
-	*arrow*
-	:rotation-axis t
-	:debug-view t)
-  (send *viewer* :draw-objects)
-  (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
+  (send *pr2* :rarm :angle-vector #f(-21.6411 19.3302 -50.7032 -121.525 184.89 -97.5873 497.363))
+  (send *ri* :angle-vector (send *pr2* :angle-vector) nil :rarm-controller);; 右手だけ実機に送る  
   (send *ri* :wait-interpolation)
+
+  ;; set pose
+  ;; (send *arrow* :newcoords (make-coords :pos #f(800.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
+  ;; (send *pr2* :rarm :inverse-kinematics
+  ;; 	*arrow*
+  ;; 	:rotation-axis t
+  ;; 	:debug-view t)
+  ;; (send *viewer* :draw-objects)
+  ;; (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
+  ;; (send *ri* :wait-interpolation)
+
+  (send *pr2* :rarm :angle-vector #f(-76.0419 52.6448 -108.075 -109.744 357.997 -9.46491 370.703))
+  (send *ri* :angle-vector (send *pr2* :angle-vector) nil :rarm-controller);; 右手だけ実機に送る
+  (send *ri* :wait-interpolation)
+
   )
 
 (defun now-devel ()

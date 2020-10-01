@@ -642,6 +642,19 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
   (send *ri* :wait-interpolation)
 
+  (send *arrow* :newcoords (send (car (send *knife* :attention)) :copy-worldcoords))
+  (send *arrow* :translate (float-vector 0 100 50) :world)
+  (send *pr2* :rarm :inverse-kinematics
+        *arrow*
+        :move-target (car (send *knife* :attention))
+        :rotation-axis t
+        :debug-view t)
+  (send *viewer* :draw-objects)
+  (send *ri* :angle-vector (send *pr2* :angle-vector) 1000)
+  (send *ri* :wait-interpolation)
+
+  (setq *av1* (send *pr2* :rarm :angle-vector))
+
   ;; set pose
   (send *arrow* :newcoords (make-coords :pos #f(800.191 2189.104 866.677) :rpy #f(-2.341 -0.222 -0.482)))
   (send *pr2* :rarm :inverse-kinematics
@@ -650,7 +663,9 @@
 	:debug-view t)
   (send *viewer* :draw-objects)
   (send *ri* :angle-vector (send *pr2* :angle-vector) 6000)
-  (send *ri* :wait-interpolation)  
+  (send *ri* :wait-interpolation)
+
+  (setq *av2* (send *pr2* :rarm :angle-vector))
 
   (warn "please run (put-carrot)~%")  
   )
