@@ -514,7 +514,6 @@
     
   ;; armが接触するか，一定距離動かす関数
   (send *arrow* :translate (float-vector 0 0 (* height 1)))
-  ;; (send *arrow* :translate (float-vector 0 0 (* height -1)))
   (send *pr2* :rarm :inverse-kinematics
 	*arrow*
 	:move-target (car (send *knife* :attention))
@@ -615,7 +614,7 @@
   (ros::subscribe "/right_endeffector/wrench" geometry_msgs::WrenchStamped #'wrench-z-cb)
     
   ;; armが接触するか，一定距離動かす関数
-  (send *arrow* :translate (float-vector 0 0 (+ 50 10)))
+  (send *arrow* :translate (float-vector 0 (+ 50 10) 0))
   (send *pr2* :rarm :inverse-kinematics
         *arrow*
         :move-target (car (send *knife* :attention))

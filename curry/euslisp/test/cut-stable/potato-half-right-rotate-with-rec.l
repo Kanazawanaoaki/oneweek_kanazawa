@@ -67,11 +67,10 @@
 
 
 ;; トピックなどを定義
-;; (defvar *topic-name* "/segmentation_decomposer/boxes")
-(defvar *topic-name* "/cutting_board_right/segmentation_decomposer/boxes")
+(defvar *topic-name* "/segmentation_decomposer/boxes")
 
 ;; ros init
-(ros::roseus "potato_rec_test" :anonymous t)
+(ros::roseus "carrot_rec_test" :anonymous t)
 (ros::load-ros-manifest "jsk_recognition_msgs")
 (setq *l* (instance ros::transform-listener :init))
 (setq found-obj nil)
@@ -128,7 +127,6 @@
   (ros::sleep)
   )
 
-
 ;; ikを解く
 (load "models/arrow-object.l")
 (setq *arrow* (arrow))
@@ -162,8 +160,8 @@
 (send p1 :assoc p2)
 (send p1 :assoc p3)
 
-;; test
-(send p1 :translate (float-vector (/ (- width 30) -4) 0 0))
+(send p1 :rotate (deg2rad 90) :x :world)
+(send p1 :translate (float-vector 0 0 (* -0.25 (- width 30))) :world)
 
 
 (objects (list *potato* *pr2* *cutting-board* *kitchen*))
@@ -173,7 +171,6 @@
 (send *irtviewer* :draw-objects)
 
 (warn "please run  (grasp-potato-half) ~%")
-
 
 (defun grasp-potato-half ()
   ;;少し上に
@@ -343,7 +340,7 @@
 
 (defun now-devel ()
   ;; (set-potato :w width :l length :h height)
-  (grasp-potato-peel)
+  (grasp-potato-half)
   (put-potato)
   (reset-larm)
   )
@@ -352,7 +349,7 @@
 
 (defun now-test ()
   ;; (set-potato :w width :l length :h height)
-  (grasp-potato-peel)
+  (grasp-potato-half)
   (put-potato)
   (reset-larm)
   )
@@ -360,7 +357,7 @@
 
 (defun exec-all ()
   ;; (set-potato :w width :l length :h height)
-  (grasp-potato-peel)
+  (grasp-potato-half)
   (put-potato)
   (reset-larm)
   )
