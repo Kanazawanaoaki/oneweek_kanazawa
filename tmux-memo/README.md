@@ -35,4 +35,19 @@ tmux [command [flags]]
 ## キー操作
 https://qiita.com/zwirky/items/adbf22abad7d7822456b
 
-`Ctl+b c` 新規
+`Ctr+b c` 新規window
+`Ctr+b n` 次のwindowに  
+`Ctr+b p` 前のwindowに  
+
+`Ctr+b %` ペインを上下に分割
+`Ctr+b o` ペインを移動
+
+
+
+
+## コピーモード
+
+`Ctr+b [' コピーモードに入る  
+`Ctr + space` 選択開始  
+`Ctr + w` 選択解除，コピーモードをやめる  
+`Esc` or `q` コピーモードをやめる  
