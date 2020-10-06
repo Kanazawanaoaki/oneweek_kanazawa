@@ -24,4 +24,3 @@
   (format t "now coords ~A ~%" (send *arrow* :copy-worldcoords))
   )
 
-
