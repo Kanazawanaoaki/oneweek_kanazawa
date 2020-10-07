@@ -289,7 +289,7 @@
      (setq *cut-point-5* (make-cascoords :pos (float-vector 0 0 0)))
      (send *cut-point-5* :rotate (deg2rad -90) :z)
      (send *cut-point-5* :rotate (deg2rad 90) :x)
-     (send p4 :assoc *cut-point-6*)
+     (send p4 :assoc *cut-point-5*)
 
      (send p4 :newcoords (send self :copy-worldcoords))
      (send self :assoc p4)
