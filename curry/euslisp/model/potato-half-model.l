@@ -235,6 +235,71 @@
      (push p8 r)
      (setq geo::bodies r))
    )
+  (:cut2
+   ()
+   (let (b1 b2 b3 b4 b5 b6 b7 r)
+     (setq b1 (make-ellipsoid width length height))
+
+     (setq b7 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b7 :locate (float-vector (- (/ width -2) 15) 0 0))
+     (setq b-list (body-cut-x b1 b7))
+     (setq p7 (elt b-list 0))
+     (setq b1 (elt b-list 1))
+     
+     (setq b7 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b7 :locate (float-vector (+ (/ width 2) 15) 0 0))
+     (setq b-list (body-cut-x b1 b7))
+     (setq p8 (elt b-list 0))
+     (setq b1 (elt b-list 1))
+     
+     (setq b2 (make-cube (* 2 width) (* 2 length) (* 2 height)))
+     (send b2 :locate (float-vector (+ (* -1 width) 1) 0 0))
+     (setq b-list (body-cut-x b1 b2))
+     ;; (setq b3 (elt b-list 0))
+     ;; (setq b4 (elt b-list 1))
+     (setq p1 (elt b-list 0))
+     (setq p4 (elt b-list 1))
+
+     (send p1 :set-color :saddlebrown)
+     (send p4 :set-color :saddlebrown)
+     (send p7 :set-color :saddlebrown)
+     (send p8 :set-color :saddlebrown)
+
+     (send p4 :assoc p1)
+     (send p4 :assoc p7)
+     (send p4 :assoc p8)
+
+     (setq *cut-point-1* (make-cascoords :pos (float-vector (- (/ width 2) 15) 0 (/ height -2))))
+     (send *cut-point-1* :rotate (deg2rad 90) :z)
+     (send p1 :assoc *cut-point-1*)
+
+     (setq *cut-point-2* (make-cascoords :pos (float-vector (+ (/ width -2) 15) 0 (/ height -2))))
+     (send *cut-point-2* :rotate (deg2rad -90) :z)
+     (send p1 :assoc *cut-point-2*)
+     
+     (setq *cut-point-3* (make-cascoords :pos (float-vector 0 0 (/ height -2))))
+     (send *cut-point-3* :rotate (deg2rad 90) :z)
+     (send p4 :assoc *cut-point-3*)
+
+     (setq *cut-point-4* (make-cascoords :pos (float-vector 0 0 0)))
+     (send *cut-point-4* :rotate (deg2rad 90) :y)
+     (send *cut-point-4* :rotate (deg2rad 90) :z)
+     (send p1 :assoc *cut-point-4*)
+     
+     (setq *cut-point-5* (make-cascoords :pos (float-vector 0 0 0)))
+     (send *cut-point-5* :rotate (deg2rad -90) :z)
+     (send *cut-point-5* :rotate (deg2rad 90) :x)
+     (send p4 :assoc *cut-point-6*)
+
+     (send p4 :newcoords (send self :copy-worldcoords))
+     (send self :assoc p4)
+     
+     (push p1 r)
+     (push p4 r)
+     (push p7 r)
+     (push p8 r)
+     (setq geo::bodies r))
+   )
   )
 
 (defun potato (&rest args) (instance* potato-object :init args))
