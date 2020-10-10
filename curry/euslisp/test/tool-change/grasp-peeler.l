@@ -1,8 +1,8 @@
 (load "tool-pos.l")
 
-(warn "please run (grasp-knife) ~%")
+(warn "please run (grasp-peeler) ~%")
 
-(defun grasp-knife ()
+(defun grasp-peeler ()
   ;; 手を上げる
   (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
   (send *arrow* :translate #f(0 0 50) :world)
@@ -16,13 +16,12 @@
 
 
   ;;掴む位置
-  (send *arrow* :newcoords (send *knife* :copy-worldcoords))
-  (send *arrow* :translate #f(-12 0 0))
+  (send *arrow* :newcoords (send *peeler* :copy-worldcoords))
   (send *arrow* :rotate (deg2rad -90) :x)
 
   (send *ri* :stop-grasp :rarm :wait t)
 
-  (send *arrow* :translate #f(60 -60 100) :world)
+  (send *arrow* :translate #f(50 -30 100) :world)
   (send *pr2* :rarm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t
@@ -32,7 +31,7 @@
   (send *ri* :wait-interpolation)
 
   
-  (send *arrow* :translate #f(-60 60 -100) :world)  
+  (send *arrow* :translate #f(-50 30 -100) :world)  
   (send *pr2* :rarm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t
@@ -43,8 +42,7 @@
 
   ;; つかむ
   (send *ri* :start-grasp :rarm :wait t :gain 100)
-  (send (send *pr2* :rarm :end-coords) :assoc *knife*)
-
+  (send (send *pr2* :rarm :end-coords) :assoc *peeler*)
 
   ;; 手を上げる
   (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
@@ -59,7 +57,7 @@
 
   ;; 手を上げる
   (send *arrow* :newcoords (send (send *pr2* :rarm :end-coords) :copy-worldcoords))
-  (send *arrow* :translate #f(40 -100 150) :world)
+  (send *arrow* :translate #f(40 0 150) :world)
   (send *pr2* :rarm :inverse-kinematics
 	(send *arrow* :copy-worldcoords)
 	:rotation-axis t
@@ -68,9 +66,6 @@
   (send *ri* :angle-vector (send *pr2* :angle-vector) 4000)
   (send *ri* :wait-interpolation)
 
-
-
-
-  (objects (list *pr2* *cutting-board* *knife*))
+  (objects (list *pr2* *cutting-board* *peeler*))
   )
 
