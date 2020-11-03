@@ -1,0 +1,10 @@
+@startuml
+[*] --> State0
+State0 --> Peel01
+
+state Peel01{
+  [*] --> Grasp
+  Grasp --> Peel01_01
+  
+}
+@enduml
