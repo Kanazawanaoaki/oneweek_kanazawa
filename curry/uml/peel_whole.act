@@ -1,0 +1,6 @@
+@startuml
+[*] --> Peel01
+Peel01 --> Rotate
+Rotate --> Peel02
+Peel02 --> [*]
+@enduml

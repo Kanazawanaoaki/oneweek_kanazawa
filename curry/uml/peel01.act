@@ -1,0 +1,30 @@
+@startuml
+state Peel01{
+  Rec01 --> Grasp01
+  Grasp01 --> Peel01_01
+  Peel01_01 --> Peel01_02
+  Peel01_02 --> Peel01_03
+  Peel01_03 --> Peel01_04
+  Peel01_04 --> Peel01_05
+  Peel01_05 --> Peel01_06
+  Peel01_06 --> Peel01_07
+  Peel01_07 --> Peel01_08
+  Peel01_08 --> Put01
+  Peel01_01 --> Regrasp
+  Peel01_02 --> Regrasp
+  Peel01_03 --> Regrasp
+  Peel01_04 --> Regrasp
+  Peel01_05 --> Regrasp
+  Peel01_06 --> Regrasp
+  Peel01_07 --> Regrasp
+  Peel01_08 --> Regrasp
+  Regrasp --> Peel01_01
+  Regrasp --> Peel01_02
+  Regrasp --> Peel01_03
+  Regrasp --> Peel01_04
+  Regrasp --> Peel01_05
+  Regrasp --> Peel01_06
+  Regrasp --> Peel01_07
+  Regrasp --> Peel01_08
+}
+@enduml
