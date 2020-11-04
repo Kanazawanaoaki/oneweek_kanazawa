@@ -1,15 +1,15 @@
 @startuml
 state Peel01{
-  Rec01 --> Grasp01
-  Grasp01 --> Peel01_01
-  Peel01_01 --> Peel01_02
-  Peel01_02 --> Peel01_03
-  Peel01_03 --> Peel01_04
-  Peel01_04 --> Peel01_05
-  Peel01_05 --> Peel01_06
-  Peel01_06 --> Peel01_07
-  Peel01_07 --> Peel01_08
-  Peel01_08 --> Put01
+  Rec01 -right-> Grasp01
+  Grasp01 -right-> Peel01_01
+  Peel01_01 -right-> Peel01_02
+  Peel01_02 -right-> Peel01_03
+  Peel01_03 -right-> Peel01_04
+  Peel01_04 -right-> Peel01_05
+  Peel01_05 -right-> Peel01_06
+  Peel01_06 -right-> Peel01_07
+  Peel01_07 -right-> Peel01_08
+  Peel01_08 -right-> Put01
   Peel01_01 --> Regrasp
   Peel01_02 --> Regrasp
   Peel01_03 --> Regrasp
@@ -18,13 +18,24 @@ state Peel01{
   Peel01_06 --> Regrasp
   Peel01_07 --> Regrasp
   Peel01_08 --> Regrasp
-  Regrasp --> Peel01_01
-  Regrasp --> Peel01_02
-  Regrasp --> Peel01_03
-  Regrasp --> Peel01_04
-  Regrasp --> Peel01_05
-  Regrasp --> Peel01_06
-  Regrasp --> Peel01_07
-  Regrasp --> Peel01_08
+  Regrasp -up-> Peel01_01
+  Regrasp -up-> Peel01_02
+  Regrasp -up-> Peel01_03
+  Regrasp -up-> Peel01_04
+  Regrasp -up-> Peel01_05
+  Regrasp -up-> Peel01_06
+  Regrasp -up-> Peel01_07
+  Regrasp -up-> Peel01_08
+  Peel01_01 -up-> FailCheck
+  Peel01_02 -up-> FailCheck
+  Peel01_03 -up-> FailCheck
+  Peel01_04 -up-> FailCheck
+  Peel01_05 -up-> FailCheck
+  Peel01_06 -up-> FailCheck
+  Peel01_07 -up-> FailCheck
+  Peel01_08 -up-> FailCheck
+  FailCheck --> Rec01
+  FailCheck -up-> CallHelp
+  CallHelp --> Rec01
 }
 @enduml

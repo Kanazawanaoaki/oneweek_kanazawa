@@ -1,6 +1,6 @@
 @startuml
-[*] --> Peel01
-Peel01 --> Rotate
-Rotate --> Peel02
-Peel02 --> [*]
+[*] -right-> Peel01
+Peel01 -right-> Rotate
+Rotate -right-> Peel02
+Peel02 -right-> [*]
 @enduml
