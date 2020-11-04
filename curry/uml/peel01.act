@@ -34,8 +34,56 @@ state Peel01{
   Peel01_06 -up-> FailCheck
   Peel01_07 -up-> FailCheck
   Peel01_08 -up-> FailCheck
-  FailCheck --> Rec01
+  FailCheck --> Set01
+  Set01 --> Rec01
   FailCheck -up-> CallHelp
   CallHelp --> Rec01
 }
 @enduml
+
+
+/'
+@startuml
+state Peel01{
+  Rec01 -right-> Grasp01
+  Grasp01 -right-> Peel01_01 : grasp succeed
+  Peel01_01 -right-> Peel01_02 : peeled
+  Peel01_02 -right-> Peel01_03 : peeled
+  Peel01_03 -right-> Peel01_04 : peeled
+  Peel01_04 -right-> Peel01_05 : peeled
+  Peel01_05 -right-> Peel01_06 : peeled
+  Peel01_06 -right-> Peel01_07 : peeled
+  Peel01_07 -right-> Peel01_08 : peeled
+  Peel01_08 -right-> Put01 : peeled
+  Peel01_01 --> Regrasp : unstable grasp
+  Peel01_02 --> Regrasp : unstable grasp
+  Peel01_03 --> Regrasp : unstable grasp
+  Peel01_04 --> Regrasp : unstable grasp
+  Peel01_05 --> Regrasp : unstable grasp
+  Peel01_06 --> Regrasp : unstable grasp
+  Peel01_07 --> Regrasp : unstable grasp
+  Peel01_08 --> Regrasp : unstable grasp
+  Regrasp -up-> Peel01_01
+  Regrasp -up-> Peel01_02
+  Regrasp -up-> Peel01_03
+  Regrasp -up-> Peel01_04
+  Regrasp -up-> Peel01_05
+  Regrasp -up-> Peel01_06
+  Regrasp -up-> Peel01_07
+  Regrasp -up-> Peel01_08
+  Grasp01 -up-> FailCheck : grasp fail
+  Peel01_01 -up-> FailCheck : dropped
+  Peel01_02 -up-> FailCheck : dropped
+  Peel01_03 -up-> FailCheck : dropped
+  Peel01_04 -up-> FailCheck : dropped
+  Peel01_05 -up-> FailCheck : dropped
+  Peel01_06 -up-> FailCheck : dropped
+  Peel01_07 -up-> FailCheck : dropped
+  Peel01_08 -up-> FailCheck : dropped
+  FailCheck --> Set01 : able to grasp
+  Set01 --> Rec01
+  FailCheck -up-> CallHelp : unable to grasp
+  CallHelp --> Rec01
+}
+@enduml
+'/
