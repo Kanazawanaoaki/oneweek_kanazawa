@@ -46,40 +46,59 @@ state Peel01{
 @startuml
 state Peel01{
   Rec01 -right-> Grasp01
-  Grasp01 -right-> Peel01_01 : grasp succeed
-  Peel01_01 -right-> Peel01_02 : peeled
-  Peel01_02 -right-> Peel01_03 : peeled
-  Peel01_03 -right-> Peel01_04 : peeled
-  Peel01_04 -right-> Peel01_05 : peeled
-  Peel01_05 -right-> Peel01_06 : peeled
-  Peel01_06 -right-> Peel01_07 : peeled
-  Peel01_07 -right-> Peel01_08 : peeled
-  Peel01_08 -right-> Put01 : peeled
-  Peel01_01 --> Regrasp : unstable grasp
-  Peel01_02 --> Regrasp : unstable grasp
-  Peel01_03 --> Regrasp : unstable grasp
-  Peel01_04 --> Regrasp : unstable grasp
-  Peel01_05 --> Regrasp : unstable grasp
-  Peel01_06 --> Regrasp : unstable grasp
-  Peel01_07 --> Regrasp : unstable grasp
-  Peel01_08 --> Regrasp : unstable grasp
-  Regrasp -up-> Peel01_01
-  Regrasp -up-> Peel01_02
-  Regrasp -up-> Peel01_03
-  Regrasp -up-> Peel01_04
-  Regrasp -up-> Peel01_05
-  Regrasp -up-> Peel01_06
-  Regrasp -up-> Peel01_07
-  Regrasp -up-> Peel01_08
+  Grasp01 -right-> Check01_01 : grasp succeed
+  Check01_01 -right-> Check01_02 : peeled
+  Check01_02 -right-> Check01_03 : peeled
+  Check01_03 -right-> Check01_04 : peeled
+  Check01_04 -right-> Check01_05 : peeled
+  Check01_05 -right-> Check01_06 : peeled
+  Check01_06 -right-> Check01_07 : peeled
+  Check01_07 -right-> Check01_08 : peeled
+  Check01_08 -right-> Put01 : peeled
+
+  Check01_01 -up-> Peel01_01 : unpeeled
+  Peel01_01 --> Check01_01
+  Check01_02 -up-> Peel01_02 : unpeeled
+  Peel01_02 --> Check01_02
+  Check01_03 -up-> Peel01_03 : unpeeled
+  Peel01_03 --> Check01_03
+  Check01_04 -up-> Peel01_04 : unpeeled
+  Peel01_04 --> Check01_04
+  Check01_05 -up-> Peel01_05 : unpeeled
+  Peel01_05 --> Check01_05
+  Check01_06 -up-> Peel01_06 : unpeeled
+  Peel01_06 -> Check01_06
+  Check01_07 -up-> Peel01_07 : unpeeled
+  Peel01_07 -> Check01_07
+  Check01_08 -up-> Peel01_08 : unpeeled
+  Peel01_08 -> Check01_08
+  
+  Check01_01 --> Regrasp : unstable grasp
+  Check01_02 --> Regrasp : unstable grasp
+  Check01_03 --> Regrasp : unstable grasp
+  Check01_04 --> Regrasp : unstable grasp
+  Check01_05 --> Regrasp : unstable grasp
+  Check01_06 --> Regrasp : unstable grasp
+  Check01_07 --> Regrasp : unstable grasp
+  Check01_08 --> Regrasp : unstable grasp
+  Regrasp -up-> Check01_01
+  Regrasp -up-> Check01_02
+  Regrasp -up-> Check01_03
+  Regrasp -up-> Check01_04
+  Regrasp -up-> Check01_05
+  Regrasp -up-> Check01_06
+  Regrasp -up-> Check01_07
+  Regrasp -up-> Check01_08
+
   Grasp01 -up-> FailCheck : grasp fail
-  Peel01_01 -up-> FailCheck : dropped
-  Peel01_02 -up-> FailCheck : dropped
-  Peel01_03 -up-> FailCheck : dropped
-  Peel01_04 -up-> FailCheck : dropped
-  Peel01_05 -up-> FailCheck : dropped
-  Peel01_06 -up-> FailCheck : dropped
-  Peel01_07 -up-> FailCheck : dropped
-  Peel01_08 -up-> FailCheck : dropped
+  Check01_01 -up-> FailCheck : dropped
+  Check01_02 -up-> FailCheck : dropped
+  Check01_03 -up-> FailCheck : dropped
+  Check01_04 -up-> FailCheck : dropped
+  Check01_05 -up-> FailCheck : dropped
+  Check01_06 -up-> FailCheck : dropped
+  Check01_07 -up-> FailCheck : dropped
+  Check01_08 -up-> FailCheck : dropped
   FailCheck --> Set01 : able to grasp
   Set01 --> Rec01
   FailCheck -up-> CallHelp : unable to grasp

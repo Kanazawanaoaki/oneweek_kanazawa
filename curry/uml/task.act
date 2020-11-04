@@ -1,0 +1,8 @@
+@startuml
+[*] --> Recognition
+Recognition --> Set : not achieved
+Set --> Do : set succeed
+Do --> Recognition
+Recognition -right-> [*] : achieved
+Set --> Recognition : Set fail
+@enduml
