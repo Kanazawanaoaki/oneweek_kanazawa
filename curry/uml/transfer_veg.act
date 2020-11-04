@@ -1,0 +1,7 @@
+@startuml
+[*] --> Set_pose
+Set_pose --> Grasp : find veg
+Grasp --> Put_into_cup : grasp succeed
+Put_into_cup --> Set_pose
+Set_pose --> [*] : no veg
+@enduml
