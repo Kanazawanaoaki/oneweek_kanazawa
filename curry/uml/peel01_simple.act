@@ -1,0 +1,53 @@
+/'
+@startuml
+state Peel01{
+  [*] -right-> Rec01
+  Rec01 -right-> Grasp01
+  Grasp01 -right-> Set_Peel : grasp succeed
+
+  Set_Peel -right-> Check
+  Check -up-> Peel : unpeeled
+  Peel --> Check  
+  Check -right-> Regrasp : unstable grasp
+  Regrasp -left-> Check
+
+  Check --> Finish_Check : peeled
+  Finish_Check -right-> [*] : finished
+  Finish_Check -up-> Set_Peel : unfinished 
+
+  Grasp01 -up-> FailCheck : grasp fail
+  Check -up-> FailCheck : dropped
+  FailCheck --> Set01 : able to grasp
+  Set01 --> Rec01
+  FailCheck -up-> CallHelp : unable to grasp
+  CallHelp --> Rec01
+}
+@enduml
+'/
+
+@startuml
+state Peel01{
+  [*] -right-> Rec01
+  Rec01 -right-> Grasp01
+
+  state peel_set{
+  Grasp01 -right-> Set_Peel : grasp succeed
+  Set_Peel -right-> Check
+  Check -up-> Peel : unpeeled
+  Peel --> Check  
+  Check -right-> Regrasp : unstable grasp
+  Regrasp -left-> Check
+  }
+
+  Check --> Finish_Check : peeled
+  Finish_Check -right-> [*] : finished
+  Finish_Check --up> Set_Peel : unfinished 
+
+  Grasp01 -up-> FailCheck : grasp fail
+  Check -up-> FailCheck : dropped
+  FailCheck --> Set01 : able to grasp
+  Set01 --> Rec01
+  FailCheck -up-> CallHelp : unable to grasp
+  CallHelp --> Rec01
+}
+@enduml
