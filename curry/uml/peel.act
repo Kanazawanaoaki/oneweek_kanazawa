@@ -1,41 +1,69 @@
 @startuml
-[*] --> Peel01
+[*] -right-> Peel01
 
 state Peel01{
-  Rec01 --> Grasp01
-  Grasp01 --> Peel01_01
-  Peel01_01 --> Peel01_02
-  Peel01_02 --> Peel01_03
-  Peel01_03 --> Peel01_04
-  Peel01_04 --> Peel01_05
-  Peel01_05 --> Peel01_06
-  Peel01_06 --> Peel01_07
-  Peel01_07 --> Peel01_08
-  Peel01_08 --> Put01
-}
+  [*] -right-> Rec_01
+  Rec_01 -right-> Grasp_01
 
-Peel01 --> Rotate
+  state peel_set_01x8{
+  Grasp_01 -right-> Set_Peel_01 : grasp succeed
+  Set_Peel_01 -right-> Check_01
+  Check_01 -up-> Peel_01 : unpeeled
+  Peel_01 --> Check_01  
+  Check_01 -right-> Regrasp_01 : unstable grasp
+  Regrasp_01 -left-> Check_01
+  }
+
+  Check_01 --> Finish_Check_01 : peeled
+  Finish_Check_01 -right-> Put_01 : finished
+  Put_01 -right-> [*]
+  Finish_Check_01 --up> Set_Peel_01 : unfinished 
+
+  Grasp_01 -up-> FailCheck_01 : grasp fail
+  Check_01 -up-> FailCheck_01 : dropped
+  FailCheck_01 --> Set_01 : able to grasp
+  Set_01 --> Rec_01
+  FailCheck_01 -up-> CallHelp_01 : unable to grasp
+  CallHelp_01 --> Rec_01
+}
+Peel01 -right-> Rotate
 
 state Rotate{
-  Rec_Rot --> Grasp_Rot
-  Grasp_Rot --> Rotate_Rot
-  Rotate_Rot --> Put_Rot
+  [*] -right-> Rec_Rot
+  Rec_Rot -right-> Grasp_Rot
+  Grasp_Rot -right-> Put_Rot
+  Put_Rot -right-> [*]
 }
 
-Rotate --> Peel02
+Rotate -right-> Peel02
 
 state Peel02{
-  Rec02 --> Grasp02
-  Grasp02 --> Peel02_01
-  Peel02_01 --> Peel02_02
-  Peel02_02 --> Peel02_03
-  Peel02_03 --> Peel02_04
-  Peel02_04 --> Peel02_05
-  Peel02_05 --> Peel02_06
-  Peel02_06 --> Peel02_07
-  Peel02_07 --> Peel02_08
-  Peel02_08 --> Put02
+  [*] -right-> Rec_02
+  Rec_02 -right-> Grasp_02
+
+  state peel_set_02x8{
+  Grasp_02 -right-> Set_Peel_02 : grasp succeed
+  Set_Peel_02 -right-> Check_02
+  Check_02 -up-> Peel_02 : unpeeled
+  Peel_02 --> Check_02  
+  Check_02 -right-> Regrasp_02 : unstable grasp
+  Regrasp_02 -left-> Check_02
+  }
+
+  Check_02 --> Finish_Check_02 : peeled
+  Finish_Check_02 -right-> Put_02 : finished
+  Put_02 -right-> [*]
+  Finish_Check_02 --up> Set_Peel_02 : unfinished 
+
+  Grasp_02 -up-> FailCheck_02 : grasp fail
+  Check_02 -up-> FailCheck_02 : dropped
+  FailCheck_02 --> Set_02 : able to grasp
+  Set_02 --> Rec_02
+  FailCheck_02 -up-> CallHelp_02 : unable to grasp
+  CallHelp_02 --> Rec_02
 }
 
+Peel02 -right-> [*]
 
 @enduml
+
