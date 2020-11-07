@@ -9,7 +9,7 @@
 (defmethod ladle-object
   (:init
    (&rest args &key (name "ladle") (pos (float-vector 0 0 0)) (rot (unit-matrix 3)) &allow-other-keys)
-   (let (link1 b1 b2)
+   (let (link1 b1 b2 b3 b4 b5)
      (send-super* :init :name name args)
 
      ;; definition of link
@@ -30,6 +30,9 @@
      (setq b5 (make-cube 5 10 55))
      (send b5 :locate #f(-7 0 -151))
      (send b5 :rotate (deg2rad 15) :y)
+
+     (send b1 :assoc b4)
+     (send b1 :assoc b5)     
           
      (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list b1 b4 b5) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 

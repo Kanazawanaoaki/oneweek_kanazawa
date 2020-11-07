@@ -21,6 +21,7 @@
 
      (send b1 :set-color :BurlyWood)
      (send b2 :set-color :BurlyWood)
+     (send b1 :assoc b2)
 
      (setq link1 (instance bodyset-link :init (make-cascoords) :bodies (list b1 b2) :weight 1 :centroid (float-vector 0.0 0.0 0.0) :inertia-tensor #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0))))
 
