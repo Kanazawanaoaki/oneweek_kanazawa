@@ -21,14 +21,26 @@
      (send b3 :locate #f(0 0 51))
 
      (setq b1 (body- b1 b3))
-     (send b1 :locate #f(25 0 -200))
+     
+     ;; (send b1 :locate #f(25 0 -200))
+     ;; (send b1 :rotate (deg2rad 30) :y)
+
+     ;; (setq b4 (make-cube 13 18 190))
+     ;; (send b4 :locate #f(0 0 -30))
+
+     ;; (setq b5 (make-cube 5 10 55))
+     ;; (send b5 :locate #f(-7 0 -151))
+     ;; (send b5 :rotate (deg2rad 15) :y)
+
+     (send b1 :locate #f(200 0 25))
+     (send b1 :rotate (deg2rad -90) :y)
      (send b1 :rotate (deg2rad 30) :y)
 
-     (setq b4 (make-cube 13 18 190))
-     (send b4 :locate #f(0 0 -30))
+     (setq b4 (make-cube 190 18 13))
+     (send b4 :locate #f(30 0 0))
 
-     (setq b5 (make-cube 5 10 55))
-     (send b5 :locate #f(-7 0 -151))
+     (setq b5 (make-cube 55 10 5))
+     (send b5 :locate #f(151 0 -7))
      (send b5 :rotate (deg2rad 15) :y)
 
      (send b1 :assoc b4)
@@ -49,9 +61,9 @@
      (send link1 :assoc handle0)
      
      ;; definition of :attention
-     (setq attention0 (make-cascoords :pos (float-vector 60 0 -220) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "attention0"))
+     (setq attention0 (make-cascoords :pos (float-vector 220 0 60) :rot #2f((1.0 0.0 0.0) (0.0 1.0 0.0) (0.0 0.0 1.0)) :name "attention0"))
      (send link1 :assoc attention0)
-     (setq attention1 (make-cascoords :pos (float-vector 60 0 -220) :rot #2f((0.5 0.0 -0.866025) (0.0 1.0 0.0) (0.866025 0.0 0.5)) :name "attention1"))
+     (setq attention1 (make-cascoords :pos (float-vector 220 0 60) :rot #2f((0.5 0.0 -0.866025) (0.0 1.0 0.0) (0.866025 0.0 0.5)) :name "attention1"))
      (send link1 :assoc attention1)
      
      ;; init-ending 
