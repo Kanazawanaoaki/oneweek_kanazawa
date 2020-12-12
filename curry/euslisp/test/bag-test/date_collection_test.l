@@ -17,7 +17,7 @@
 (defun test ()
   (send *ri* :angle-vector (send *pr2* :angle-vector))
   (send *ri* :wait-interpolation)
-
+  
   (unix:sleep 1)
   
   (setq res (ros::service-call "after_stow_data_collection/save_request" req t))
