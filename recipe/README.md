@@ -3,6 +3,9 @@
 
 
 ## mecab
+
+[mecab-python3](https://pypi.org/project/mecab-python3/ )に従ってinstal．
+
 python scriptでmecabを使って形態素解析をする．
 
 ```
