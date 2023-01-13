@@ -1,0 +1,5 @@
+(hello)
+(print "test1")
+(print "test2")
+(test :text `(print "test3"))
+(hello :text "test4")
