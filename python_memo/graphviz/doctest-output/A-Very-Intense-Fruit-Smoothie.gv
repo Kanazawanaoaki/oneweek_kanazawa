@@ -1,0 +1,12 @@
+// A-Very-Intense-Fruit-Smoothie
+digraph {
+	ing18 [label="1 (10 ounce) package frozen mixed berries"]
+	ing19 [label="1 (15 ounce) can sliced peaches, drained"]
+	ing20 [label="2 tablespoons honey"]
+	ing21 [label="fruit and honey"]
+		ing18 -> ing21 [label=test]
+		ing19 -> ing21
+		ing20 -> ing21
+	ing22 [label=smoothie]
+		ing21 -> ing22
+}
